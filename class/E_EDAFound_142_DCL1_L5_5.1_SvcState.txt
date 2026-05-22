@@ -1,0 +1,95 @@
+**Summary:**
+This content provides an overview of the use of state in Vantiq Services, highlighting the distinction between global and partition state. It explains how state is utilized in various activity patterns, such as caching enriched data, analytics, and compute statistics. The document also describes how developers can manage state using Vail code and system-generated procedures. Additionally, it touches on collaborations as a form of partition state and their role in managing AI conversations within the Vantiq platform.
+
+**Original Content:**
+
+filename: 142_DCL1_L5_5.1_SvcState  
+video url: https://youtu.be/5MofWYBGdn8
+
+Service State.
+
+The activity pattern list we're discussing here is not definitive, but each of them uses state for different reasons, making them good for closer examination.
+
+There are two kinds of state in Services.
+
+Global state is scoped at the whole Service level.
+
+Partition state is a separate copy of individualized information for each member of a group.
+
+The split by activity pattern is how to partition state in an app.
+
+Once the split is made, the events for each group run asynchronously from one another, flowing through the downstream tasks by group.
+
+Any tasks that you state from this point on are keeping that state just for the group as partition state.
+
+We've seen this in the labs where we get statistics on a per pump basis splitting by pump ID, but if that analyzed readings task were before the split, then we'd be getting statistics on all of the pumps together in global state.
+
+Here's our first example of an activity task using state.
+
+You've seen cached enriched before, which adds data to events from a standard type.
+
+After the initial database query to enrich the event the first time, the query information will remain in state for a specified interval of time.
+
+This is a good pattern to use for enhancements from types that do not change often, like patient addresses and phone numbers.
+
+On the right are the auto generated procedures that the system builds for every task that uses state.
+
+We can use these to see exactly what patient information is currently in the state, make changes to it, or even wipe it clean.
+
+Many of the math activity patterns use state, of which too are analytics and compute statistics.
+
+Both of these patterns calculate cumulative statistics on a specified series of events.
+
+Developers can customize what information they want to hold in state just by writing in a few simple lines of Vail code.
+
+This is the Accumulate State activity pattern.
+
+By default, this task updates state with the latest event, but state can be further defined to create and update counters, check the current status of certain data, and so on.
+
+We have here a very simple visual event handler app flow that does nothing more than take in two numbers, merge them into a single event stream, and then log them.
+
+As you can see, we've got #1 #2 each is getting logged.
+
+But now I'm going to add an analytics pattern to compute statistics on the number one, and we'll see what happens and what doesn't happen as a result of adding something that uses state.
+
+I'll select number one from this list.
+
+I want these statistics over a sliding window timeframe of one minute in length, and I'll keep count and average, Max and minimum.
+
+Notice that once I save, the generated procedures for this task suddenly appear.
+
+But also absolutely nothing has changed in the logging behavior.
+
+That's because the state is being stored, but we haven't done anything to retrieve it yet.
+
+Let's solve that now.
+
+From the left, we'll drag in a procedure activity pattern, which, as you may have guessed, calls a procedure.
+
+We'll find our procedure within our package and Service name.
+
+We want to retrieve our statistics, so we'll use the GET procedure.
+
+Notice that by default it uses the return value as the outbound event, so we will see our statistics now.
+
+Upon saving the changes, the new statistics start to appear in the log stream immediately.
+
+Employing activity tasks that keep state is effortless from the developer standpoint.
+
+When the task is put into use, the Service system automatically generates procedures to manage the state.
+
+Developers can then use these procedures like they would any other in order to access and alter that state.
+
+Collaborations are interactions between an application running on the Vantiq platform and some outside entity.
+
+We will be covering these extensively in Lesson 7 and in the labs.
+
+Collaborations are also a form of partition state, keeping track of the interaction progress written to database storage and intervals that the developer can set.
+
+Vantiq also uses state within collaborations to seamlessly manage AI conversations.
+
+We'll be adding some of this to our lab, but there is much more to AI than we can cover in this class.
+
+I highly recommend our elective AI classes referenced in the Key resources.
+
+The filename: class/E_EDAFound_142_DCL1_L5_5.1_SvcState.txt

@@ -1,0 +1,105 @@
+**Summary:**
+This content provides a detailed guide on deploying applications in Vantiq, focusing on setting up partitions, environments, and using deployment tools. It explains how to organize resources into partitions, create environments for different deployment types, and use the deployment tool to distribute resources across namespaces. The guide emphasizes the importance of maintaining a hierarchy in partitions and preserving data during deployment. It also highlights the flexibility and efficiency of Vantiq's deployment tools for consistent application distribution.
+
+**Original Content:**
+
+filename: 136_Deploy_L1_1.3_Steps
+video url: https://youtu.be/fJsP9AwaLOs
+
+Steps to Deployment In this video we'll go through the process involved in setting up a deployment.
+
+Most of the deployment tools are located in the Administer Deploy menu, and some of them are specific to bootstrapping edge devices, so we'll only discuss distribution to live name spaces for now.
+
+I should mention that projects to be distributed can be made into assemblies before deployment if desired.
+
+Here we're just going to use an application so we can see all the resources.
+
+Let's assume we already have our application completed in a single namespace and the code with all the processed by clauses for connecting 2 resources through nodes.
+
+So the first step we'll look at more closely is partitioning.
+
+The partitioning tool is available from the Projects menu in Show partitions.
+
+At first, all the resources are in a single partition called Default.
+
+We're selecting all of the resources that should go into our Headquarters namespace and making a new partition for it.
+
+We've chosen to move resources, but that partition does not already exist, so we'll create one now.
+
+Partitions are designated by their properties.
+
+In our case, it's region equals headquarters.
+
+On the left, you can see the headquarters region partition with the resources inside, and on the right there's a new blue partition depicted with those resources as well.
+
+Remember that the headquarters partition is the top of our hierarchy.
+
+We also have two factory nodes that are going to be part of the same factory partition and under the headquarters partition.
+
+So this time when we create the factory partition, we're going to place it under the headquarters partition by making the headquarters partition its parent in order to preserve the hierarchy.
+
+Notice that this latest partition is fully enclosed in the headquarters partition.
+
+Finally, we'll take the store resources and make a store partition fully enclosed within the regional factory partition.
+
+When this project is deployed, the project namespace will distribute to the headquarters namespace, which will distribute resources to the regional factory namespaces, which in turn will distribute resources to their store namespaces.
+
+For now, there's only one store namespace, but in future deployments there could be more.
+
+The Resource Partition tool is located under the Projects menu in the Project Partitions window.
+
+At first, all of the resources will be in the single default partition.
+
+Create more partitions and set up their hierarchy.
+
+The next listed step was to create the name, spaces, and nodes for the deployment, which we've already accomplished.
+
+So let's move on to environments.
+
+An environment represents a specific type of deployment, be it for production purposes, testing purposes, etcetera.
+
+In an environment, the developer lists each type of node that will be used in the deployment.
+
+In our use case, we're deploying from a headquarters namespace to two factory namespaces, and finally from one of the factory namespaces, A widget store namespace.
+
+In this case the only direct connection known is the HQ namespace.
+
+From there, during the deployment, the HQ has the factory node connections and the Eastern Region factory has the store connection.
+
+You could set up other environments with other node properties for different deployments as needed.
+
+The deployment tool requires an environment from which to work.
+
+There is an option for using a catalog which is helpful if there is two way communication between a single hub and multiple spokes.
+
+Deployment deploys resources but not the data associated with them.
+
+This is where partition parameters are useful.
+
+In this case, we want to preserve the sales data in our sales by Month type.
+
+That's part of the store partition, so we supply that data in JSON format to be inserted into the sales by month type once it's deployed.
+
+The deployment tool is located in the Administer menu and here we'll create a new deployment and copy some data into it with the type records in JSON format.
+
+All you have to do is copy and paste the entire set.
+
+Now all of our deployments will not only have the Sales by Month type, but they will have the data within that type as well.
+
+Once the partitions are set and the resources and data are where you want them in each partition, click on the Deploy button.
+
+As the system moves down the nodes, each deploy will get a status circle with either a green check mark or a red X.
+
+The deployment tool also works in the reverse.
+
+To undeploy a project will remove all deployment resources from the target namespaces completely.
+
+These look rather similar, so check the status to know what most recently happened.
+
+The great advantage to Vantiq deployment tools is that once the application is configured for deployment, its distribution can be accomplished over and over again.
+
+Over time, as the application evolves, the results will be consistent and efficient.
+
+The filename: class/Deploy/136_Deploy_L1_1.3_Steps.txt
+
+https://www.youtube.com/watch?v=fJsP9AwaLOs

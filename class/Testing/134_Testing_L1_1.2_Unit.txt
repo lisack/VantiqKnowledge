@@ -1,0 +1,172 @@
+**Summary:**  
+This video provides an overview of unit testing within a Vantiq application. It begins with a briefing on the application to be tested, which involves handling events from MQTT sources and enriching them with database data. The video explains the creation of a visual event handler and the addition of a task to track event counts from pumps. It emphasizes the importance of testing within the service itself and demonstrates how to create unit tests for a specific procedure, "Check Counts." The video also covers setting up tests, expected inputs and outputs, and handling errors. Finally, it suggests organizing tests into a suite for efficient management.
+
+**Original Content:**  
+filename: 134_Testing_L1_1.2_Unit  
+video url: https://youtu.be/bqKRWRKcU-U
+
+Unit testing.
+
+In this video, we'll look at unit testing.
+
+We'll get a briefing on the application that we will be testing in this class before focusing on the details around unit testing.
+
+We have a service which you can see has two inbound service events from MQTT source events and one outbound service event.
+
+We've created a visual event handler for it that ingests events from MQTTRPMS and temperature sensors for five pumps, enriches the events by using database data to match the sensor name with the pump name, then joins the temperature and RPMS readings by pump ID before stripping out redundant data in the transform event.
+
+Does this sound familiar?
+
+It should.
+
+You created this app yourself in the developer level 1 labs instead of sending the information on to a catalog.
+
+I've made a couple of minor changes.
+
+One is to add a task called Check Counts to use state to keep track of how many events are coming from each pump.
+
+The Report counts task outputs that state.
+
+The pump event is exactly what we sent to the catalog before, only now it's set to the outgoing service event.
+
+Since our app is a visual event handler for a service, it's best practice to test it within the service itself.
+
+It's worth noting that any tests we make anywhere within the project will appear in the project test pane, even tests made within a service.
+
+If you recall.
+
+Unit tests are for a single procedure rule or service event type.
+
+Open the unit test drop down for the service to see what resources are eligible to be tested.
+
+In our case, we have two inbound events and the procedure I wrote to keep state on pump counts.
+
+To test a single event type, you need to think about the input and the ultimate output in the outbound event for the service.
+
+In our case, we won't test each inbound event individually because the app depends on the input from the other event for expected output from the output event.
+
+It will be better to create an integration test for the whole service.
+
+In that case.
+
+Let's make unit tests for our check counts procedure.
+
+Here are the highlights from our check counts procedure, which is used for an accumulate state app task.
+
+Part 1 initializes the state, Part 2 updates the count for each pump ID or raises an exception if the ID isn't recognized, and finally, pump 3 puts the counts in order, then takes the difference between the highest and lowest counts.
+
+The status message either reports that all is well or there is an imbalance in pump IDs.
+
+Let's review the steps involved for creating a test, inventing for the check counts procedure.
+
+What should our inputs and expected outputs be?
+
+Does the test need any special setup before and cleanup after the test?
+
+I have here the app from the Sense enrich which is what you pretty much built in level 1.
+
+The difference being that after the transform, I've got this check counts accumulated state activity that is using the check counts procedure in order to set the state.
+
+So this initializes the state, then it keeps a count of which pump has been reported.
+
+If there's some weird pump name, it's going to raise an exception.
+
+Otherwise, I then put each of the pump counts in an array, sort the array, and then check to see if the difference is more than 100, whereupon I set the status and that is all.
+
+So let's look at our tests.
+
+I want to create a unit test on the procedure check counts.
+
+If I right click on it, that'll create a new test.
+
+But as you can see, I've already got three tests here.
+
+Let's look at our basic test, provide a name for it, set up whether you want some kind of setup or cleanup.
+
+I'll talk about that in a second and how long it will wait for the expected output before it times out.
+
+My setup in this case is I'm just resetting the state back to zero.
+
+In both cases in the beginning before the test and after the test, my expected inputs for this procedure and notice it already provided the procedure for me.
+
+Now I just have to provide the parameters and I did.
+
+It needed the state and it needed the event.
+
+So notice my state is just set with these basic counts, and the event is going to be a new #4 what it will return then is an extra number for #4 So it was 5, now it's going to be 6.
+
+There are no actual outputs for this particular test because the output is the return statement.
+
+Let's save it.
+
+Run it really quick.
+
+Take a look at the test history.
+
+Everything's great.
+
+Let's go ahead and break this.
+
+I'm going to go back to edit, and this time for the return value, I'm going to just mess it up.
+
+It's going to return a six, but we're saying we're expecting A7.
+
+And when I save it and run it now, notice it takes a while to run.
+
+That's because remember, I set my timeout for one full minute, so we'll have to wait one full minute while it waits for the correct output.
+
+And there we have it.
+
+If we want to look at the error and see what it tells us, all you have to do is hover over this and it'll tell you exactly what happened.
+
+So it returned six that we were expecting 7, The error occurred.
+
+Remember, my check counts procedure will raise an exception if there's a bad pump name.
+
+Let's check that out.
+
+So I have a new test here for bad input.
+
+Same thing.
+
+Let me edit this.
+
+I'm making a weird input of pump 40.
+
+Otherwise all the rest of this would be pretty normal.
+
+Return value does not matter.
+
+So I didn't put one because it's going to raise the exception when it runs through that arameter and this time the output is expecting go to edit.
+
+It's expecting an error.
+
+So of the proper possible resources that could be the output.
+
+It's not outputting an event.
+
+The output isn't being validated by a procedure.
+
+It's going to the error.
+
+Then it's going to say well, what is that error?
+
+Well, I had a message that said there is no such pump ID with the error code band pump.
+
+The name is the name of the resource that is reporting the error.
+
+In this case, it is a task called check counts in the sense enrich service and the package dot sensors package.
+
+Run this and the expected error occurred.
+
+Now there's one more test here called unbalanced that is going to detect if there is a reporting difference between pumps of more than 100.
+
+You're going to write that for your lab, so I'm not going to show you.
+
+In the demo, we saw that there are three unit tests created for the checkouts procedure.
+
+It would be good practice to put them together into a suite.
+
+Going to the Service Test Suites pane, choose the type of test, then the specific resource if applicable.
+
+In the test lab, Add all the tests desired, then set up how often they should be run as a sequential group in the Run policy.

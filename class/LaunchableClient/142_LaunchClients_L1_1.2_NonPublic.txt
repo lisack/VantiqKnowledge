@@ -1,0 +1,48 @@
+**Summary:**  
+This content discusses the features and security measures associated with non-public launchable clients in Vantiq. Unlike public clients, non-public clients can access any namespace resources available to the developer, but require users to have at least user-level privileges. These clients can further restrict access by user groups or specific users, enhancing security and control. The process involves setting client properties and using the advanced tab to manage access restrictions. The video linked provides a detailed walkthrough of these features.
+
+**Original Content:**  
+filename:142_LaunchClients_L1_1.2_NonPublic  
+video url: https://youtu.be/CKCX7lx2d0g
+
+Non public launchable client features If the launchable client is not designated public, there are a couple of features available to restrict the users to that client.
+
+As we learned in the last video, public clients are very restricted to what resources can be accessed directly from them.
+
+This ensures good security because public clients cannot restrict the users who can run the client.
+
+By contrast, non public launchable clients can access any namespace resources that the developer can access, but all the users for that client must have at least user level privileges in that namespace.
+
+Non public clients can further restrict users to those in a specified set or by group.
+
+We'll look at those restriction features now.
+
+Clients can be restricted by group or by designation.
+
+For the most part, it's better to restrict client access to a group.
+
+If there is only one user in the restricted user array, that person's Vantiq mobile app will open to just that launched client window, making it hard for the user to go to other client windows.
+
+This is a good thing for a user who wants the simplicity of working with just that one application, but inconvenient otherwise.
+
+We go to client properties in order to restrict users from a non public launchable client.
+
+So when we go to the advanced tab, notice I am not marked as public and I have a client group and restricted users.
+
+I've previously set up these two groups, one is VIP and one is VUP.
+
+I'm only allowing the VIP's to see this client.
+
+The first thing that's going to happen in Incognito mode when I go to the client URL is that it's going to have me log in to Vantiq.
+
+Once I successfully login, it will take me to the namespace because I am a user for that namespace, but it will also tell me it cannot find the client because I am not a member of the VIP group returning to my developer account.
+
+In the client properties and Advanced tab now I look at the restricted users.
+
+This is a full list of all the registered users for this namespace.
+
+Click on the ones you want to have access to the client.
+
+Both public clients and nonpublic clients can be made launchable.
+
+Nonpublic clients don't necessarily have to be launchable, but if they are, you can restrict the users in it.

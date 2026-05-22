@@ -1,0 +1,7 @@
+Return the title of the given content.
+
+The content : ${titleNeeded}
+
+{
+	title: ""
+}

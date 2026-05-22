@@ -1,0 +1,58 @@
+### Summary
+
+This content provides an overview of using semantic indexes within Vantiq, particularly focusing on their integration with catalogs. Semantic indexes are crucial for enhancing the contextual understanding of AI large language models by providing shared data resources across different namespaces. The process of publishing and subscribing to semantic indexes is similar to that of services, allowing developers to manage and access these indexes efficiently. The document also highlights the reversible nature of publishing indexes and the ability to access them without catalog registration through nodes, although the latter is not covered in detail here.
+
+---
+
+filename: 143_Catalog_L2_2.3_SI  
+video url: https://youtu.be/dgSD09bKU8g
+
+Semantic Indexes and the Catalog Having the ability to create a semantic index in one place and share it with other trusted namespaces is highly beneficial over having to create multiple copies of the index wherever the information is needed by your generative AI large language models.
+
+And just in case semantic indexes are new to you, they are a way to contextualize prompts so that AI large language models can give better informed responses.
+
+You learn all about them in our Introduction to AI course, but for now, suffice it to say that they are data, sometimes large, and developers can create them in one namespace and publish them to a catalog for access by others.
+
+For those of you who would call index plurals indices, somehow this didn't become popular in the industry, so indexes is the more widely known term.
+
+All the rest of this lecture will give you an uncanny sense of deja vu, because using semantic indexes with a catalog is almost identical to publishing and subscribing to services.
+
+For instance, the mechanism for publishing is the same as is the way to subscribe, only this time from a semantic indexes list.
+
+The index will appear as a resource in the project contents, but it will be read only just as services are.
+
+Updates to the Semantic index work exactly the way they do for services where both the publisher and subscriber must explicitly choose to send or accept the update, respectively.
+
+On the left, you can see this namespace is connected to a catalog.
+
+On the right is my Semantic Index notice.
+
+At the bottom it has the listing of the catalog name and the option to publish to that catalog by clicking on the Publish cloud icon.
+
+Once I do, I'll need to confirm in order to actually publish, but then notice that to unpublish, all I would have to do is click on that X there.
+
+So this is a reversible process.
+
+Let's go to another namespace now so we can subscribe to and use our new semantic index.
+
+We choose our catalog from Show Catalogs, choose Semantic Indexes, and if you don't see it right away, be sure to click on the refresh button.
+
+Once we click on the listing to subscribe to it, you'll see it appear in the project contents.
+
+But in fact, just like services, it has not moved anywhere.
+
+It's still in its local place, but you can access it.
+
+It just so happens that I have aGenny I service procedure called Fact Checker that is using that semantic index.
+
+So I refer to it just as I would any semantic index resource in my local namespace and it will work exactly as such.
+
+In this case it's a simple conversation and if I ask the question what is in tank D, the application will not know or be able to respond if we are not accessing that semantic index.
+
+But notice it says Tank D contains sulfuric acid, so it does indeed access the semantic index.
+
+One difference with semantic indexes is that they can be made accessible through nodes without being registered in a catalog.
+
+We don't discuss that in this class since this class is centered around catalogs, but check the documentation for more details.
+
+The filename: tmp/143_Catalog_L2_2.3_SI.txt

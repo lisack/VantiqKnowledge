@@ -1,0 +1,90 @@
+**Summary:**
+This video tutorial provides an overview of the various layout widgets available in the Vantiq client, focusing on how developers can use them to organize and display widgets effectively. It covers fixed, flow, grid, scrolled, and tabbed layouts, explaining their behaviors, configurations, and how they can be used to create flexible and precise user interfaces. The video also highlights the importance of the Layout Management User's Guide for further information on optimizing layouts in dynamic environments.
+
+**Original Content:**
+
+General Layout Widgets In this video, we'll cover the other five layout widgets available in the client.
+
+However you want to display widgets in the client, there's a layout to facilitate your vision.
+
+Fixed layouts allow for complete freedom within defined boundaries.
+
+Developers place widgets however they want within the fixed layout.
+
+Widgets can be arranged above and below other widgets.
+
+Fixed layouts do not adjust size if their widgets are too large for the space they are well fixed.
+
+How flow layout behaves depends on its children and relative size.
+
+If the container is larger than the minimum size needed to hold whatever is inside, inline buttons at least will widen to fit the space.
+
+The flow layout height and width cannot shrink farther than the widgets and their set margins will allow.
+
+Grid layouts also won't go smaller than what is needed to fit the children inside.
+
+By default, the grid is 2 by two.
+
+Column width and row heights are set to what will fit the largest child, which can result in a lot of white space.
+
+Let's see how each of these three behave in the client.
+
+By default, fixed layouts will not change even if the objects within them overflow the space.
+
+However, they can be configured with scroll bars.
+
+Speaking of those configurations, you can work with fixed layouts as if they were floor plans or maps, having them react in certain places where they are clicked.
+
+The flow layout resizes to accommodate his children and does not allow the widgets to overlap one another like you can and fixed.
+
+Finally, there's the grid layout.
+
+In this layout, the placement of widgets is rigidly enforced.
+
+If you try to occupy a space that's already there, you will get an error.
+
+The size of the grid layout row or column depends on the largest size of the widget in that row or column.
+
+By default, the grid structure is 2 by two, but you can change that to up to 10.
+
+By 10.
+
+There are still two more container widgets to look at, starting with the scrolled layout.
+
+While scrolled layouts can only accept a single child widget, that widget can be a compound.
+
+Developers can turn scrolling on or off in either the vertical and or horizontal directions in the tabbed layout.
+
+Developers can overlay widgets within the tabbed display even as those displays themselves are overlays.
+
+The default number is 3, but developers can set tab names, icons, and the quantity of tabs all in the configuration pane.
+
+The Layout Management User's Guide contains much more information about how to size layouts to best work in changing environments.
+
+But within layout, most widgets and layouts have height and width policies of either explicit, natural size, or size to parent.
+
+Explicit is a fixed size, Natural will set its own size based on what is being displayed, and size to parent will fit as best as it can within its container.
+
+I'm going to drag a scroll layout to the canvas and put a button inside it.
+
+I'm going to remove the scrolling on both sides, and the scrolled layout will accommodate the size just a little bit.
+
+If I try to add a child, I will be reminded that scroll layouts can only have one child.
+
+However, there's something very interesting about what that one child can be in scrolled layouts, and that is because that one child can be a page.
+
+We'll use this button to set ours to display page 2.
+
+I'll also select page 2 so you can see what it looks like before we put it in the scrolled layout.
+
+When we run the client, we'll click on the button, and now you can see that the contents of page 2 are in the scrolled area.
+
+Finally, the tabbed layout arguably allows the developer to display the most information in a single place in the client.
+
+In the configuration, you can set as many tabs as you want along with it, changing their names and their icons.
+
+The eight different layouts in the client allow developers to set up their displays with maximum precision and or flexibility.
+
+And once again, I highly recommend the Layout Manager guide.
+
+https://www.youtube.com/watch?v=lt4rQN4Vd2Q

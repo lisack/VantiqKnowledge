@@ -1,0 +1,30 @@
+**Summary:**  
+This video provides a walkthrough of verifying the deployment of an application system in Vantiq. It explains the process of ensuring that resources have been successfully transferred and that the distributed application is functioning correctly. The video covers the hierarchical distribution of resources, the communication between nodes, and the management of inventory through scheduled procedures. It also highlights how executives can access updated reports via a dashboard, thanks to the deployment parameter settings.
+
+**Original Content:**  
+filename: 136_Deploy_L1_1.4_Deploy  
+video url: https://youtu.be/o4edE6c3dX8
+
+Verifying Deployment In this video, we've deployed our application system and we just want to verify that the resources have transferred successfully and that the distributed application is working properly.
+
+Here's where we left off from our last video.
+
+Pressing the deploy button starts the cascade of resources in our hierarchical distribution.
+
+Functionally, the application communicates to the nodes below it from the top down, and this is also how the partition resources are distributed.
+
+Notice that both the eastern and Western factory namespaces will receive their own copies of the same factory partition resources.
+
+We're here at the freshly distributed store level.
+
+Namespace customers order widgets, and our widget service keeps track of the inventory.
+
+Eventually our store runs out of inventory and that's where the factory namespace comes in.
+
+The factory service has a scheduled procedure that checks every minute what the inventory levels are at the stores and restocks if needed.
+
+Meanwhile, at the Widget World Headquarters namespace, the executives want to be kept abreast of what is going on.
+
+So they have a dashboard that when you click on the Get Latest Report button, calls a procedure that runs a procedure in the factory namespace that then does a select against the Sales by month type that is located at the store level namespace.
+
+We only have that data because it was copied over as one of the deployment parameter settings, and once those procedures return up the chain, the dashboard at the executive level is updated.

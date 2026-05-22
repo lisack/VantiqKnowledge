@@ -1,0 +1,89 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+
+This content provides an overview of how Vantiq applications integrate with large language models to enable real-time AI input and automation. It describes a lab scenario where a technician interacts with an AI system to address issues like gas odors and refrigerant leaks. The application uses retrieval augmented generative AI, incorporating generative and embedding language models, and a semantic index to enhance AI responses. The content also highlights the ability to maintain multiple conversational contexts simultaneously, using built-in service procedures and collaborations. It emphasizes the importance of semantic indexes and prompt templates in guiding AI responses and mentions the availability of comprehensive hands-on exercises in Vantiq Academy.
+
+**Original Content:**
+
+142_DCL1_L8_8.1_AI
+
+Generative and Agentic AI in Vantiq applications Vantiq applications integrate seamlessly with industry leading large language models, enabling AI input and automation in real time.
+
+Here's the lab portion we already built, which the technician receives when he accepts the job.
+
+But Scroll down a little bit and now you can see that the technician has some space to ask some questions.
+
+Let's try the question.
+
+I smell gas near the pump.
+
+Is that a problem?
+
+The technician clicks the send button and she can see what she said and before long there's a response.
+
+And this one says there should not be a gas odor coming from the pump and give some suggestions about what to do about it.
+
+The technician can then ask some follow up questions like how would I check for a refrigerant leak?
+
+And once again, the AI responds with a well informed answer.
+
+Building Retrieval Augmented Generative AI with conversation context is extremely easy to do in Vantiq applications.
+
+In our Vantiq application, we incorporated 2 large language models, one of them generative and one of them embedding.
+
+We also populated A semantic index with information about HVAC pumps so that our AI will be further informed with this extra knowledge.
+
+After that it was a simple matter of adding the area for the technician to put in input and taking advantage of Vantiq many built in resources for managing conversational context and querying the retrieval.
+
+Augmented generative AI At its most basic, generative AI is what new content comes from a large language model that has been trained for that purpose.
+
+Here we ask the LLM for a joke and even pick the subject and the model is easily able to oblige without needing any other inputs.
+
+Of course, in most projects we can't just rely on the models training, no matter how specialized.
+
+This is where Semantic Indexes come in.
+
+This is a screenshot from one of the AI elective class labs.
+
+On the right is text that you'll be uploading to a semantic index when the client runs.
+
+The large language model first searches the vector database for any relevant material and uses that to help craft its response to the submitted question.
+
+Here's another use case using retrieval augmented generative AI.
+
+I have a tank monitoring system and if the pressure goes below a certain amount, the AI will kick in.
+
+All of a sudden, not one but two tanks are reporting dangerous drops in pressure.
+
+Our technician needs to know what's in the tank, whether or not that's dangerous, what state and local laws there are, And fortunately the AI has been informed by all of this with vectorized data.
+
+But of course, we have two emergencies, not just one, so our technician can carry on 2 simultaneous separate conversations about the separate tanks with their separate chemicals.
+
+And the AI is not confused about the context of either conversation.
+
+In the demonstration you just saw, the system was able to maintain 2 separate conversations with AI without losing their contexts.
+
+This is the code from the maintain convo procedure that does this using built in service procedures.
+
+This can also be accomplished with even less code using collaborations.
+
+The take away here is that there are a lot of ways to keep the AI informed and current with runtime conditions.
+
+Using prompt templates, AI can be guided in its response with regard to what priorities should be considered, what tone should be struck, what topic should be avoided, etcetera.
+
+AI agents are developed to act independently after assessing runtime conditions.
+
+In addition to the previous ways AI is informed, contextualized and guided tools or functions written with conditional descriptors that AI will assess at runtime to determine if they should be executed.
+
+The AI classes in the Vantiq Academy all offer comprehensive hands exercises.
+
+Here are the links to those classes along with documentation.
+
+The filename: class/E_EDAFound_142_DCL1_L8_8.1_AI.txt
+
+---
+
+There were no embedded video HTML tags in the provided document, so no URLs were extracted. If there are specific sections with embedded video HTML that were not included, please provide them for conversion.

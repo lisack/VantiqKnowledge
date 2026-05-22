@@ -1,0 +1,48 @@
+**Summary:**  
+This video tutorial provides an overview of the most commonly used Command Line Interface (CLI) commands for maintaining Vantiq resources. It includes slides for reference and explains key distinctions between certain commands. The tutorial highlights how these commands are primarily informational and do not alter the file system. It covers executing procedures within the platform, copying resources between Vantiq namespaces and local file systems, and managing resource metadata. The video also demonstrates how to export and import projects between namespaces, making resource management and migration efficient. Viewers are encouraged to consult the documentation for a deeper understanding of the CLI's capabilities.
+
+**Original Content:**  
+filename: 135_CLI_L1_1.3_Maintenance  
+video url: https://youtu.be/d-ySVBDVkb4  
+
+CLI maintenance commands In this video we'll cover the most often used CLI commands for maintaining Vantiq resources.
+
+I'll include some good slides to use for reference, and then explain a couple of important distinctions between certain of the commands.
+
+The handy designation to this subset of commands is mine, but I think you can see why I call them that.
+
+These don't add anything to the file system, they mostly serve for information purposes.
+
+The execute option is good for running procedures from within the platform.
+
+What comes back from the command is whatever the procedure returns.
+
+This set of CLI commands copy resources to and from Vantiq namespaces and local file systems.
+
+This is an area where the CLI really shines and makes resource management and migration very convenient.
+
+Our handy set of commands had a List command, and all this does is return output to the terminal window.
+
+Find, on the other hand creates a whole JSON object file with all the information about that resource instance.
+
+So detailed is this file as you can see that it can then be used with a load command to actually define or redefine an existing resource instance.
+
+It's common to first run the list command to see the names of all of some type of resource, then use the find command to collect the metadata for one of the specific resources.
+
+After that, suppose you have a project in your namespace and one of your coworkers wants a copy of it in their own namespace.
+
+The Vanter command line interface can manage this painlessly.
+
+Here's an example.
+
+We'll first run the export command, designating a directory to hold all the files.
+
+As you can see, the command results in quite a few sub directories, which themselves often have more sub directories, all holding files of metadata and data all about the project exported.
+
+To upload the project to the new location, switch to the profile of the other namespace and run the import command using the minus D option to specify the top level directory of the exported files.
+
+You'll get a rather bland one line report for success like shown, but your coworker will be able to go to their namespace in the IDE, select the new project, and all the resources will be visible.
+
+By now, you should feel comfortable using the CLI for your own resource maintenance needs.
+
+In this brief elective, we've only covered a small selection of the CLI's capabilities.

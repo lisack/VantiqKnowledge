@@ -1,0 +1,90 @@
+**Summary:**
+This content provides an overview of using Grafana for system monitoring within a Vantiq installation. Grafana is a powerful tool for visualizing resource usage across different administrative levels, from the entire system down to individual applications. The document explains how to access and navigate Grafana dashboards, adjust time frames, and interpret data. It highlights the importance of understanding system-level dashboards and recommends further learning through the Organization and Namespace Administration class. Key dashboards discussed include DB Internals, Metric Collection Resources, MongoDB Monitoring, Org Activity, and Vantiq Resources. The document emphasizes the intuitive nature of Grafana dashboards and the ability to customize views for detailed analysis.
+
+**Original Content:**
+
+System Monitoring with Grafana Grafana is an excellent tool for monitoring resource usage at all administrative levels, including for the entire system.
+
+Grafana is available from the administer menu, and choosing dashboards from the main menu will show us each of our dashboards that we installed earlier.
+
+This, for instance, is the Org Activity menu.
+
+Notice that along the top I can choose exactly what it is I want to view, and when I click on an individual entry within the dashboard, it'll show me that exact entry only.
+
+You can choose the desired time frame from the drop down on the right.
+
+Follow the bread crumbs back up in order to change dashboards as you want.
+
+In this case, we're going to take a look at Vantiq Resources.
+
+I don't need to spend a lot of time interpreting the results here, partly because it's very, very well documented, and partly because the dashboards themselves are fairly intuitive.
+
+I should point out that to open a dashboard in its own browser window is just a matter of choosing the share link and copying the link to a new browser window.
+
+Grafana engages with time series data to create easy to read dashboards depicting all kinds of activity in a Vantiq installation.
+
+They can provide a system wide perspective all the way down to the resource usage of a single application.
+
+In this video we only have time to talk about the dashboards at the system level, but a System Administrator should know about the dashboards at every level.
+
+So I highly recommend the Organization and Namespace Administration class to learn more.
+
+Also, we do not discuss quotas in this class, but they are covered extensively in the org and Namespace class.
+
+You'll see Grafana as an option below the administer drop down from the NAV bar.
+
+The dashboards are in the General folder off of the home menu.
+
+Before we go into individual dashboard specifics, there are a few generalities about how to use them.
+
+First, look to the options at the top left to know and change the scope of what you're seeing.
+
+In the example, we have the choice of Installation, POD, and Garbage Collector types.
+
+On the right you can select time range and how often to collect the data, which defaults at 30 seconds.
+
+One feature that is really handy is the ability to separate a line item from amongst the whole graph of them.
+
+For instance, in the left side example, it's almost impossible to see the nginx controller associated with the yellow line because the fluctuation and therefore the scale setting of the blue 1 is so large.
+
+Unless I click on just that one at the bottom, then the scale changes so the variations are clear.
+
+Each display panel also has a dropdown to maximize it.
+
+In the case of View and Explorer.
+
+Explorer also shows the query share is for opening the whole panel in another browser window, among other options.
+
+Inspect shows the data points in a table format in flux.
+
+DB Internals is the first of the list of Grafana system dashboards available.
+
+Mostly you will use this to see the heap usage during large queries and get a sense of database disk usage in the series by Database pane.
+
+The Metric Collection Resources dashboard shows data for the Metrics Collector pod sent originally from the Vantiq pods.
+
+The MongoDB Monitoring dashboard is for showing metrics from the MongoDB pods.
+
+Choose from among the pods to see the metrics for each, and here's what part of the Org Activity dashboard shows.
+
+There's so much it wouldn't all fit.
+
+Here's where to see system loads by organization.
+
+Do be careful when selecting the time range with either of the Org Activity dashboards.
+
+Influxdb can be overloaded if the chosen range is too broad.
+
+The Organization Activity with Top Namespaces dashboard is just like the Org Activity dashboard we just saw, but with extra namespace data.
+
+Ordinarily, you would first consult the Org Activity dashboard to get an overall sense of which orgs are using excessive resources, then switch to the Organization Activity with Top Namespace dashboard to determine which namespaces within those orgs are the most responsible for the problem.
+
+It is likely you will consult the Vantiq Resources dashboard most often, as it's a good bird's eye view of the general health of a whole system.
+
+I mentioned the Oregon Namespace Administration class in the last video, and I'm recommending it again in this one.
+
+System administrators really need to know all levels of administration for a Vantiq installation.
+
+The filename: class/SysAdmin/140_SysAdmin_L3_3.2_SystemMonitor.txt
+
+https://www.youtube.com/watch?v=ogotL9LxPtI

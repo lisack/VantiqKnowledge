@@ -1,0 +1,99 @@
+**Summary:**
+
+This guide provides instructions for setting up users in the Vantiq Platform after the initial software deployment. It covers the creation of user accounts, setting up system and organization administrators, and managing quotas for resources, especially when using generative AI features. The process includes creating new accounts, verifying emails, setting up SMTP servers, and configuring namespaces for development. It emphasizes the importance of assigning real usernames for sysadmins and managing user privileges to protect system resources.
+
+**Original Content:**
+
+Vantiq Platform users.
+
+The software is deployed now as the system administrators.
+
+We have a few housekeeping chores for bringing in users of every level of responsibility.
+
+Most of these tasks only need to be performed once for a brand new installation.
+
+The first time we log into the system, key cloak will come up to let us log in, but of course there are no users yet.
+
+So choose Create New Account and write in your information.
+
+It's Vantiqh's policy not to have a generic sysadmin login, but rather put in real usernames and make as many of those to be sysadmins as necessary.
+
+Once you click the Create Account button, click the e-mail verification link.
+
+That will be sent to the e-mail you supplied.
+
+Remember that you needed to watch the logs for the Vantiqh 0 deployment in order to get the code there.
+
+Here's where that goes.
+
+You will then be prompted to agree to the standard conditions.
+
+Upon accepting those, you'll see the familiar project wizard.
+
+Choose an empty project to clear it.
+
+To integrate with the e-mail source, set it to the SMTP server that you use for key cloak along with the password also that you supplied in your secrets dot yaml file.
+
+Here's another one off task for the installation.
+
+Set the installation cluster to point to the server URL.
+
+Here's what we see when we first go to the new installation.
+
+Create a new account to make yourself the first user.
+
+At this point, the link has been sent to your e-mail.
+
+Click on that to be let back into the system and here is where we paste in the authorization code that we got from the Vantiq Dash 0 log.
+
+Once you're in, ignore the system errors for now because we are still setting up the installation, starting with repointing the self node, going to administer deploy notes, choosing self node, right clicking on it, and here is where you set the new URL to what your actual domain name is.
+
+It's true, from the system namespace you could invite a brand new user to be another System Administrator, but Vantiq highly recommends that the user should be homed in at least an org level namespace first.
+
+This is to protect the system from resource overuse.
+
+We don't talk about quotas in this class, but quotas are not enforced at the system level and they are at the other levels.
+
+Organizations are the tenants of a multi tenanted installation and you need at least one.
+
+Neither system nor org root namespaces should have development work on them.
+
+Developers should have namespaces within orgs.
+
+By sending an invitation instead of making yourself the org admin, you are making the invited one the org admin instead.
+
+If this person wasn't already a user on the system, he or she will become both a Vantiq user and an Org admin.
+
+Org administrators are tasked with downloading the Gen AI Flow service connector as a project for the root org namespace, but by default they will get an error if there is not enough quota.
+
+You as a System Administrator should set higher quotas for all orgs that are going to be using Gen AI features in their projects like what is shown here.
+
+If you want to make an existing user an org admin, start from the org namespace ull U his or her user profile and change the rivileges to include org admin for the organization.
+
+We're at the system namespace for the moment, and if we choose to administer users from here and add a new user, the only privilege we'll be able to give them is as of system admin.
+
+Let's create an org first by going to administer organizations and choosing a new organization.
+
+After supplying the organization name and a root namespace for that organization, you can set anyone to be the administrator, even a user who is not in the Vantiq system yet.
+
+Any new user who is also simultaneously made an org administrator will be on that org root namespace.
+
+But now let's change into our new org namespace and we can create users for the org.
+
+Neither system nor org root namespaces should have projects on them.
+
+As the org administrator, I create new users for both my org as org administrators or as users within the org.
+
+If the new user will be a developer, this is where I also need to set up his home namespace before sending the invitation.
+
+Coming back to the system namespace, one thing I want to show is how to change quota in organizations.
+
+For almost any organization that's going to be using generative AI, it's very important to up the quota for the Kate's resources.
+
+In most cases, 1V CPU and a couple of gigs of memory is sufficient.
+
+The system administrator's job is never done, of course, but these simple setup tasks are easy and don't have to be repeated often or at all.
+
+The filename: class/InstallAdmin/140_InstallAdmin_L2_2.2_Users.txt
+
+https://www.youtube.com/watch?v=eJ_BzSHkDzk

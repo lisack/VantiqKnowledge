@@ -1,0 +1,70 @@
+### Summary
+
+This content discusses the importance of retrieving coherent responses from vectorized information using the Gen AI Builder. It highlights the challenges of document retrieval, particularly when dealing with numerous documents on the same topic, such as sulfuric acid. The Gen AI Builder offers several components to enhance semantic index responses, including a Semantic Index with compression and various compressor components. These compressors work with large language models to refine and rank document responses. The document also explains the use of rerankers and the RAG component, which formulates answers by searching through a semantic index and leveraging the LLM's training.
+
+### Original Content
+
+Filename: 141_GAB_L2_2.2_DocRetriev
+Video URL: https://youtu.be/ayr9og7iiv4
+
+Document retrieval components Just as important as making sure vectorized information is as cohesive as possible is the need to get the most coherent responses from queries from that information.
+
+In this video, we'll explore the options available in the Gen
+
+AI Builder for using generative AI to its best abilities.
+
+Is probably just easiest to explain the problem by demonstrating it On the left, I've asked the question, What is sulfuric acid?
+
+The problem is that I've also uploaded a ton of documents about sulfuric acid.
+
+Almost all of them that start off with sulfuric acid is.
+
+I could crank minimum similarity up, but I would still get most of them because they all answer the question directly.
+
+Fortunately, the Gen
+
+EI Builder has several components designed to improve semantic index responses.
+
+We'll start by covering the builders alternative version of the Semantic Index component.
+
+Semantic Index with compression is designed to work in conjunction with a compressor.
+
+A compressor goes through the initial list, purging some entries and shortening others in order to tighten the response.
+
+There are 4 Gen
+
+AI compressor components in the Gen
+
+AI Builder, each with its own compression algorithm.
+
+The rerankers shorten the relevant documents return to just the top X numbers that the developer sets.
+
+Most of the compressors work with multiple large language models, except for Cohare Rerank, which specifically uses a Cohare model and requires a Cohare API key.
+
+The compressors each require an object with two inputs.
+
+They can work outside of a semantic index with compression subflow, but having it there conveniently supplies the required document list.
+
+To supply the required prompt, use prompt from template, but take note that the prompt output will need to be converted into a string like in the code block shown.
+
+Here's what happened when all the compressors were tried against the same semantic index we saw earlier.
+
+The provided LLM for all of them except Cohair Rerank was ChatGPT 3.5 Turbo.
+
+Cohair Rerank has a setting to return just the top end number of responses.
+
+I've edited some of the extra output to show these responses and how they ranked in relevance.
+
+Extract Relevant content returned an empty set even when the content only switch was on in the semantic index setting.
+
+Filter for Relevance returns all relevant documentation, so this list is edited for the top three and there is no relevant score.
+
+Finally, Listwise Rerank also allows the top end responses, but doesn't supply a ranking score.
+
+Notice that in all three cases, the same results came up.
+
+We've seen the RAG component before.
+
+It behaves just like the Answer Question App Builder pattern, searching through the designated semantic index and formulating an answer based on the information plus the LLM's own training.
+
+The filename: class/GAB/141_AdvAI_L3_3.2_DocRetriev.txt

@@ -1,0 +1,114 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This video provides an overview of the Vantiq Client, explaining its purpose, navigation, and how to set client properties. It covers the client builder for creating low-code visual user interfaces, which can run on both desktop browsers and the Vantiq mobile app. The video discusses the MVC design strategy, data streams, and how developers can use JavaScript to handle events and customize the client. It also highlights the client properties menu, including tabs for Events, Theme, Localization, and Advanced settings. The video concludes with a demonstration of creating a client using the AI Client Assistant, which helps in designing and coding the client interface.
+
+**Original Content:**
+filename: 142_DCL1_L6_6.1_Client
+video url: https://youtu.be/HlexmXTHEYY
+
+The Vantiq Client By the end of this video you should know what the client is and how to move within it and how to set client properties.
+
+The client builder is for building low code visual user interfaces.
+
+Vantiq clients run on both desktop browsers and in the Vantiq mobile app, like the screen shown here.
+
+The design strategy employed by the client builder is often described by the initials MVC for models, views and controllers.
+
+Bottles refers to the data that the client ingests to be converted in some way for display in views which the developer can further operate using controllers like the JavaScript code in event handlers.
+
+This is what the client builder looks like.
+
+The AD side consists of widgets in a palette that can be dragged into the canvas, configured and used for client based application.
+
+The Edit side is for setting client and individual page properties.
+
+Events flow into clients via data streams.
+
+Most often, data streams are connections to outbound service events, but can also be from sources or topics.
+
+Many widget displays can be bound directly to data streams.
+
+Developers can also write code to execute when data comes into the stream.
+
+Data objects hold client variables at either the whole client scope or for individual client pages.
+
+On the right you see the actions choices.
+
+The plus side is for adding more data objects.
+
+The trash can icon is for deleting them and the lightning button will build a form like layout based on the type.
+
+Click on the three dot menu next to client to bring up the client properties menu.
+
+Open it and you'll see five tabs.
+
+Basic is where we can add custom JavaScript code and libraries.
+
+All code within the client is JavaScript.
+
+Still within the client properties, I want to highlight the Events, Theme, and Localization tabs.
+
+The Events pane is where developers can add code to execute when the client experiences certain conditions.
+
+Theme is for setting a consistent appearance scheme across all the pages.
+
+Individual widgets can override these settings as needed.
+
+Finally, Localization is for converting all text and labels in the client to other languages.
+
+The last tab, Advanced, is where developers set the working characteristics of the client.
+
+Let me start with the area in the menu that I circled.
+
+Toggling on any of these choices will affect all the pages in the client.
+
+Above the circled area is a section that determines how the client will run and who can see it.
+
+Let me call your attention especially to the Mark as Launchable option.
+
+When a client is launchable, it becomes a visible listing in either the Mobile Apps Start area or a browser's client launch window, so it can be run from either.
+
+The three settings at the bottom are for using custom CSS in the client, being able to reuse what you've done in this client as a base for future clients, and whether or not to run the client if events don't come into the system for a prescribed length of time.
+
+Clients can have any number of pages, the first of which is always called.
+
+Start Pages have several events associated with them, such as Onstart, for which developers can write their own custom handlers.
+
+To create a client, you can go to the Add menu and choose Client, then New Client.
+
+I'm going to give my client a name and a package name, and instead of using a template, I'm going to use the AI Client Assistant, something we won't be doing in labs because in the Foundations course you learn how to do things from scratch.
+
+When the assistant comes up, type the best description you can for the client you want to see.
+
+Here's mine.
+
+I want to keep track of sensor data from pumps, 5 of them in all that each have a temperature and speed sensor.
+
+A table should show averages by pump.
+
+The client will try to interpret your vision and come up with a layout.
+
+What's especially nice is the assistant breaks down an explanation of what it interpreted.
+
+You can have an ongoing interaction with the AI and ask it to add or subtract things as needed.
+
+You can continue interacting with the AI assistant until you're satisfied.
+
+There's even AI assistance in the code editor.
+
+In the buttons onclick event handler, we're going to tell the AI what we'd like to see.
+
+Let's say we want to open up a new page.
+
+All we have to do is describe what we'd like the code to do and then press command Enter.
+
+After a couple of seconds, your code will appear, but it's not always perfect.
+
+You might have to do some tweaking like we're doing here.
+
+Now that you know a bit about the client, we'll move on to the widgets in the next video.
+
+The filename: class/E_EDAFound_142_DCL1_L6_6.1_Client.txt

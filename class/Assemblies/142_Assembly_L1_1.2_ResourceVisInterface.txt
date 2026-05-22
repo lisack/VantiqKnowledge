@@ -1,0 +1,101 @@
+**Summary:**
+This content provides an overview of managing resource visibility and interfaces within a Vantiq assembly. It explains how to set project attributes that are visible and alterable, and how to view the assembly from a consumer's perspective. The guide covers the use of the assembly pane, including the General tab for naming and procedures, the Assembly Data section for transferring database records, and the Visible Resources tab for managing resource visibility. It also discusses the Interface tab for defining expected event messages and services. The content emphasizes the importance of not altering the assembly interface after subscribers have accessed it, as this could disrupt their applications. Additionally, it provides instructions on updating assemblies and viewing service listings in project resources.
+
+**Original Content:**
+
+filename: 142_Assembly_L1_1.2_ResourceVisInterface
+video url: https://youtu.be/qYo4GvTNtMw
+
+Assembly Resource Visibility and Interface.
+
+Once a project becomes an assembly, this assembly pane comes up, allowing the assembly author to set what project attributes will be visible and alterable, and also to see the assembly from the consumer standpoint.
+
+If the assembly pane is not visible in your workspace, you can retrieve it from the Show menu.
+
+By the way, the Add Assembly menu option opens a list of installable assemblies that Vantiq created to allow developers to customize their projects with color themes or select enhancements.
+
+Back to the assembly pane, let's start going through the tabs.
+
+You've seen the General tab already, where the assembly can be named and even a procedure called after the assembly is installed.
+
+The Assembly Data section is for transferring database records to the installed assembly, with or without a WHERE clause to prune what records will copy over.
+
+The type must have a unique index and natural key or you'll get an error.
+
+The data will transfer, but the subscriber will not see it until the type is made visible.
+
+Types and other assembly resources are made visible in the Visible Resources tab.
+
+The resources in your project that can be made visible from the Visible Resources tab will show up on the left side of the pane.
+
+Click and drag them to the right side for the subscriber to be able to see them.
+
+Note that this only establishes visibility.
+
+Nothing on this list will be editable by the subscriber.
+
+Also, not everything in an assembly can even be made visible.
+
+For instance, visual event handlers and Gen AI procedures in a service will not ever be visible.
+
+However, app components and Gen AI components can be.
+
+More on this later.
+
+Finally, notice that right now all we're making visible in this whole assembly is the client and one of the types.
+
+Will the installed assembly even work for subscribers?
+
+Short answer, yes it does.
+
+Just because resources aren't visible doesn't mean they aren't available for the application.
+
+In our use case, there aren't inputs or outputs, but assemblies can work as parts of an application whole, with discrete expected event messages to intake for processing, and possibly events of an entirely different structure outbound.
+
+These are defined in the Interface tab of the assembly pane.
+
+Initially, the pane will be blank.
+
+Click on the icon next to Manage Services to select the services that expect input or will output events.
+
+Once you do, the full list of inbound and outbound service events along with the service procedures will appear.
+
+The Transform Local Events button in the context menu to one of your interfaces is for creating a whole new service designed to ingest events and restructure them to the expected scheme of for your assembly to handle.
+
+Be careful not to change your assembly interface after subscribers have accessed it as this would be likely to make their applications non functional.
+
+I'm in the visible resources tab of the assembly pane and I think I'll go ahead and make the service visible so you can see what that looks like.
+
+All I have to do is drag it over.
+
+If the save button goes away before you can press it, that's because you have auto save on.
+
+Go to the General tab to update your assembly by clicking on the Update circle icon once it turns blue.
+
+Once the update is complete from the publisher side, go to the Subscriber namespace.
+
+This little book icon indicates that an assembly update is needed.
+
+You might not see it right away, but if you refresh your browser, you will.
+
+You can choose a specific update from the list or just choose Update All.
+
+Once the update is complete, we will see the service listing in the project resources.
+
+Let's take a look at what that looks like.
+
+Well, the service says it's read only.
+
+There's no implement or test tabs, and we can't see how any of these things are implemented.
+
+We can however, see the event schema that they're based on, but that's it.
+
+Same thing with our outbound stuff.
+
+We can see the event schema and nothing else.
+
+Procedures.
+
+We can see what they are expecting as parameters, but again, no implementation.
+
+If you'd like to know more about the capabilities of a Vantiq catalog, I recommend our Catalog elective course.

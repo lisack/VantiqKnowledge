@@ -1,0 +1,146 @@
+**Summary:**
+This video tutorial delves into the intricacies of refining rule triggers in Vantiq, focusing on event binding and temporal operators. It explains how to create rules that only trigger under specific conditions, enhancing performance by avoiding unnecessary activations. The video demonstrates the use of temporal operators like "before," "after," and "within" to bind rules to specific sequences and timing of events. It also covers the use of aliases, the "constrain 2" clause, and the "WHERE" clause to further refine rule conditions. The tutorial concludes with an exploration of the "timeout" keyword, which handles scenarios where part of the triggering conditions are met but not completed within the specified timeframe.
+
+**Original Content:**
+
+Fail Rule, Event binding.
+
+There is much more to rules than what you've seen so far.
+
+Rules can and should be very nitpicky about what triggers them.
+
+In this video, we're looking at ways to refine what the rule is listening for.
+
+If you recall, in the last video, we created a basic rule that fired every time an event was published to a topic, even when I sent a completely empty event message.
+
+That was because the rule was bound to any event in that topic.
+
+But what if my program only needs to react when a single property in that whole event exceeds a particular threshold?
+
+Can we refine rules so that they only trigger for very specific and discrete reasons?
+
+The answer to that question is yes, and it's important for performance reasons that rules only trigger when they should.
+
+Temporal operators in the rule triggering condition will bind the rule to an ordered or unordered 1-2 combination of events.
+
+In the example shown, an event must first be published on topic A, followed by one on topic B, and within 2 seconds in order for the rule to fire.
+
+The within keyword is vital because the rule must know how long to wait for the second part of the triggering condition.
+
+I'm going to show you how this logic behaves in just a second, but I should point out that for the purpose of uniformity, these keywords are caitalized in the rule editor itself.
+
+It doesn't matter if they are caitalized or not, which you will soon notice.
+
+It's so much easier to see how things work when we just do them.
+
+So let's take a look now at how before, after, and and within work in rules.
+
+So we have a rule here.
+
+It says rule Rule A when event occurs on topic A, before event occurs on topic B, within 2 seconds right to the console, rule A triggered.
+
+If I click on topic A and within 2 seconds click on topic B, it triggers the rule.
+
+However, if I am slow and I click on topic A, but I take my sweet time so I do not click on topic B within 2 seconds, notice nothing is triggered.
+
+So that's the power of within.
+
+Now let's look at the power of before.
+
+If I click on topic B and then within 2 seconds click on topic A, absolutely nothing happens because I've done it in the wrong order.
+
+It needs to be in topic A, then topic B order within 2 seconds.
+
+This is very, very specific.
+
+Well, let's take a look at the power of after and I'll save.
+
+If I click now on topic A and within 2 seconds click on topic B, now nothing happens because it is now within the order of topic B has to happen first, then topic A.
+
+So if I click on topic B, then topic A ta da, it's triggered and is either way.
+
+So once again I'll clear my log message and save this.
+
+If I click on topic A then topic B, it's triggered.
+
+If I click on topic B, then topic A, it's triggered.
+
+And allows you to do this in either order.
+
+Give events aliases by adding the keyword as and then the nickname for the event.
+
+Now the event is accessible, including all the information in the event message.
+
+The constrain 2 clause establishes at least one point of commonality between events for which a rule will fire.
+
+Rules can't chain more than two events together without a constrain 2 clause.
+
+Take a moment to read the triggering condition in this rule example.
+
+Notice how each of the events are aliased so we can use them in the constrain 2 clauses.
+
+Here I've got a full rule that will log a message saying that it was fired as a result of three inserts into standard types taking place within a total of 5 seconds and within the order of type A, followed by type B, followed by type C.
+
+But only if the name property value of the first insert is the same as that in the 2nd and the number property value of the third insert is the same as that in the second.
+
+The constraint to clause in conjunction with the temporal operators do allow us to craft rules that will fire under very specific conditions, but we can narrow the window even more.
+
+With the WHERE clause.
+
+We accessed property values in two events with the constraint to clause in order to correlate those events for a rule to fire.
+
+The WHERE clause is for setting conditions within a single event.
+
+Take a moment to read the triggering condition in this rule, then see if you can answer the quiz question.
+
+Did you think that both of these inserts would trigger the rule choice?
+
+A will not because the WHERE clause only cares about the name property having the value of Ada.
+
+Any other property with that value will not trigger the rule.
+
+Finally, the time out keyword comes before logic that will run if a part of the triggering conditions for a rule are met, but the rest is not within the time frame of the within clause.
+
+Let's have some fun with the timeout clause, shall we?
+
+I have here a rule that first starts listening when an event occurs across topic A, and we're going to call that TA.
+
+And then when something happens to topic B, if the name value of topic A&B are the same, then it meets the first TO constraint.
+
+But then we're waiting for yet another event to happen on topic C, and the constraint there is that the name value of B&C need to be the same, and that happens.
+
+It has to happen within 5 seconds.
+
+So within 5 seconds total, all of those three conditions must take place.
+
+Then we will do the logic for the rule.
+
+But if only the event comes across the topic A and it's going to run this logic.
+
+So let's take a look.
+
+So 1st, I'm going to do this in rapid succession.
+
+Publish for one 2-3 and look at that.
+
+It fired the topic impounded.
+
+Good.
+
+But now I'm only going to do 1-2.
+
+And then I'm just going to sit here.
+
+Let's see what happens.
+
+After 5 seconds, we're going to see it failed.
+
+All right, now I'm just going to do the first one.
+
+Now I'm going to do just the first one, and after 2 seconds, if I don't do the next one, boom, it gives me another failure.
+
+The take away from this lecture is to be sure to create discriminating rules that only fire when they are needed.
+
+The filename: class/Rules/134_RULES_L1_1.2_EvtBind.txt
+
+https://www.youtube.com/watch?v=9A8quKlxYmc

@@ -1,0 +1,112 @@
+**Summary:**
+This video provides a comprehensive guide on installing the Vantiq Command Line Interface (CLI), which is designed to facilitate routine resource maintenance tasks in shell scripts. The video covers the installation process, including the necessary Java dependency, setting environment variables, and configuring the CLI for use with Vantiq resources. It also explains how to set up namespace access credentials and use different profiles for various installations. The video is a useful resource for anyone looking to manage Vantiq resources efficiently from a terminal window.
+
+**Original Content:**
+
+filename: 135_CLI_L1_1.1_Install
+video url: https://youtu.be/8i0C17evtrw
+
+Command Line Interface Installation Vantiq's command line interface is intended to make it easier to do routine resource maintenance tasks in shell scripts.
+
+In this video, we'll cover how to install the CLI and use it to connect to the Vantiq platform.
+
+The Vantiq command line interface is a tool primarily for managing Vantiq resources from a terminal window, which makes it perfect for use in shell scripts.
+
+At first glance, the CLI looks a little like just accessing the Vantiq API, and in fact the CLI can do a large subset of the things API queries can do.
+
+But the CLI was created with Vantiq system resource management in mind, as we'll see in subsequent videos.
+
+Here's what we mean by management tasks.
+
+The Vantiq CLI interacts seamlessly with the local file system for importing and exporting individual resources or whole projects, performing bulk uploads of data, setting up the VCs server for version control, etc.
+
+Installing the CLI is a straightforward process.
+
+We'll go through each of these steps now.
+
+To begin, remember that the CLI has one software dependency.
+
+This product was written in Groovy, which is a form of Java, so there will need to be a Java installation on the host machine.
+
+Go to oracle.com and look for their Java archives, where you'll find version 11, which is the version required.
+
+Each platform has clear instructions on how to perform the download.
+
+In Windows, it's an executable file.
+
+On Macs, it's done with the standard installer, and so on.
+
+Once you've installed Java, set the environment variable JAVA_HOME to the home directory for the installation.
+
+Feel free to use this slide as a reference.
+
+Next, download Vantiq CLI zip file from the Developer Resources pane shown before.
+
+You may need to Scroll down a bit to find it, but that big button is hard to miss.
+
+Expand the zip file wherever you'd like it to reside, and then update your PATH environment variable so that it can be accessed from anywhere on your system.
+
+Technically, if you've gotten this far, you've successfully installed the Vantiq CLI, but there is one more job to do to make the product much easier to use.
+
+In a hidden directory in your home directory called Vantiq, there will be a text file called Profile.
+
+Edit this in in order to set up namespace access credentials.
+
+HTTP client options can also be set in the profile.
+
+See the CLI documentation for more details.
+
+So here's what the profile file looks like.
+
+In most cases, the profile names like Oauth 1 and Personal are whatever you want them to be.
+
+The exception here is base.
+
+The profile requires at least a base profile name, and this serves as the default that the CLI will use as well.
+
+However, in the case of cloud installations managed by Vantiqh like dev.Vantiqh.com and api.Vantiqh.com, which are Oauth installations, the credentials between the base curly braces will be ignored because you'll need to make a specific Oauth grouping with the URL and access token.
+
+That Oauth grouping does not have to have a particular name.
+
+Here we see Oauth One as the name, but it could just as easily have been ABC.
+
+Notice that in the profile we called Personal there's also a setting for the namespace name, which is especially helpful when connecting with a username and password.
+
+You can also see that we flagged the single quotes with a warning.
+
+Set your text editor, whatever it is to make sure that it doesn't use so-called smart quotes.
+
+The CLI will not be able to read the profile with them.
+
+The command to actually run the Vantiq CLI is Vantiq or Vantiq.bat in Windows, and then the command if no dash options are specified.
+
+The system assumes that the Uri is dev.Vantiq.com and uses what the profile has for the base category.
+
+If you'd like to use another profile from the profile file, use the minus S option and specify by name which one you want.
+
+If you have an Oauth installation, IE Key cloak access, you will have to do this and use a profile that includes an access token.
+
+Notice I don't have any quotation marks around the Dash S parameter.
+
+That's because in some shells they're not needed, but in others you might have to use single or double quotes.
+
+Check which shell you're using and what is expected in the graphic.
+
+Minus V option is verbose mode, which in this case is just reporting the CLI version number.
+
+And by the way, the examples you're seeing here are from the bash shell script.
+
+If you want to override any of the defaults apart from the profile settings, just use the command line options listed here instead.
+
+These are fairly intuitive.
+
+Note that minus T is for access token, minus B is for something besides the default dev.Vantiq.com and so on.
+
+By the way, do you see that the dollar sign in the password is escaped in some shells?
+
+If you don't do this, the command will fail because the dollar sign will be misinterpreted and you'll get an error that says supplied authentication information is invalid.
+
+But in other shells, the password parameter might work just fine without it, but need to be single or double quoted.
+
+By now you should feel able and ready to install, configure and use the Vantiq CLI on your own system.
+

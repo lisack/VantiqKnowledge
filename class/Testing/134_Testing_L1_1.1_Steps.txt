@@ -1,0 +1,93 @@
+**Summary:**
+
+This content provides an overview of the importance and methodology of testing in Vantiq projects. It emphasizes the necessity of testing to ensure the correctness of outputs, handle a range of inputs, and maintain application integrity over time. The document outlines the steps involved in setting up and running tests, including unit and integration tests, and highlights the importance of creating test suites and using run policies for automated testing. It also discusses the use of source mocking and cleanup procedures to maintain a stable testing environment. The content encourages developers to integrate testing into their development process to catch issues early.
+
+**Original Content:**
+
+The testing process.
+
+There are a few things you should know about testing Vantiq projects before we get into the specifics on how to create and run tests.
+
+Tests are very important and will review why before looking at some of the tools available to facilitate regular tests throughout project development and beyond.
+
+During development, we can compile and trace through code, run autopsies, log messages, view task inputs and outputs, and so on to make sure the program is working.
+
+So why is there a need to do testing on top of all that?
+
+Well, very often in the program it's easy to see that inputs are coming in and outputs are going out.
+
+But are you certain that those outputs are actually correct?
+
+Testing validates those results.
+
+Tests should also cover the range of possible inputs that the system might experience.
+
+Expected inputs, unexpected inputs, altogether bad inputs to ensure all will be handled well.
+
+Also think about how applications tend to evolve over time.
+
+Tests are vital to ensuring that future changes don't cause issues elsewhere.
+
+Make sure all possible avenues are covered in tests.
+
+An application has to be able to handle more than expected inputs, but also outputs out of expected range and even pure nonsense just in case.
+
+Also check that all features of the program are touched and thoroughly vetted in the tests.
+
+This means, of course, that each area of the project that is being tested will be tested multiple times.
+
+Make test suites of those runs so that they can be scheduled together, but the individual tests on the same resource will not collide with each other.
+
+Regardless of the breadth and scope of the testing, the steps for them are basically the same.
+
+Each test needs all the inputs an their expected outputs, even if those are errors.
+
+The test may require a certain environment before the actual test run.
+
+That is where setup procedures come in.
+
+These setup procedures also often temporarily turn off the source from the outside world and instead use simulated source events to ensure the correct inputs.
+
+A process called source mocking clean up procedures after the test runs, perform such tasks as removing the source mocking and resetting any resources disturbed by the test.
+
+Developers can run tests automatically and at times most convenient to the application through run policies.
+
+Even if a test takes longer to run than expected, the next one will not start until it is complete.
+
+In this screenshot, you can see that we've set up our test to run every two hours.
+
+By default they would start right away, but we've set starting dates and times too.
+
+Unit tests are run on individual rules, procedures, and incoming service events.
+
+Within the Rule or Procedure pane.
+
+You'll see the option to create a test there, but Service procedures can also be tested from the service, and all procedure and rule tests can also be set up from the test menu in the IDE navigation bar.
+
+Integration tests refer to tests run against a whole service or project.
+
+Service level integration tests test everything within a service.
+
+Project level integration tests test everything within a project, including how the project resources behave within the project.
+
+Unit tests run locally, but integration tests run in a clean new environment.
+
+First, a new namespace is created and all the relevant resources are copied over to the fresh environment.
+
+If there's a set up procedure, it runs before the test runs.
+
+After the test runs, the clean up procedure is executed before the test reports the results back to the original namespace.
+
+In the menu pane for the integration test set up, there is an option to save the test namespace.
+
+In the event that the test fails by default, it is toggled on.
+
+Toggle it off and the test namespace will delete itself at the end of the test.
+
+It's good for developers to design their tests right along with their projects and to test frequently so problems are caught early.
+
+Don't forget to try the tutorials.
+
+The filename: class/Testing/134_Testing_L1_1.1_Steps.txt
+
+https://www.youtube.com/watch?v=S82es-HVGOw

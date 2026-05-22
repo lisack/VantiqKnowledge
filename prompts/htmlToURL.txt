@@ -1,0 +1,9 @@
+Look through this document for embedded video html and convert only the html to the video's url address, leaving the rest of the document untouched.  
+
+Here's an example.  This HTML:
+<iframe width="355" height="200" src="https://www.youtube.com/embed/roCv8i3uTCg?si=IGNYVdVS227I_A2N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+should return the video url of: 
+https://www.youtube.com/watch?v=roCv8i3uTCg
+
+The document: ${content}

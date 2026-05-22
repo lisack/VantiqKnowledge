@@ -1,0 +1,81 @@
+**Summary:**  
+Vantiq is a versatile platform that allows developers to create a wide range of applications, from emergency response systems to AI-driven health monitoring. This video provides an overview of the tools available on the Vantiq platform, which include a Visual Integrated Development Environment, AI assistance, and various low-code program logic builder tools. Developers can build both the backend services and frontend user interfaces using prebuilt widgets or custom code. Vantiq supports easy integration with internet-connected devices and services, and offers flexible deployment options from cloud to local devices. For more information, visit community.Vantiq.com.
+
+**Original Content:**  
+Vantiq is a platform that lets developers build, well, just about anything.
+
+Emergency first response systems?
+
+Check.
+
+Smart buildings?
+
+Check.
+
+Irrigation systems?
+
+Solar panel controls?
+
+AI driven health monitoring?
+
+You can build them all in Vantiq.
+
+These possibilities and more make for great reasons to answer why Vantiq, But this video starting your development training journey seeks to give you a glimpse into how Vantiq.
+
+By how Vantiq we mean, of course, what are the tools on the platform the developers use to make all these high performance, situationally aware, automated and AI agentic systems?
+
+Here's the 10,000 foot fly over of them.
+
+Developers do their work within a namespace, isolated securely from other work using the Visual Integrated Development environment.
+
+Here.
+
+Handy menus make all the tools and project resources readily available for use.
+
+Help in the form of AI assistance, documentation, and technical training are also available at the click of a button.
+
+The Design Model tool lets developers describe what their application should be in natural language and generates the framework and many of the resources needed to develop it.
+
+Services are collections of logic, program, state, testing and debugging tools, as well as other related resources that build the back end of any application.
+
+They have defined inputs and outputs with processing inside.
+
+Through these inputs and outputs, they interact with outside entities, other services, and other tools on the platform.
+
+If services are defined as agents, more abilities are unlocked for AI runtime decision making in the service.
+
+Within services, there are two types of low code program logic builder tools.
+
+Visual event handlers generally process data messages, otherwise known as events, that come into the service.
+
+A number of predefined code patterns are visually linked together into application flows that can manipulate the data, perform statistical analysis, or be evaluated by AI.
+
+The other builder is for generative AI procedures.
+
+The predefined code patterns here are for creating procedural flows for complex AI based logic.
+
+Clients are the front end user interfaces.
+
+Developers drag in prebuilt widgets onto the client canvas and codelessly connect them to data or AI for display, or they can build their own in JavaScript, HTML, and CSS.
+
+The Vantiq platform integrates easily with anything on the Internet, even if there's a firewall in between.
+
+A variety of prebuilt tools facilitate connections to anything from camera feeds, message and AI protocols, databases, API's, microservices, and so on.
+
+Among those tools are software development kits and a React Native library for mobile device connections.
+
+Vantiq even has its own mobile app available for free from the Google Play and Apple stores.
+
+Finally, let's talk about application distribution and deployment.
+
+Vantiq servers can deploy in the cloud, a single laptop, or anything in between.
+
+And yes, there are tools to make that a single button action.
+
+Developers can codelessly set up node and catalog connections to share resources and processing for optimal performance and scalability.
+
+In short, anything you want to build.
+
+You can learn more by going to community.Vantiq.com.
+
+https://www.youtube.com/watch?v=-aSdctHIkB0

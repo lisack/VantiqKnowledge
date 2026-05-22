@@ -1,0 +1,38 @@
+**Summary:**
+This content provides an overview of creating and using GenAI custom components in Vantiq. It highlights the similarities and differences between GenAI components and app components, explaining how to create a GenAI component from an existing procedure or from the Add menu. The document also describes a practical example of a service that collects URLs and saves content to a semantic index, and how custom components can handle errors. It further explains the process of creating synthetic variables, using the GenAI component in a procedure flow, and configuring repeatable tasks with user-defined components. The content emphasizes the reusability of GenAI components and the importance of understanding their unique characteristics compared to app components.
+
+**Original Content:**
+
+GenAI Custom Components Much of what has been said about app components applies to GenAI custom components as well, but there are enough differences to warrant a separate module about them.
+
+You can either select a portion of an existing GenAI procedure to create a GenAI component just like we did for the App component, or you can go to the Add menu and select to create a GenAI component from there.
+
+I have a service that collects URLs about celebrities and saves the website contents to a semantic index. Many sites don't allow this and produce errors. So I created this custom component to try to upload the page to the semantic index but to report what failed. If not, I need to make the semantic index changeable and within the component you can see that the exposable properties have little clickable plus signs next to them just like so.
+
+To create synthetic variables, go to the configuration menu in the components properties and add 1 when you want to reference it within the component, use the same dollar curly braces with the names inside like you do for templates.
+
+Using your GenAI custom component is a simple matter of selecting it from the user defined category and dragging it onto the procedure flow. When you select it, you'll see what's configurable just like any other task. Notice in our case it's what we exposed and what we created after we save our newGeni procedure.
+
+I do want to point out a couple of differences about GenAI components. Notice there is no way to expand or explode it like there is for app components, and while you can see the generated Python code, you cannot change anything in it.
+
+Let's now run our event handler and see how well it works. When the component is called, I just have to enter a single celebrity name. You can see that the event runs all the way through to our GenAI procedure and through the procedure as well. The result being that we'll see new entries in our semantic index in the GenAI Builder environment.
+
+The two component patterns in the configuration processors were designed to be used with components. Let's take a closer look at each of them. Repeat will run its internal subflow multiple times that number depending on the number of configurations set. Only one code pattern can be used inside the Repeat task. However, we can make custom code patterns from GenAI Builder components to get around this.
+
+As I mentioned, the Repeat component only allows 1 component in its subflow, but that component can be user defined. So we're going to make a user defined component, then use it inside a Repeat component. We go to the Add menu and choose GenAI Component in order to create a user defined GenAI component. This puts us back in the GenAI Builder environment and in our case, we're going to build a component that will set up a prompt, give it to an LLM, and return a response by clicking on the little + next to prompt template.
+
+We're exposing that property to make it configurable, and we'll do the same thing with the LLM property in the LLM component. Once we save our user defined component, we can now use it and reuse it in any application as we see fit. In our case, we're going to put it to use in the Tutor service by clicking on the little + next to the public.
+
+We created a GenAI procedure that we've called repeat question, but we don't have anything in it yet. Now we're going to fix that. Here's our repeat and if we go to the user Defined section, we can get a listing of all of our user defined custom components. Now we can set this up to ask as many questions of the LLM as we want. So going into the repeat configuration, we'll choose to repeat the prompt template.
+
+We can also define exactly what those property values will be, but we're going to wait on that until we first configure our prompt. Configuring our user defined component depends on what we expose. So we exposed which LLM we can use and the template. So we're going to use just a hard coded template and the question will be what would the ancient philosopher who have to say about what, who and what being the substitution variables.
+
+Now let's go back into the repeat configuration and fix those repeatable template values. So in both cases, I'm substituting an ancient Greek philosopher for who and the origin of man for what. OK, let's save it and give it a trial run. We don't really need to input anything, so I'm just going to give it an empty object and go. And here is my response from both questions. I could have done any number of questions. Repeat will keep running until we run out of values to put in.
+
+The repeat. Optional isn't a filter for a runtime condition which determines if a subflow will run or not. When you check the enabled box, its subflow will run. Uncheck it to disable the run. This is especially useful in components in order to enable and disable the whole component.
+
+GenAI custom components are reusable modules that work much like app components do, but be aware of the key differences between them.
+
+The filename: class/AppComponents/143_AppCom_L1_1.4_GenAIComp.txt
+
+https://www.youtube.com/watch?v=hYH0Z__0oao

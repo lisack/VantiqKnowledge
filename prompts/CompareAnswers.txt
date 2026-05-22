@@ -1,0 +1,5 @@
+Answer the user's query about aspects of the Vantiq platform, compare the two answers given and return a single answer that most completely answers the query.
+
+The query: ${retainQuery}
+First answer: ${InsideAnswer}
+2nd answer: ${OutsideAnswer}

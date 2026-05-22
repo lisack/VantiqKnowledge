@@ -1,0 +1,97 @@
+### Summary
+
+This content provides an overview of navigating and utilizing the Design Model in Vantiq. It explains how to start with either an empty template or a preconfigured design, and how to build a design model that is associated with an application. The document details the use of tools like the canvas and palette, which allow users to drag and drop services, clients, and externals into the design model. It also covers how to create and edit services and clients, establish event flows, and manage connections between different components. The process of setting up a new design model and integrating existing services and clients is also discussed.
+
+### Original Content
+
+**Design Model Navigation.**
+
+Since you worked with design models in the Foundations course, some of this will be familiar to you.
+
+Whether you want to start from scratch with an empty template or add to the preconfigured design, you'll be building a design with the application associated with it simultaneously from within the Design Model.
+
+**Tools.**
+
+**Canvas.**
+
+Much like with our other builder tools, a palette of choices appears on the left for dragging into the canvas.
+
+We'll look at each of them in turn and then discuss how to create a cohesive application out of them.
+
+Dragging an external onto the canvas and even connecting it will not result in any changes to the application.
+
+But they are meant to represent various entities that exist outside the Vantiq platform but interact with the application system in some way.
+
+Sensors, databases, and camera feeds are such examples.
+
+In this diagram, the inputs and outputs are both named externals.
+
+On the left is what you'll see if you drag in a new service.
+
+Double click on it to give it a name and choose from the drop down to either create a new service as expected or change your mind and pick an existing service from a long list that includes system services.
+
+By naming the service and saving the design model, you are also creating the service in the application.
+
+Right click on it to edit it.
+
+Dragging in an existing service comes immediately with a list of services from the project.
+
+Select one and it will appear complete with all its possible inputs and outputs On the right.
+
+The analyze services from a catalog and read only, which is why there's a lock on it.
+
+Any connections that services already had with each other will automatically be joined as soon as both sides are represented in the canvas.
+
+Much of what was said for services applies to client options in the Design Model palette.
+
+When a new client is dragged onto the canvas, double clicking on it to name the client and selecting the Create New Client option from the drop list will actually create a client in the application.
+
+Dragging a client in allows the developer to choose which existing client will be part of the design model and once chosen any pre-existing connections will also appear.
+
+In our example above we already had a data stream in the CL1 client called Send to Control System.
+
+Setting up event flows between services and from service to client is a simple matter of dragging your mouse in from one + on the right to the recipient's left.
+
+In the case of connecting services with clients, this immediately creates a data stream for the client preconfigured to the event type.
+
+Notice that by default, upon starting a new project, you will be taken to the Design Model window.
+
+Alternatively, you can go to the Add menu to add a new design model.
+
+We're going to go choose New Design Model and this time around we're going to have a start from a completely empty canvas.
+
+Into that canvas we will drag in a new service, double click on it in order to set it up.
+
+Notice that ordinarily we would just choose Create New Service, but we do have a full list of any number of system and developer created services.
+
+If we change our minds, once we click the save button, the service becomes real and available from the project contents.
+
+Right clicking on it and choosing Edit in Service Builder will also bring it up.
+
+As I mentioned before, adding externalities to the design is a great way to add clarity to your application design, but it doesn't make a difference to the application functionality.
+
+By dragging in a service, it is assumed that that service already exists, so I have a list to choose from.
+
+Existing services do come in dark green with their existing event, service flows, and so forth.
+
+If there's a connection between that and something else that's on the board and it was already set up, it will appear as well.
+
+In this case, I'm drawing a new connection and from the outbound way it's going to be called RPMS and inbound is going to be called speed.
+
+Dragging in client means I'm dragging in an existing client, so I choose from the list of existing clients.
+
+Drawing an event stream connection creates a data stream configured to that event type with the client.
+
+You'll also see items forming in A to Do list.
+
+Click on an item to be taken to the area of concern.
+
+Hover over it to read the item.
+
+Dragging in a new client and double clicking on it works exactly as expected.
+
+You name it and can choose either to create one or pick from a list of options.
+
+**Video Resource**
+
+https://www.youtube.com/watch?v=JYVFXAYfkwQ

@@ -1,0 +1,97 @@
+**Summary:**  
+This video introduces the concept of Vantiq Catalogs, which are essential for building flexible distributed systems and sharing reusable projects while maintaining security. Catalogs act as namespaces dedicated to brokering events and resources between project namespaces. The video explains how to create and connect namespaces to catalogs, emphasizing the importance of catalogs in preventing event loss during failures. It also provides a step-by-step guide on setting up a catalog, creating access tokens, and connecting namespaces. The tutorial is recommended for gaining hands-on experience with Vantiq Catalogs.
+
+**Original Content:**  
+The Vantiq Catalog In this video, we'll introduce Vantiq Catalogs.
+
+Catalogs are a great way to build flexible distributed systems and share reusable projects while still maintaining total security over the system.
+
+Over the course of this class, you'll see how all of this is possible.
+
+Catalogs are name spaces that are dedicated to brokering events and resources between project name spaces.
+
+Catalog namespaces themselves should generally not have their own projects on them as this would adversely affect performance.
+
+This small diagram shows conceptually how publishers P register their events to the catalog C to broker the connection to the namespace that then subscribes to them.
+
+S Do you see the dotted line?
+
+At runtime, the catalog is not actually involved, but a mesh connection is created between the publishing and subscribing namespaces.
+
+This is important so the catalog is not a possible point of event loss in the case of catastrophic failure.
+
+Project namespaces, here represented in blue, can be connected to any number of catalogs as publishers, subscribers, or both.
+
+Catalogs, in turn, can be connected to any number of project namespaces.
+
+Absolutely nothing I'm going to show you now should be new to you.
+
+You did it all in the Foundations class.
+
+Making a catalog starts by making a fresh new namespace.
+
+It's good to give it the name with catalog in it just so that you can find it easily.
+
+A name is all that's needed.
+
+Then save to create the namespace.
+
+And at this point, that's all it is, is a namespace.
+
+Once it's saved, we need to switch to that namespace in order to formally turn it into a catalog.
+
+Choose Empty for your project because you won't be putting any projects on a catalog namespace.
+
+To turn a regular namespace into a catalog namespace, go to Administer Advanced Catalog and click the Create Catalog button.
+
+You'll be reminded that you have great responsibility with this role accepted.
+
+Anyway, once you decide if you want to give your catalog a specific name, the catalog pane itself comes up with a very handy button for creating a token, which you're almost certainly going to need to do in order to connect this catalog to already existing namespaces.
+
+We'll talk about what the personal and single namespace options are later, but for now just give your token a name and reasonable expiration date.
+
+Your token will be saved in your clipboard memory.
+
+So now all we need to do is switch to a namespace that should be connected to our catalog.
+
+We will be putting a project into this later, but for now I'll say empty and not set up the version control system so that I can go straight to the part about the catalog.
+
+To connect our existing namespace to a catalog, we go to Show Catalog Connect and all we have to do now is paste in our access token below that, make sure the URL is pointing to the server installation for the catalog.
+
+If you're making a brand new namespace, you can connect it to the catalog right away at the time that you create it, just by giving it a name and picking your catalog from a drop list where it says Connect to catalog.
+
+Upon saving, then not only is the new namespace created, but it comes preconnected to the catalog.
+
+Let's switch to our new namespace now and verify this as the new namespace comes up.
+
+Of course, it'll ask us about our project and setting up the version control system.
+
+But what we want to see now is Show Catalogs, which brings us to the catalog pane.
+
+But only this time, instead of having to connect to one, we come preconnected with this one.
+
+Of course, right now as you click through the event type Services and Assemblies, you won't see anything because we haven't published anything to this catalog yet.
+
+Just a quick review from the demo.
+
+To create a catalog, click the Create Catalog button in the Administer Advanced Catalog menu.
+
+Also from the demo, if you're creating a new namespace after the catalog has been established, simply choose it from the drop down like the screenshot shows.
+
+If your namespace already exists, change to the catalog namespace first and create an access token.
+
+Click on the token entry to copy the code into your clipboard and then switch to the namespace you want to connect.
+
+Choose New in the catalog pane and paste the token there.
+
+Make sure the URL is correct for the location of the catalog.
+
+If it connected properly, you'll see the entry in the catalog pane.
+
+Vantiq's engineers have created a useful tutorial about the catalog.
+
+I recommend you check it out to get even more hands on experience with using this feature.
+
+The filename: class/Catalog/142_Catalog_L1_1.1_Intro.txt
+
+https://www.youtube.com/watch?v=aVKbNXRFkas

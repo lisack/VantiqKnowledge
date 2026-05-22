@@ -1,0 +1,126 @@
+**Summary:**  
+This video provides an in-depth look at some of the less commonly used features of Vantiq rules, including rule versioning, expected events, merging, and activation. It explains how maintaining different versions of a rule can be beneficial, especially when dealing with evolving data from multiple applications. The video also covers how rules can listen for multiple events, including those that didn't happen, and how to manage rule activation during development. These features, while not frequently used, are essential for rounding out your understanding of Vantiq rules.
+
+**Original Content:**  
+filename: 134_RULES_L1_1.3_MissMrgVers  
+video url: https://youtu.be/C-qrxr5rqzM  
+
+Rule versioning, Expected events, merging and activation.
+
+The features in this video are not used as often as the other features you've seen so far, but they will round out your knowledge of rules.
+
+In this lecture, we'll go through a sort of miscellaneous collection of somewhat obscure rule behaviors.
+
+We'll start by talking about rule versioning.
+
+Having your application system maintain different versions of the same rule is highly useful, especially as the system runs over time.
+
+Let's say you have one central system that takes in events from multiple smaller applications, but the data some of them send has changed since you wrote the rule for it.
+
+To version a rule, simply add a colon after the rule's name and the version number.
+
+The system interprets the highest number to be the latest version and evaluates that first, followed by the next highest, and so on.
+
+Be sure to be consistent in your numbering scheme or the system will interpret the versions incorrectly.
+
+I want to point out something from the second example at the bottom.
+
+Notice that instead of aliasing the event being bound and then adding the where clause to evaluate the property using the alias, I'm instead evaluating the event property first in the where clause before the when clause.
+
+The third example is exactly the same as the second, and it's the format you saw in the last lecture.
+
+All right, but moving on.
+
+These are three rules.
+
+Well, actually I shouldn't say 3 rules.
+
+These are one rule with three different versions.
+
+They are all listening to something on topic A version 1.0 is just looking generically for anything in topic A and then it's going to insert into type A.
+
+But since that time that I wrote that version, things have changed.
+
+And so so I want to look for the possibility that occupation is part of the message.
+
+And if so, then I want to put it into type B.
+
+But yet there is more and that's where this version 5.0 comes in.
+
+And if there's a property called allergies, I want then to put it into type C.
+
+So these are my 3 versions and let's see how they are evaluated when we have something come across the topic.
+
+Right now, I'm just going to have name and number.
+
+The name is Fred.
+
+The number is 12.
+
+Let me publish that.
+
+Let's see what happens.
+
+It evaluated first version .5 found that there are no allergies.
+
+It evaluated version 1.1, found that there is no occupation.
+
+And then finally it evaluated this version.
+
+It could do that insert and it did OK Poor Fred, he's allergic to air.
+
+Let's see what happens when I publish this.
+
+Inserted into type C So again, the system first went to the highest numbered version to evaluate that first found the allergies property and stopped right there.
+
+Let's just cover the occupation.
+
+OK, so Fred #12 occupation circus clown.
+
+Let's see what happens when I publish that inserted into type B so you can see again.
+
+The system first looked at the highest number, determined that there was no allergies property, then went back to the next highest number, determined there was an occupation property and inserted there, and then ignored this one because this one was already meant.
+
+We've seen before that we can write rules to listen for a combination of events that all have to occur within a set period of time and have some relation to one another.
+
+But that's not the only way.
+
+Rules can listen for multiple events with the keyword or the rule can listen to any number of unrelated events, and there is no within delimiter because the events are treated separately.
+
+This is very handy if multiple streams of data with the same structure are coming into the system and need to be handled the same way.
+
+Rules can even listen and react to events that didn't happen.
+
+I've just created a rule here that is going to expect an event on topic A every 5 seconds.
+
+If indeed something happens on topic A, it'll log the info the event did happen, but otherwise it'll reset the timer for every 5 seconds.
+
+And if something doesn't happen, you're going to see a message about that.
+
+You're probably wondering, now that I've made this rule, why we're not seeing anything in the log messages.
+
+That's because I haven't primed the pump, if you will.
+
+As soon as I publish something in topic A, thereafter it's going to be listening to topic A and giving that message.
+
+So let me publish something.
+
+OK, notice I get the event on topic A and let's just wait in about.
+
+There we go.
+
+No event on topic in over 5 seconds and it will keep nagging me every 5 seconds from here on out until I inactivate this rule.
+
+There are times, especially during development, when developers will want to turn off the rules from listening for and processing events.
+
+To do this, just toggle off the activation checked box in the top right of the rule editor pane.
+
+By default, when rules are deployed along with other resources to new nodes, they will be active.
+
+But developers who want the rule to be inactive in some of the nodes where it is deployed just need to set an activation constraint.
+
+The property should match a property on the nodes where the rule should be active.
+
+This has been a short tour through rule features that don't see as much regular use as the other features, but they are good to know about nonetheless.
+
+The filename: class/Rules/134_RULES_L1_1.3_MissMrgVers.txt

@@ -1,0 +1,61 @@
+**Summary:**
+This content explains the concept and setup of public catalogs in Vantiq, which allow for easier and broader access compared to private catalogs. Public catalogs can be accessed by all namespaces within an organization without needing individual access tokens for each namespace. The process involves creating an access token at the organization level and setting up the catalog to be available across all namespaces. The guide also details how to create and connect to a public catalog, ensuring that resources and events can be shared efficiently within an organization.
+
+**Original Content:**
+
+filename: 142_Catalog_L3_3.1_Public  
+video url: https://youtu.be/v7HesatWVAw
+
+Public catalogs Public catalogs enable more widespread and easier access than private catalogs.
+
+Up to this point, we've been ignoring the public catalog option, but toggling it on produces a drop list of available catalogs.
+
+Vantiq managed installations will see this short list by default.
+
+Which are Vantiq supplied tools to facilitate certain service integrations and other handy resources.
+
+Developers of individual namespaces that can see a public catalog will not have to enter an access token to subscribe to something in it.
+
+The catalogs we've been creating up to this point have been the default private catalogs that any developer can create in order to share events and resources to other namespaces, one access token connection at a time.
+
+Public catalog still do require an access token, but it's connected at the org or system level.
+
+Namespaces that are under that level then all have access to the catalog by default.
+
+I'm in the catalog namespace we've been using all of this time and you can kind of tell because it's absolutely devoid of any project contents because it has no project on it.
+
+But now I need an access token so that I can connect it at the entire org level, and I want it to be longer term than the one that I have for the others.
+
+So if I go to Advanced Access Tokens and just choose New, it looks exactly like any access token we've already had.
+
+The difference being that I'm going to set the expiration date a little bit longer.
+
+This automatically puts the token in your clipboard, but you can also click on it to make sure that it's in the clipboard.
+
+I happen to be an org administrator for an org called Vantiq Training Sandbox, so I want to make this catalog now available for all of the namespaces within that org.
+
+So I first switched to the Org root namespace and instead of going to show catalogs and connecting from there, you go to Administer Advanced Catalogs and instead of seeing Create Catalog to create a catalog out of this namespace instead it allows you to create a public catalog for the entire org name, description and tags to find it by its purpose later if need be.
+
+And the very important part is of course the access token and making sure that the URL is pointing to the catalog location.
+
+At the bottom you see a toggle for connect using VQS.
+
+This creates A websocket connection for Edge installations connecting to the catalog.
+
+OK, I see the listing for my catalog class catalog.
+
+Let's go to a pre-existing namespace in the same org and see if it's now available as a public catalog in any namespace.
+
+To see available catalogs you go to Show catalogs.
+
+I'll make this full size and go to connect and take a look at the public catalog listing.
+
+Notice that mine is the middle one Catalog class catalog.
+
+I'll choose Connect and when I click on the listing I will see the events, services, and assemblies that have been published to this catalog so far.
+
+Having at least one catalog available to share from your organization makes for easy sharing of events and resources amongst the namespaces therein.
+
+The filename: class/Catalog/142_Catalog_L3_3.1_Public.txt
+
+https://www.youtube.com/watch?v=v7HesatWVAw

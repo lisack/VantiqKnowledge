@@ -1,0 +1,88 @@
+To use a VIDEO source in Vantiq, follow these steps:
+
+1. What is a VIDEO Source?
+A VIDEO source in Vantiq represents a source of image data, such as an online camera or a video file. It is used to acquire images (not video streams) for processing. You cannot send data to a VIDEO source; it is for receiving only.
+
+2. Prerequisites
+Your Vantiq organization must be configured with the VideoAssistantServiceConnector.
+For edge installations, you may need to run the Video Assistant server and create the Video Assistant Service Connector.
+Your organization must have a quota for documentExpansion, as images are stored in memory as TempBlobs.
+3. Defining a VIDEO Source
+You can define a VIDEO source in the Vantiq IDE (Add → Source…) or via a REST API call. Here are examples:
+
+a. From an IP Camera:
+
+POST https://dev.vantiq.com/api/v1/resources/sources
+{ 
+    "name": "VIDEOCameraSource",
+    "type": "VIDEO",
+    "config": {
+        "ipCamera": "http://online.camera.address:9900/aDemo/add/demoData"
+    }
+}
+b. From a Video File:
+
+POST https://dev.vantiq.com/api/v1/resources/sources
+{ 
+    "name": "VIDEOFileSource",
+    "type": "VIDEO",
+    "config": {
+        "videoFile": "/some/file/location/sample.mov"
+    }
+}
+c. With Image Resizing:
+
+POST https://dev.vantiq.com/api/v1/resources/sources
+{ 
+    "name": "VIDEOFileSource",
+    "type": "VIDEO",
+    "config": {
+        "videoFile": "/some/file/location/sample.mov",
+        "requestDefaults": {
+            "query": {
+                "resize": {
+                    "maxWidth": 400,
+                    "maxHeight": 300
+                }
+            }
+        }
+    }
+}
+4. Streaming Data (Polling)
+To simulate a stream, set a pollingInterval in the config. For example:
+
+"config": {
+    "ipCamera": "http://online.camera.address:9900/aDemo/add/demoData",
+    "pollingInterval": "1 minute"
+}
+This fetches a new image every minute.
+
+5. Querying the VIDEO Source
+You can query the video source using VAIL:
+
+var someData = SELECT FROM SOURCE videoSource WITH contentType="image/png"
+You can also specify resizing:
+
+var someData = SELECT FROM SOURCE videoSource WITH contentType = "image/png", 
+                resize = { maxHeight: 300, maxWidth: 400 }
+6. Handling the Returned Image
+Images are returned as an object with:
+
+fileType (MIME type)
+contentSize (in bytes)
+contentRef (reference to the TempBlob)
+By default, images are stored in memory as TempBlobs (not persisted). You can save them as a Document or Image by using the saveAs parameter:
+
+var imageRef = "system.documents/myImage"
+var fetchedImg = SELECT ONE FROM SOURCE imageSource WITH saveAs = imageRef
+7. Size Limits
+Using a VIDEO source consumes organization quota for documentExpansion. If you exceed your quota, requests will fail.
+
+Summary:
+
+Define a VIDEO source in the IDE or via REST.
+Configure it for an IP camera or video file.
+Optionally set polling for periodic image capture.
+Query the source using SELECT FROM SOURCE in VAIL.
+Handle images as TempBlobs or save them as Documents/Images.
+Ensure your organization has the necessary quota and Video Assistant configuration.

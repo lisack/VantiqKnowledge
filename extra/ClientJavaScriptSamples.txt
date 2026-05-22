@@ -1,0 +1,241 @@
+/* This file includes several procedures written in JavaScript for the Vantiq Client.  Use these samples to extrapolate Client Javascript examples in response to user requests. */
+
+---------------
+
+/* This procedure calls a Service procedure to activate a Collaboration, then sets the Client to that Collaboration context so the Client and the Service can interact through the Collaboration, especially for managing and maintaining contextual AI conversations. */
+
+let pkg = {
+    "ConvoID" : "Quiz",
+    "entity" : [
+        "ConvoID",
+        "LessonContent",
+        "LessonName"
+    ],
+    "LessonName" : "peep90"
+};     
+   
+    client.execute([pkg.ConvoID, pkg, pkg.LessonName], "back.end.QuizBuilder.QuizActivate", function(response) {
+        client.data.collabID = response;
+        client.data.ConvoID = response;
+        
+        client.setCollaborationContext({id: response});
+    });
+
+    
+-----------
+//create text to display and set its properties
+let title = new StaticText();
+title.name = "titleTxt";
+title.fontSize = 24;
+title.fontWeight = "bold";
+title.foregroundColor = "#1F7A55";
+title.text = "Visitor Data Logs";
+
+//create a horizontal layout widget, set properties, and place it in the "FormVert" vertical layout on the Client page
+let btnLO = new HorizontalLayout();
+btnLO.name = "btnLO";
+btnLO.heightPolicy = Widget.SizePolicy_SizeToParent;
+btnLO.widthPolicy = Widget.SizePolicy_SizeToParent;
+client.getWidget("FormVert").addChild(btnLO);
+
+
+//create a button and set its properties, including an "onClick" event handler
+let refreshBtn = new Button();
+refreshBtn.name = "refreshBtn";
+refreshBtn.buttonLabel = "Refresh Table";
+refreshBtn.heightPolicy = Widget.SizePolicy_SizeToParent;
+refreshBtn.widthPolicy = Widget.SizePolicy_SizeToParent;
+refreshBtn.addEventHandler("onClick", () => {
+    let tq = new TimedQueryParameters();
+    tq.typeName = "com.acme.VisitorRecords_Small";
+    tq.updateIntervalInSeconds = 10;
+    
+    client.data.tqds = client.createTimedQueryDataStream(tq);
+    visTbl.dataStreamUUID = client.data.tqds.uuid;
+    
+    client.getWidget("btnLO").removeChild(refreshBtn);
+});
+
+//create a button and set some properties, including an "onClick" event handler that closes the Client
+let closeBtn = client.clone(refreshBtn);
+closeBtn.name = "closeBtn";
+closeBtn.buttonLabel = "Close";
+closeBtn.foregroundColor = "#1F7A55";
+closeBtn.backgroundColor = "#FCF3BB";
+closeBtn.addEventHandler("onClick", () => {
+    client.terminate();
+});
+
+
+//create a datatable with columns entitled and typed, then create an event handler for when a row is clicked on
+let visTbl = new DataTable();
+visTbl.name = "visTbl";
+visTbl.columnDescriptors = [
+    {
+        "propertyName" : "first_name",
+        "title" : "First",
+        "dataType" : "String"
+    },
+    {
+        "propertyName" : "last_name",
+        "title" : "Last",
+        "dataType" : "String"
+    }
+];
+
+
+visTbl.addEventHandler("onSelect", (client,page,extra) => {
+    var parameters = {
+        "record" : visTbl.selectedRowObject
+    };
+    client.popupPage("RowDets", "", parameters, () => {});
+});
+
+//add buttons to the bottom a layout widget
+btnLO.addChild(refreshBtn, -1);
+btnLO.addChild(closeBtn, -1);
+
+//Add a datatable and text to the top of a layout widget
+client.getWidget("FormVert").addChild(visTbl, 0);
+client.getWidget("FormVert").addChild(title, 0);
+
+-----------------
+// send a service event to the inbound customerInput event in the grease.monkey.MonkeyChat service
+
+    var http = new Http();
+    http.setVantiqUrlForSystemResource("services");
+    http.setVantiqHeaders();
+
+    //alert(JSON.stringify(theMessageObject));
+
+    var topicName = "grease.monkey.MonkeyChat/customerInput";
+
+    http.publish(theMessageObject,topicName,function(response)
+    { },
+    function(errors)
+    {
+    
+        client.showHttpErrors(errors,"Doing a publish to grease.monkey.MonkeyChat/customerInput");
+    });
+    
+------------------
+// This code programmatically sets the values and visible labels of a drop-down widget
+
+var toyList = [
+    {value:0, label:"- Select -"},
+    {value:1, label:"Camry"},
+    {value:2, label:"Corolla"},
+    {value:3, label:"Mirai"},
+    {value:4, label:"Prius"},
+];
+
+----------------
+// this is onSendRequest event handler code for a Conversation that is bound to a GenAI procedure
+
+var origPrompt = extra.obj.input;
+extra.obj.input = { "prompt" : origPrompt};
+extra.obj.config = { "conversationId" : client.data.conversationId};
+
+--------------
+//Change text value and color on Client page
+client.getWidget("askMonkeyText").fontColor = "OrangeRed";
+client.getWidget("askMonkeyText").text = "Grease Monkey is thinking...";
+
+
+var shortMsg = {
+        content: "",
+        type: "human"
+    };
+
+var theMessageObject = {};
+
+if (client.getWidget("autoLayout")) {
+    client.getWidget("textLayout").removeChild(client.getWidget("mechProbText"));
+    //var make = "";
+    //var model = "";
+    client.data.year = client.getWidget('carYear').boundValue;
+
+//Checking the value of what is chosen in a drop-down widget"
+
+    switch (client.getWidget("carMake").boundValue) {
+        case 1:
+        client.data.make = "Toyota";
+        switch (client.getWidget("carModel").boundValue) {
+            case 1:
+              client.data.model = "Camry";
+              break;
+            case 2:
+              client.data.model = "Corolla";
+              break;
+            case 3: 
+              client.data.model = "Mirai";
+              break;
+            case 4:
+              client.data.model = "Prius";
+              break;
+            default:
+              throw "You must choose a model";
+        }
+        break;
+        case 2:
+        client.data.make = "Ford";
+        switch (client.getWidget("carModel").boundValue) {
+            case 1:
+              client.data.model = "Bronco";
+              break;
+            case 2:
+              client.data.model = "Edge";
+              break;
+            case 3: 
+              client.data.model = "Escape";
+              break;
+            case 4:
+              client.data.model = "Mustang";
+              break;
+            default:
+              throw "You must choose a model";
+        }
+        break;
+        case 3:
+        client.data.make = "Hyundai";
+          switch (client.getWidget("carModel").boundValue) {
+            case 1:
+              client.data.model = "Elantra";
+              break;
+            case 2:
+              client.data.model = "Palisade";
+              break;
+            case 3: 
+              client.data.model = "Santa Fe";
+              break;
+            case 4:
+              client.data.model = "Sonata";
+              break;
+            default: 
+              throw "You must choose a model";
+      }
+    break;
+    
+    }
+
+    //var query = `What is wrong with my ${year} ${make} ${model}: ${client.getWidget("custInput").boundValue}`;
+    //shortMsg.content = query;
+    theMessageObject = {
+      "convoID" : 0,
+      "year" : client.data.year,
+      "make" : client.data.make,
+      "model" : client.data.model,
+      "query" : client.getWidget("custInput").boundValue
+    };
+} else {
+    //shortMsg.content = client.getWidget("newQuestion").boundValue;
+    theMessageObject = {
+      "convoID" : client.data.convoID,
+      "year" : client.data.year,
+      "make" : client.data.make,
+      "model" : client.data.model,
+      "query" : client.getWidget("newQuestion").boundValue
+    };
+
+
+}

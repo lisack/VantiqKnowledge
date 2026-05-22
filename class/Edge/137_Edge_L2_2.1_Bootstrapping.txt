@@ -1,0 +1,148 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+This video provides a comprehensive guide on bootstrapping edge nodes in Vantiq, focusing on deploying system resources to edge devices. It covers the entire process from setting up project partitions to configuring and deploying edge nodes. The video is particularly useful for those who have not yet taken the Vantiq Academy Distributed Deployments class, as it offers a detailed walkthrough of the deployment process, including handling edge-to-cloud connections and creating bootstrap files for edge nodes.
+
+**Original Content:**  
+filename: 137_Edge_L2_2.1_Bootstrapping  
+video url: https://youtu.be/fCKjhSg5DFE  
+
+Bootstrapping edge nodes.
+
+The goal of this video is to familiarize viewers with system deployments to edge nodes.
+
+Here is our cloud based application project.
+
+Our service takes in events from 2 MQTT sources, processes them, and then sends the averages to its own outbound event.
+
+The dashboard listens to that outbound event and displays the averages accordingly.
+
+If you haven't taken the Vantiq Academy Distributed Deployments class, I highly recommend it for deeper clarification of the whole deployment process.
+
+As you recall, a Vantiq Edge server is a Vantiq server for an edge device to connect to namespaces in the cloud.
+
+You can create a node to that namespace, supply the Uri and the access token, and the connection will work exactly the same as it would between two cloud based namespaces.
+
+For edge to cloud connections, it's a bit trickier due to the likely presence of a firewall protecting the edge site.
+
+Vantiq has tools to work around this.
+
+In this video, we'll look at how to deploy a namespace and resources to an edge device.
+
+Unlike nodes in the cloud, which are always up and running, edge nodes can go up or down as needed for extra processing, new locations, etcetera.
+
+Vantiq supports a single process by which an edge node is spun up and namespace is created and project resources are deployed to it.
+
+This process is called bootstrapping.
+
+Here are the steps for deploying to an edge node.
+
+We'll go through each of them in turn, starting with step number one.
+
+Set up project partitions.
+
+Partitions can be found by going to projects and show partitions.
+
+At first all project resources are found in the default partition, but you can create new partitions by choosing new partition and giving it a property name and some kind of value such as Edge, Lab and Edge.
+
+There are several ways to populate your new artition.
+
+I'm right clicking in the default area and moving all of the resources to my new edge artition.
+
+And here it is, Step 2.
+
+Now that you've defined where resources go to which partitions, we need to create an environment so you can create a deployment next.
+
+Of course, because the edge node doesn't exist yet, the system will not find the node connection with the property type you set up, so it will show as an empty location.
+
+Let's head now to administer deploy environments.
+
+In order to start our environment, our new environment will list its nodes by constraint, that constraint being the property we just gave it in the partitions.
+
+And here's our new environment with this as yet empty node.
+
+Step 3.
+
+Now we can create and configure a deployment.
+
+In our case, we are also going to populate our sensors table to create a deployment.
+
+We go to administer deploy deployments, then click new.
+
+We'll just supply a name, the rest is filled in for us.
+
+Ordinarily in any deployment, types will be allocated, but not the data in them.
+
+So that's what we're going to set up in a new parameter in this partition.
+
+For the edge, we'll go first to the sensors type, get the data as JSON, just a simple copy of this entire mount, and then paste it into the appropriate area so that it will be copied in when the deployment is created.
+
+Moving on to Step 4, peer connections are to existing namespaces in the cloud.
+
+Node templates, by contrast, are not connected to anything yet.
+
+They describe aspects of nodes that will be bootstrapped later, including what resources the nodes will have deployed to them.
+
+Go to Administer, deploy nodes, choose New and of type template.
+
+This one's already filled out with the name and information about the parent node, which is the cloud environment.
+
+The partition of course is the partition that you set up in partitions.
+
+The template property is something that will be unique about the node when it becomes a node, and the properties are the same properties that you set up for the partition already.
+
+The namespace name is the name of the namespace that will be created in the edge server, and by default the direction is 1 for a top down deployment.
+
+Step 5.
+
+This is the node configuration for the edge node we will be bootstrapping.
+
+There isn't much to fill out, we're just supplying the unique value for the template property we set up in the node template.
+
+Let's take a look at the next step because number six, the node configuration is actually building a bootstrap file that the edge node will use when it comes online.
+
+To use this, you'll need to copy this file and put it where the configuration files are in the Edge node installation.
+
+Back in the Administer Deploy menu, there is also Node Configurations.
+
+Let's make a new one.
+
+Once I choose the temlate from which it's based, all it's going to want to know is what the edge ID is.
+
+To get to the JSON file, we're going to need either right click on the listing or go to the context menu and choose Show Configuration JSON.
+
+There it is.
+
+Copy that in whole and put it in your clipboard for the next step.
+
+Now in your file system, go to your edge installation and the config subdirectory and create a file called Bootstrap JSON.
+
+Paste your clipboard into that.
+
+Finally, all there is left is to spin up the edge node to deploy the resources.
+
+I'm showing examples from a docker instance, but I should point out that starting up an edge node from Kubernetes or the jar file will be different.
+
+See the documentation for details.
+
+The principle is exactly the same, however, just as demonstrated in the last video.
+
+We first log into the key IO and make sure that we can get to the images and run the docker compose up command to start the boot up.
+
+This will take a few minutes.
+
+Search for the namespace name you made in the template.
+
+Select the project created from the projects window in order to see the resources.
+
+The service and client are here and the sources are working.
+
+Opening the sensors type, we see that the records are there.
+
+Bootstrapping has started up.
+
+The Edge server created a namespace and deployed an application to it.
+
+The filename: class/Edge/137_Edge_L2_2.1_Bootstrapping.txt

@@ -1,0 +1,162 @@
+### Summary
+
+This content provides an overview of the fundamental components of the Gen AI Builder environment in Vantiq. It explains the categorization of Gen AI components based on their behavioral similarities and introduces key components such as primitives, configuration processors, and user-defined components. The document also describes how these components are used to create procedural flows and tasks within the Gen AI Builder. Additionally, it highlights the use of large language models (LLMs) for categorization and consensus patterns, and provides examples of how these components function in practice. The content concludes with a recommendation to explore the Gen AI Builder tutorial for further learning.
+
+### Original Content
+
+Filename: 141_GAB_L1_1.2_GenFundamental
+Video URL: https://youtu.be/wP9VsbTjw2w
+
+Gen AI fundamental components Now that you've seen something of the Gen
+
+AI Builder environment from the last video, we'll need to clarify a couple of terms about this developmental tool.
+
+We'll also briefly discuss the component categories.
+
+However, in this video I'm grouping Gen
+
+AI component patterns by their behavioral similarities and not necessarily by their categories.
+
+The components to be featured here are notable in that they are pre built procedure code that accomplishes a basic fundamental function, making them a good introduction to the Gen
+
+EI procedural flow.
+
+In general, the Gen
+
+AI Builder is creating a procedure or even an app task that the event handler will invoke.
+
+Just as we call App Builder items Activity Patterns, which are configured into App tasks, in the Gen
+
+AI Builder, they are Gen
+
+AI components and are configured into Gen
+
+AI Flow tasks.
+
+In the App Builder, you can make App Components comprised of a chain of App tasks that act like single App Patterns.
+
+And in the Gen
+
+AI Builder, you can also create a custom Gen
+
+AI component comprised of a chain of Gen
+
+AI tasks that act like a single Gen
+
+AI component.
+
+This will become clear over the course of this class.
+
+The Gen
+
+AI Builder categories generally reflect the components origins.
+
+For instance, the Resources category is a grouping of components configured from specific Vantiq resources.
+
+You've already seen Conversation, LLM and Prompt from template from this category.
+
+The primitives are based on Lang chain primitives.
+
+AI patterns each require a large language model to perform their functions, and then we move into the categories that have to do with document formats and retrievals.
+
+Configuration processors affect the procedural flow in their own ways, as we'll see.
+
+As I mentioned, developers can make Gen
+
+AI components much like app components, and those will be found in the user defined category.
+
+Now let's talk about these fundamental components.
+
+At the top right is the category where they can be found, in this case primitives.
+
+The assigned task creates a subflow which adds in specified properties to the input value.
+
+In this case, we're adding a status property to the input and giving it a value.
+
+Code blocks, which are just snippets of Vail or Python code, often do the logic work to make the assignment, so you'll see them often here.
+
+Branch is not splitting processing.
+
+Only one path will be taken based on the truth of a condition.
+
+In the example here, if the input dot temp value is over 100, then the high temp path will run.
+
+This subflow assigns an alert level of caution, urgent, or emergency depending on how high the value of the temp is.
+
+The default subflow does none of these.
+
+Fall back runs an alternative subflow if the main subflow fails in some way.
+
+In this example, we have a main flow that takes in two numbers and divides one by the other.
+
+Our fall back subflow engages when the divisor is 0.
+
+Since that results in a failure, there can be more than one fall back subflow, so the first fall back could have a second, and so on.
+
+Transform behaves very similarly to the App Builder transformation pattern, right down to the same 3 modes.
+
+Here we've got the very familiar visual mode, though notice that instead of event dot properties, they are input dot properties.
+
+Just like the App Builder, Transformation Transform can define the whole downstream information flow or check Transform in place to act on specific properties, leaving the rest to go through unaltered.
+
+Categorize uses a generative LLM to evaluate where the prompt value belongs.
+
+In the categorized task, we've created 3 categories of Fish, Bird, or Mammal.
+
+In the case of a prompt stating that the entity is a parakeet, the LLM evaluates the category to Bird.
+
+Tiger went to the Mammal category and Grouper to Fish, and so on.
+
+Finally, there is the consensus pattern, which generates a large language model response from the collected responses of multiple LLMS.
+
+It takes just one parameter, the LLM, that will be used to craft the consensus response.
+
+In this example, we prompted for an opinion of what could be wrong if a 1972 Dodge pickup truck is leaking a green fluid from a wheel well, and we asked 2 LLMS with came up with two possibilities of what could be wrong in a large language model packaged them into a single response.
+
+I will caution you that if the two responses are not in fairly close agreement, chances are the return will be something like no consensus found.
+
+Transform behaves very similarly to the App Builder transformation pattern, right down to the same 3 modes here.
+
+Welcome back.
+
+You saw how this application worked in the last video, and in this video I'll show you the services behind it.
+
+The Sensor Input service reports the tank pressures to the client dashboard and sends an alert to the Convo input service to handle conversations.
+
+If there's a drop in tank pressure, our worker Performance service takes in the conversation from the Convo input service.
+
+After adding the user ID of the employee, we send everything to a Gen
+
+AI procedure called Eval Question.
+
+Let's take a closer look at this procedure.
+
+Tasks outlined in black will be part of the output.
+
+We sent the entire event from the app as input, so this transform task calls the information to what we'll actually need.
+
+To the left, we're prompting 3 large language models to use the conversation in order to restate the user's question.
+
+The ChatGPT response will be used as the basis for categorizing whether the question is an information request or an action proposal.
+
+The responses from the other two large language models will be used by a third LLM to form a question by consensus.
+
+Over here on the right, we're assigning a new value called Employee, which will be the employee's name based on the passed in user ID.
+
+One last thing I want to do, which is to create a branch to run if the employee is Bob.
+
+We're sending the output from this procedure to a log message.
+
+Let's run the program again and see what we get.
+
+When we expand the log message, we can see the output from the branch is fire.
+
+Bob Categorized scored the question as 70% action and 30% information request, and the consensus LLM could not consolidate the two disparate restated questions from the other LLMS to reach a consensus.
+
+For more experience with the Gen
+
+AI Builder tool, I highly recommend that you take the Gen
+
+AI Builder tutorial available from the Help menu.
+
+The filename: class/GAB/141_AdvAI_L2_2.2_GenFundamental.txt

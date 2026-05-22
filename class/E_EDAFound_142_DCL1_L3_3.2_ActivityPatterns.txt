@@ -1,0 +1,84 @@
+**Summary:**  
+VEH stands for the Visual Event Handler. This video titled "Visual Event Handler Activity Patterns" (also known as VEH Activity Patterns) provides an overview of activity patterns in Vantiq's Visual Event Handlers (VEH). These patterns are pre-written VAIL code snippets that can be integrated into event flow diagrams to perform specific tasks. The video explores various categories of activity patterns, such as modifiers, flow control, filters, and more, explaining their functions and use cases. It highlights the importance of cached enrich for efficient database interactions, the use of flow control patterns like loop while and split by group, and the role of filters in event processing. Additionally, it touches on integrating with large language models, action activity tasks, mobile interactions, and mathematical calculations. The video emphasizes the growing library of activity patterns with each Vantiq release and encourages hands-on experience through labs.
+
+**Original Content:**  
+filename: 142_DCL1_L3_3.2_ActivityPatterns  
+video url: https://youtu.be/ZDjBTG3BzFc
+
+Visual Event Handler Activity Patterns.
+
+Activity patterns are pre written pieces of VAIL code available within service Visual Event Handlers by category.
+
+Once a pattern is dragged into the event flow diagram and configured for the application, it becomes a part of the program as an activity task.
+
+There are dozens of activity patterns available to service Visual Event Handlers.
+
+In this video, we'll explore the main categories, highlighting one or more in each of them.
+
+We'll also cover service procedures, service events, and collaboration activity patterns later.
+
+The top category of prebuild activity patterns is modifiers.
+
+Modifiers alter the events in some way.
+
+In the case of Enrich and Cached Enrich, the events gain additional information based on stored data with a common unique foreign key.
+
+Database interactions are slow and resource intensive, so this is where cached Enrich really shines.
+
+Cached Enrich performs the data retrieval from the database when first invoked, just like the enrich pattern, but then it maintains that data in state for the designated refresh interval as shown in the configuration panel.
+
+The drawback is if the persisted data changes in that time period, the events won't be enriched with that until the refresh interval expires.
+
+Bail is a convenient way to add a few lines of code right in the app.
+
+Event flow.
+
+Flow control patterns work on the events themselves rather than the data in them, defining how and how often events come in and either bringing events together or splitting them apart.
+
+The loop while activity pattern runs an event through the same pattern until the while condition is no longer true or a counter reaches the designated maximum number of times.
+
+If you're iterating throughout events array like the example shown, this is a handy way to do it.
+
+We'll be using split by group in the next lab, which is also a very useful flow control.
+
+Activity pattern filters restrict the number of events that will continue through the app, and as such they look a lot like flow chart decision symbols.
+
+The rest of the activity tasks look like process rectangles.
+
+Since they are, there is no great mystery to what filter does.
+
+It only allows events that meet the designated condition to pass through.
+
+Dwell requires that condition to remain true for duration of the developer's designation.
+
+As you can see in the screenshot, the Gen
+
+AI category is for integrating event processing with large language models with or without a semantic index.
+
+In this example, the answer question task has taken in semantic index.
+
+Text that declared the best stock to buy is Vantiq, so its response reflects how it was informed.
+
+Action Activity Tasks Provision developers to retain or report events, call procedures and send events elsewhere.
+
+Save to type is for persisting information from events to a database.
+
+It should be used sparingly for only critical data in order to avoid unnecessary performance bottlenecks.
+
+Procedure calls a procedure.
+
+The Publish to service pattern sends events either to the current services outbound event or to the inbound event of another service.
+
+Patterns in the Mobile category are for interacting with users over the Vantiq mobile app on mobile devices.
+
+You'll be using the Notify pattern in your labs.
+
+Math is the last category we'll cover in this video and as you no doubt guessed, these are a collection of activity patterns to generally perform various calculations on the events over a selected window of time.
+
+Compute Statistics will gather various statistics on a single numerical event.
+
+Property Analytics gathers the same statistics and more and on more than one event property.
+
+To sum up, there are many activity patterns available in Visual Event Handlers and more get added with each Vantiq release.
+
+One video is not enough to cover them all, but we will be seeing more in subsequent videos in this class and you will get much hands on experience with apps in your labs.

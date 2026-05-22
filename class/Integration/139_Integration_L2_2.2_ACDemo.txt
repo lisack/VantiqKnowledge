@@ -1,0 +1,56 @@
+**Summary:**  
+This guide explains how to send messages between two Vantiq namespaces using the Azure Service Bus queue. It involves setting up access tokens, connecting to the Camel catalog to install necessary assemblies, and configuring the Camel connector assembly. The process includes deploying the Camel connector to Kubernetes and setting up services for message sending and receiving. The guide also covers creating a cluster object and running deployment procedures to facilitate message transfer between namespaces.
+
+**Original Content:**  
+filename: 139_Integration_L2_2.2_ACDemo  
+video url: https://youtu.be/aRbXDktaiyo
+
+In this use case, I'll be sending messages from 1 Vantiq namespace to another via the Azure Service Bus queue.
+
+At the moment both of these namespaces are completely empty, though I did make access tokens and put them in secrets.
+
+To get to the public catalog that has the assemblies, we go to show catalogs, connect, choose a public catalog and the Camel catalog.
+
+From there connect and then you'll see a listing for the Camel assemblies.
+
+Choose that and assemblies and here is the full list of all of the assemblies.
+
+For facilitating connections to outside systems, the first assembly to install is the Camel connector assembly required for providing the infrastructure for the other assembly.
+
+As is common for assemblies, this one has a few configurable properties.
+
+In this case, we only need to set two because we're otherwise happy with the resource defaults.
+
+The second assembly we'll be installing has to do with the direction and outside system.
+
+In our case, we want to use Azure Service Bus and the sync direction to send messages to it.
+
+Here are the resources from the two assemblies that we have installed.
+
+Take note of the message structure.
+
+I also got two services associated with my Azure Service Bus sync deployment.
+
+This one will send the outgoing message to my Service Bus queue and the other one will deploy the route to Kubernetes.
+
+If we're using Kubernetes at this point, do make sure that your Kubernetes cluster is up and your Kate's workers are active back in the message sending namespace.
+
+I need to create a cluster object by going to Administer Deploy Clusters and then choosing a new cluster.
+
+In this case, the name is what I set in my environment variable before I ran my Kate's worker.
+
+Now I can run the deployment procedure that will deploy the Camel connector as configured by the installed assembly.
+
+What returns is what's being sent to the Kate's worker.
+
+So here is a simple procedure to send a message to the Service bus queue and in the namespace that's going to receive the messages.
+
+I downloaded the assembly for the Camel connector and the source version for my service event bus.
+
+I also ran the deployment procedure for that assembly and created my own service so that I could see the received messages.
+
+Now when I run my message send procedure from the sending namespace, it goes through my service bus and to my receiving namespace.
+
+The filename: class/Integration/139_Integration_L2_2.2_ACDemo.txt
+
+https://www.youtube.com/watch?v=aRbXDktaiyo

@@ -1,0 +1,87 @@
+**Summary:**
+This content provides a detailed guide on how to localize displays in Vantiq, specifically focusing on translating launchable client displays into different languages, such as Zulu. It explains the use of global and local message symbols for translations, the process of creating and managing localization symbols, and how to export and modify default values for new language translations. The guide also covers the steps to import translated files and ensure proper display in the desired language, along with tips for dynamic communications and instant locale changes.
+
+**Original Content:**
+
+filename: 142_LaunchClients_L1_2.1_Localization
+video url: https://youtu.be/wqoQ6JbZnFk
+
+Localization.
+
+The localization tools aren't exclusive to launchable clients.
+
+However, arguably launchable clients displays are more likely to be translated into other languages.
+
+I have a client in English and with the click of a button, I'm going to turn it to Zulu.
+
+Our About Us page is in Zulu.
+
+The names of our products are in Zulu.
+
+Even our Contact us page is in Zulu.
+
+This is especially interesting because it's composed of a client component that has a second page that I can't even see as a developer, but I can still translate the words to Zulu.
+
+We'll go through the steps to localize displays in this video and see it demonstrated in the next one.
+
+There are two types of message symbols for translations.
+
+The global type is for labels that will see a lot of use, such as OK or submit buttons in the global localization symbol table.
+
+Global symbols start with an @and should be in the format of usage dot name.
+
+The value is the default value which will be translated for different language displays.
+
+The local message symbols are for individual widget labels, such as the example of the label on the input string shown.
+
+These start with a dollar sign and should be in the format of page name dot widget name.
+
+Notice that they are set equal to their default values.
+
+Developers can create their localization symbols as they drag each widget into the canvas, but it's easy to miss some this way.
+
+Also, when using client components, the consumer can't access text that is internal to the component.
+
+The clickable last line in the localization tab will find all the text in your client and automatically replace it with a local message symbol, making your original value the default.
+
+This is a huge time saver.
+
+Once developers have all the text displays set to symbols and default values, export a default value which will look something like this with the global symbol messages first, then the local ones in a table next to their default equivalents.
+
+Now we're to the point of actually accomplishing the translation.
+
+You will need the default file, so make a copy to modify for the new language.
+
+In my case, I started with a default JSON file, made a copy for Zulu, so the name of the translated file will be zu dot JSON.
+
+If I'd started with a default dot properties file, then it would be zu dot properties.
+
+In my zoo dot JSON file I replace all the default values for the symbols to their Zulu translations.
+
+The resulting file will look something like what is shown.
+
+Once your new symbol file is translated, compress it and the original default file into a zip file and drag it into the region where it will be imported.
+
+You'll see a message like the one shown here.
+
+Make sure the default and all the language files have been found.
+
+If there's a syntax error, that language file won't appear.
+
+Fix the problem and start over.
+
+If you specify the desired locale in the localization tab, then run the client, you'll see what translated.
+
+In our case, because the names of the products came straight from a standard type, they don't translate, but all the major headers and non data display text has converted to Zulu.
+
+Using the client dot format message function in alerts and other dynamic communications will ensure that the right language turns up at runtime.
+
+To know what the pertinent localization symbol messages are, put a listing of them in the comments section of the client custom code.
+
+Client override locale sets the new locale right away.
+
+In our case we have that code for a button click so the user can instantly change the display to the new language.
+
+The filename: class/LaunchableClient/142_LaunchClients_L1_2.1_Localization.txt
+
+https://www.youtube.com/watch?v=wqoQ6JbZnFk

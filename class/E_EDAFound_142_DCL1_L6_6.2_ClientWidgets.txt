@@ -1,0 +1,94 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides an overview of using Client Builder Widgets in Vantiq to create interactive client displays. It explains how to add and configure widgets, manage client properties, and utilize layout widgets for effective design. The document highlights the importance of using themes for styling, the functionality of different widgets, and the significance of layout management. It also mentions the availability of further learning resources through Vantiq's Academy for a deeper understanding of Client Builder.
+
+**Original Content:**
+filename: 142_DCL1_L6_6.2_ClientWidgets
+video url: https://youtu.be/THEHQo7Ikeo
+
+Client Builder Widgets.
+
+Widgets are what make up the Client display and interact with users.
+
+As you saw before, the Add menu is a good way to open a new Client and this time after supplying the name and package we will open an empty browser window template.
+
+This will give us an empty Client.
+
+Remember the edit tab is for getting to your Client properties and the add tab is for getting to the widgets that you can drag in.
+
+In the Edit tab is also where you set up what data will be coming into the Client through either streams or objects.
+
+Moving back to the Add tab now, let's drag in an inline button and then select it to bring up the configuration pane.
+
+Configurations are ordered by category, and they're fairly intuitive.
+
+You might notice that buttons are missing a data category, but that's because they don't usually display data.
+
+The more complex the widget, the more options there will be.
+
+Particularly in the Events section, buttons have nothing more than a simple click, but if I drag in something more complex like a data table, there are suddenly a wide variety of events for actions that could be done to that data table.
+
+Rather than style each widget individually, go to the Client properties and choose theme to do it as a group.
+
+In this one place I can change fonts, colors, borders, etcetera for the entire Client and even save my overall theme for later use.
+
+For each widget, I can go to the style properties and override the defaults if I want to as well.
+
+Let's use a layout widget now so you can see layout placement options.
+
+Move a widget's top left corner into a layout widget in order to place it in that widget.
+
+If we don't like how that button stretched across the entire layout, we can fix that in the layout properties.
+
+I can change the width policy from size to parents to explicit, and then set it to a more reasonable width that I like.
+
+And if I don't like it in the center, I'll change the horizontal gravity to left.
+
+When a widget is selected, this panel slides in from the right.
+
+Within each of these sections, developers give the widgets names, set their initial values and appearances, write event handlers for them, among other actions.
+
+Layout widgets are good for aligning Client widgets neatly.
+
+No matter the size of the screen.
+
+They can be nested in code.
+
+Whatever affects the outermost layout widget effects its contents too.
+
+Good layouts in the Widget Builder are so important.
+
+There is a Vantiq document devoted to the subject called the Layout Manager User's Guide.
+
+The button widgets come in three different forms, but many of the other widgets have onclick events associated with them, so they behave like buttons too.
+
+Here are all of the data display widgets shown in one screenshot, starting from bar at the top left to viewer at the bottom right.
+
+It's fairly easy to determine what most of these do, but I'll point out a few that aren't as obvious.
+
+For instance, you may wonder what the difference is between an image widget, the Vantiq logo in the middle, and the viewer widget, which is the Vantiq logo at the bottom right.
+
+The viewer widget displays a clickable image designed to take the user to another URL.
+
+The HTML viewer is for inputting raw HTML for browser display within the Client, such as when creating a custom widget.
+
+Markdown displays markdown formatted text.
+
+The Canvas widget to the right of the calendar is for allowing the user to Draw Something on the canvas.
+
+Data input is for widgets expecting values for users to fill in.
+
+All the black widgets are meant to be used only for Clients that will be in the Vantiq mobile app.
+
+In your labs, you'll be building a comprehensive dashboard for pump sensor data and even a couple of Clients for viewing on the Vantiq mobile app.
+
+There is so much to the Client Builder that we can't cover in this class.
+
+Take any of the Client related electives offered by the Academy to deepen your knowledge and experience with this very important development tool.
+
+The filename: class/E_EDAFound_142_DCL1_L6_6.2_ClientWidgets.txt
+
+---

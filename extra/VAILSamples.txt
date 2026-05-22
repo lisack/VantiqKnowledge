@@ -1,0 +1,472 @@
+This file includes examples of several VAIL procedures and rules.  Use these samples to answer user requests for examples. VAIL is much like JavaScript.
+-------------
+//
+//  This Procedure is used to add one or more users to an existing "Chatroom"
+//
+//  chatId:String           - The unique identifier for the target chatroom
+//  usersToBeAdded:String   - An array of usernames to be added
+//
+//  returns - An object containing "chatId" and "addedUsers"
+//
+PROCEDURE Chat.addUser( chatId String DESCRIPTION "The unique identifier for the target chatroom",
+                        usersToBeAdded String MULTI DESCRIPTION "An array of usernames to be added")
+
+SELECT EXACTLY ONE * FROM ArsChat WHERE (chatId == chatId)
+
+var currentUsers = ArsChat.users
+
+//
+//  Build up a list of users we are actually removing
+//
+var addedUsers = []
+
+FOR (user in usersToBeAdded)
+{
+    user = user.toLowerCase()
+
+    //
+    //  First make sure it's not already on the list
+    //
+    IF (!includes(currentUsers,user))
+    {
+        currentUsers.push(user)
+        addedUsers.push(user)
+    }
+}
+
+IF (addedUsers.size() > 0)
+{
+    //
+    //  Get the username of the person adding these new users
+    //
+    var adder = Context.username()
+
+    //
+    //  Update the member list for the group associated with the chatroom to include the new users.
+    //
+    var groupName = "cr-" + chatId
+
+    UPSERT groups(name:groupName, members:currentUsers)
+
+    //
+    //  Update the ArsChat object with the new currentUsers list
+    //
+    UPDATE ArsChat(users:currentUsers) WHERE (chatId == chatId)
+
+    FOR (addedUser in addedUsers)
+    {
+        //
+        //  Now send a message announcing that the user was added (which the new users will now see).
+        //
+        var addUserMsg = "User '" + addedUser + "' has been added to the chatroom by '" + adder + "'"
+        Chat.sendMessage(chatId,"text",addUserMsg)
+    }
+}
+
+var result = {}
+result.chatId = chatId
+result.addedUsers = addedUsers
+RETURN result
+
+---------------
+PROCEDURE ActivityPattern.generateEnrichActivityPattern(collaborationTypeName String, activityName String) HIDDEN
+
+SELECT EXACTLY ONE FROM collaborationtypes AS collaborationType WITH configure=true WHERE name == collaborationTypeName
+var activityType = collaborationType.assembly[activityName]
+activityType.name = activityName
+activityType.configuration.enableBadging = 
+    !collaborationType.disableBadging || activityType.configuration.enableTaskBadging
+
+log.debug("ActivityPattern.generateEnrichActivityPattern: Starting to generate resources for Enrich activity")
+
+var config = AppGeneration.validateConfiguration(collaborationType, activityType, ["associatedType"])
+
+config.imports.push("type " + config.associatedType)
+config.simpleTypeName = config.associatedType
+var dotIndex = config.associatedType.lastIndexOf(".")
+if (dotIndex > -1) {
+    config.simpleTypeName = config.associatedType.substring(dotIndex + 1)
+}
+
+// Generate the triggers
+var errorPrefix = "io.vantiq.appType." + config.collaborationType + "." + config.name
+config = AppGeneration.generateTaskTriggers(collaborationType, config, errorPrefix)
+
+// Configure query used to fetch enrich instance
+config.queryQual = AppGeneration.generateEnrichQueryQual(config, errorPrefix)
+if (!collaborationType.isEventHandler) {
+    config.queryQual = AppGeneration.replaceEventWithEventValue(config.queryQual)
+}
+
+log.debug("ActivityPattern.generateEnrichActivityPattern: Validated input config: {} for generating a Enrich activity.", 
+    [config.toString()])
+    
+// Check to see if this is an event handler
+var isAsync = false
+if (collaborationType.isEventHandler) {
+    // Set up the action to run for each event
+    var actionTemplate = getDocument("apps/enrich/Enrich_Action_Template.vail")
+    config.taskAction = generateResource(actionTemplate, config)
+
+    // Trigger directly and mark as async
+    config.streamTrigger = config.triggerOp
+    isAsync = true
+} else {
+    // Generate the event stream to do the work
+    AppGeneration.generateVAIL(config, "apps/enrich/Enrich_ES_Template.vail", "eventstream", true)
+}
+
+// Generate event producing rule, if necessary
+AppGeneration.generateEventProducer(config, collaborationType.name, errorPrefix, isAsync)
+
+log.debug("ActivityPattern.generateEnrichActivityPattern: Done generating resources for Enrich activity")
+-----------------
+// Uses the VLS to determine if the given block of VAIL code is synchronous
+PROCEDURE AppGeneration.isVAILBlockSync(vailText String): Boolean HIDDEN
+
+// Set up command message to VLS to analyze given block
+var msg = {}
+msg.op = "isBlockSync"
+msg.resourceName = "system.vls"
+msg.object = vailText
+ResourceAPI.executeOp(msg)
+----------------
+//
+// Remove the given event type from the named service.
+//
+PRIVATE PROCEDURE AppGeneration.removeServiceEventType(serviceName String REQUIRED, eventTypeName String REQUIRED) 
+    HIDDEN
+
+// Construct patch command to remove the event type
+var cmdList = [
+    {op: "removeIfExists", path: "/eventTypes/" + eventTypeName, value: null}
+]
+ResourceAPI.patch("system.services", serviceName, cmdList, {retry: true, install: true})
+return true
+----------------
+PROCEDURE AppGeneration.validateComponentConfiguration(config Object, componentDef Object) HIDDEN
+
+var componentInterface = componentDef.componentInterface
+var errorPrefix = "io.vantiq.component." + componentDef.name + "."
+
+for (entry in componentInterface.configurationProperties) {
+    var propName = entry.key
+    var prop = entry.value
+
+    // first validate all required config properties are present
+    if (prop.required && !config[propName]) {
+        exception(errorPrefix + "missing.required.property",
+                  "The configuration property {0} is required for the Component: {1}.", [propName, config.name])
+    }
+
+    // apply defaults
+    if (prop.containsKey("default") && config[propName] == null) {
+        log.debug("AppGeneration.validationComponentConfiguration: applying default: {} to property: {}", [prop.default, propName])
+        config[propName] = prop.default
+    }
+}
+
+return config
+-------------------
+PROCEDURE Broker.createCatalog(name String, allowEdge Boolean)
+
+// Default the name to the old style: <uri>_<namespace>
+if (name == null) {
+    name = Broker.makeNodeName()
+}
+var catalog = {name: name, host: true}
+if (allowEdge) {
+    catalog.allowEdge = true
+}
+UPSERT system.catalogs(catalog)
+-------------------
+// Removes the specified shared catalog. Only valid in system and org namespaces
+PROCEDURE Broker.deleteSharedCatalog(catalogName String REQUIRED)
+
+// Find and delete the instance in this namespace. If we delete just by name, it may find one in both the org and
+// system namespace, in which case it will fail with an error.
+SELECT EXACTLY ONE FROM system.sharedcatalogs AS sharedCat WHERE name == catalogName AND ars_namespace == Context.namespace()
+DELETE system.sharedcatalogs WHERE _id == sharedCat._id
+-------------------
+// Find all the published services in a catalog
+// Can be called in any connected namespace
+PROCEDURE Broker.getAllServices(catalogName)
+
+SELECT EXACTLY ONE name, host, catalogNode FROM system.catalogs AS catalog WHERE name == catalogName
+var managerNode = catalog.catalogNode
+
+var services = []
+// If in the catalog namespace, don't use processed by to avoid it hiding grouped entries
+if (catalog.host) {
+    services = SELECT FROM ArsCatalogEntry WHERE type == "service"
+} else {
+    SELECT FROM ArsCatalogEntry AS result WHERE type == "service" PROCESSED BY EXACTLY ONE name == managerNode
+    CONTEXT TO resultCtx {
+        log.debug("Successfully retrieved services from catalog {}", [catalogName])
+        services.push(result)
+    } ON REMOTE ERROR (errorCtx) {
+        log.error("Had error retrieving service from catalog {}", [catalogName])
+    }
+    // A namespace will only have entries in one format. If there are none in ArsCatalogEntry it may be in system.services
+    if (services.isEmpty()) {
+        SELECT FROM services AS depService WHERE implementingNode != null PROCESSED BY name == managerNode
+        CONTEXT TO resultCtx {
+            var normalizedService = Broker.normalizeService(depService)
+            services.push(depService)
+        } ON REMOTE ERROR (errorCtx) {
+            log.error("Had error retrieving service from catalog {}", [catalogName])
+            var error = errorCtx.error
+            exception("io.vantiq.service.remote.error",
+                        "Failed to retrieve services from catalog {1} with error: {0}",
+                        [error.message, catalogName])
+        }
+    }
+}
+
+return services
+---------------------
+// Create a connection from the host namespace to the target namespace
+// The node will follow the broker node naming conventions and will have user-level permissions
+// Will return the node targetNodeName whether it created it or found an existing one
+// Must be run in the catalog to work properly.
+PROCEDURE Broker.createMemberConnection(hostNodeName, targetNodeName, localTargetNode)
+
+var targetNode
+
+// Find the local host node so we can see if either use VQS.
+var localHostNode = SELECT ONE FROM nodes WHERE name == hostNodeName
+var hostIsVqs = localHostNode && localHostNode.uri.startsWith("vqs://")
+var targetIsVqs = localTargetNode && localTargetNode.uri.startsWith("vqs://")
+if (hostIsVqs && targetIsVqs) {
+    exception("io.vantiq.catalog.edge.to.edge", "Cannot create a connection between two edge nodes")
+} else if (hostIsVqs || targetIsVqs) {
+    targetNode = Broker.createVqsMemberConnection(hostNodeName, targetNodeName, localHostNode, localTargetNode)
+} else {
+    // See if there is an existing definition of the target node in the host node
+    targetNode = SELECT ONE FROM nodes WHERE name == targetNodeName PROCESSED BY ONE name == hostNodeName
+
+    // Make sure the existing node works. We'll replace it later if it doesn't.
+    if (targetNode) {
+        // Run it remotely, in case we can access the target but the host can't
+        var existingNode = targetNode
+        targetNode = null
+        EXECUTE Broker.validateNode(existingNode.name, existingNode.uri) AS result PROCESSED BY name == hostNodeName
+        CONTEXT TO resultCtx {
+            // Reset the node if it doesn't look like expected
+            if (!localTargetNode || existingNode.uri != localTargetNode.uri || !localTargetNode.ars_properties ||
+                    result.namespace != localTargetNode.ars_properties.namespace) {
+                targetNode = null
+            } else {
+                targetNode = existingNode
+            }
+        } ON REMOTE ERROR (errorCtx) {
+            // The node/token doesn't work right. Reset targetNode so that it will create a working one from scratch
+            targetNode = null
+        }
+    }
+
+    // Only need to do work if the node doesn't exist
+    if (targetNode == null) {
+        // Find the target node in the manager node
+        var node = SELECT ONE FROM nodes as result WHERE name == targetNodeName
+        if (node == null){
+            exception("io.vantiq.node.does.not.exist",
+                    "Could not create connection from {0} to {1} because the catalog could not find the node {1}",
+                    [hostNodeName, targetNodeName])
+        }
+
+        // At this point we have a node that points to the host namespace.
+        // Now check if there is a token already defined in the target namespace that the host can use
+        var token = null
+        var hostToTargetTokenName = Broker.getTokenNameFromNodeNames(hostNodeName, targetNodeName)
+        SELECT * FROM tokens as result WHERE name == hostToTargetTokenName PROCESSED BY name == targetNodeName
+        CONTEXT TO resultCtx {
+            var token = result
+            log.debug("Token with id {} on node {} already exists", [result._id, resultCtx.node.name])
+        } ON REMOTE ERROR (errorCtx) {
+            var error = errorCtx.error
+            log.error("Failed to select token on node {} due to error: {}", [ errorCtx.node.name, error.message])
+            rethrow(error)
+        }
+
+        // If there was no token in the target namespace (or we didn't have permission to see the token), create/find it
+        if (token == null || token.accessToken == null) {
+            var toLocalNode = SELECT EXACTLY ONE FROM nodes WHERE name == targetNodeName
+            var localProfile = "user"
+            var systemProfile = "user__system"
+            EXECUTE Broker.createRemoteToken(toLocalNode, {"name": hostToTargetTokenName,
+                            profiles: [localProfile, systemProfile]}) AS newToken PROCESSED BY name == targetNodeName
+            CONTEXT TO resultCtx {
+                log.debug("Inserted token with id {} on node {}", [newToken._id, resultCtx.node.name])
+                token = newToken
+            } ON REMOTE ERROR (errorCtx) {
+                var error = errorCtx.error
+                log.error("Failed to insert token node {} due to error: {}", [ errorCtx.node.name, error.message])
+                exception("io.vantiq.catalog.connection.creation.failed",
+                                "Failed to create token for connecting node to {0} with error {1}.",
+                                [targetNodeName, error.message])
+             }
+        }
+
+        if (node.uri == null) {
+            node.uri = Context.serverUri()
+        }
+
+        var targetNode = {
+            "name": targetNodeName,
+            "accessToken" : token.accessToken,
+            "deliveryMode": "bestEffort",
+            "credentialType": "token",
+            "uri" : node.uri,
+            "ars_properties" : {"brokerMember": "true", namespace: token.ars_namespace, isGenerated: true}
+        }
+
+        // Add properties from local node (if any)
+        if (localTargetNode != null && localTargetNode.ars_properties) {
+            targetNode.ars_properties.putAll(localTargetNode.ars_properties)
+        }
+
+        // Do the upsert and get the result
+        UPSERT nodes(targetNode) as result PROCESSED BY name == hostNodeName
+        targetNode = SELECT ONE FROM nodes WHERE name == targetNodeName PROCESSED BY ONE name == hostNodeName
+    } else if (localTargetNode != null) {
+        // Make sure the target node in the host has the centrally defined properties
+        if (!targetNode.ars_properties) {
+            targetNode.ars_properties = {}
+        }
+        // Merge the ars_properties from targetNode and localTargetNode
+        if (localTargetNode.ars_properties) {
+            targetNode.ars_properties.putAll(localTargetNode.ars_properties)
+        }
+
+        // Do the update and get the result
+        UPSERT nodes (targetNode) as result PROCESSED BY name == hostNodeName
+        CONTEXT TO resultCtx {
+            log.debug("Upserted node with id {} on node {}", [result._id, resultCtx.node.name])
+        } ON REMOTE ERROR (errorCtx) {
+            log.error("Failed to update member to member connection on node {} due to error. Contact support if the " +
+                          "issue cannot be resolved. Error was {}: {}",
+                      [errorCtx.node.name, errorCtx.error.code, errorCtx.error.message])
+        }
+        targetNode = SELECT ONE FROM nodes WHERE name == targetNodeName PROCESSED BY ONE name == hostNodeName
+    }
+}
+
+return targetNode
+------------------
+// Checks for schema conflicts, and if there are none it adds any schema that are missing
+PROCEDURE Broker.updateSchema(schemaDefs) HIDDEN
+
+// Make sure there are no local conflicting schema definitions
+var newSchemaNames = Broker.checkLocalSchema(schemaDefs)
+// Copy any missing schema into the catalog node
+for (schema in schemaDefs) {
+    if (newSchemaNames.contains(schema.name)) {
+        // If the original was a standard type, various system properties have been added to the intended properties
+        var props = Utils.stripSystemProperties(schema.properties)
+        // Some are properties are missed by this, particularly ars_public and ars_group
+        var finalProps = {}
+        for (p in props) {
+            if (!p.key.startsWith("ars_")) {
+                finalProps[p.key] = p.value
+            }
+        }
+        var arsProps = schema.ars_properties
+        if (!arsProps) {
+            arsProps = {}
+        }
+        
+        // We want to limit the values that we set or update.
+        // Name and properties are required, and the role will be added if the type doesn't exist locally
+        var insertableSchema = {name: schema.name, properties: finalProps, ars_properties: arsProps}
+        SELECT ONE types AS existingType WHERE name == schema.name
+        if (existingType) {
+            ResourceAPI.executeOp(
+                {
+                    "op": "upsert",
+                    "resourceName": "system.types",
+                    "resourceId" : schema.name,
+                    "object" : insertableSchema,
+                    "parameters": {"install": true}
+                }
+            )
+        } else {
+            // Only set the role and isInstalled/read-only if we're creating the type
+            arsProps.ars_isInstalled = true
+            insertableSchema.role = "schema"
+            insertableSchema.ars_dontExport = true
+            INSERT types(insertableSchema)
+        }
+    }
+}
+
+return schemaDefs
+-----------
+// Checks if there are local schema whose names collide with the schema that
+// are provided, and if so that those schema match.
+// Note that schemas should contain the entire schema definition for each schema
+// that the service uses.
+//
+// Returns the names of all schema that are not in the current namespace
+PROCEDURE Broker.checkLocalSchema(schemaDefs) HIDDEN
+
+var newSchema = []
+var collisionSchema = []
+// Check for name collisions in schema and mark the schema that need updates or creation
+for (schema in schemaDefs) {
+    var name = schema.name
+    var curSchema = SELECT ONE FROM types WHERE name == name
+    if (curSchema) {
+        // Verify that the schema match
+        try {
+            var hasLegalChange = Broker.verifySchema(curSchema, schema)
+            if (hasLegalChange) {
+                newSchema.push(name)
+            }
+        } catch (err) {
+            // Collect the names of all conflicting schema for the final error
+            collisionSchema.push(name)
+        }
+    } else {
+        // If the schema doesn't exist locally, remember its name
+        newSchema.push(name)
+    }
+}
+
+// Throw an error if any collisions occurred
+if (!collisionSchema.isEmpty()) {
+    exception("io.vantiq.schema.mismatch",
+            "The following schema definitions conflict with local schemas: {0}. Schema are in conflict if their " +
+                "properties differ, and any of those differences are not new, non-required properties in the " +
+                "origin's schema.",
+            [collisionSchema])
+}
+
+// Return the names of all schema that don't exist locally
+return newSchema
+-----------
+package k.r.DocBuster
+RULE test
+WHEN EVENT OCCURS ON "/services/k.r.DocBuster/test"
+
+----------------
+//this rule triggers when there is an update on the system.documents type
+package k.r.DocBuster
+RULE test
+WHEN EVENT OCCURS ON "/types/system.documents/update"
+----------------
+//this rule triggers when there is a delete on the system.audits type
+package k.r.DocBuster
+RULE test
+WHEN EVENT OCCURS ON "/types/system.audits/delete"
+-----------
+//this rule triggers when there is an insert on the system.collaborations type
+RULE test
+WHEN EVENT OCCURS ON "/types/system.collaborations/insert"
+-----------
+//this rule triggers when there is an insert on the Employee type AND the salary property is less than 100 for the record.
+RULE myRule:V2 WHERE event.value.salary < 100
+WHEN EVENT OCCURS ON "/types/Employee/insert"
+-----------
+
+

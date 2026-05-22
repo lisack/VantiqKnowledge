@@ -1,0 +1,91 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content discusses the process of publishing services to a catalog in Vantiq, allowing subscribers to access and utilize the program logic of these services. It explains how publishers can choose to publish either individual events or entire services, making them available to different departments or namespaces. The document provides a step-by-step guide on how to publish services, verify their availability, and interact with them from a subscribing namespace. It also touches on the concept of assemblies and their potential for sharing clients through a catalog, although this is noted as a more advanced topic covered in a dedicated class.
+
+**Original Content:**
+
+filename: 142_Catalog_L2_2.2_SvcAssbly  
+video url: https://youtu.be/2xFdKVV5zes
+
+Services and the Catalog Moving on from publishing simple events to a catalog, we'll now look at what subscribers can use from published services.
+
+Publishers can choose to publish just the outbound events from services and they behave exactly like events and topics.
+
+But publishing a full service makes much of the program logic in that service available to subscribers.
+
+On the left, I have a data type called Employees that has all the records of the employees in my company.
+
+I want to keep that data accurate and incorrupted by using this service here that has various procedures that are dedicated to any of the operations that will be done against this data.
+
+Since departments all over the company need to be able to reach this service and the logic there in this is a great example of what services can do when they're published to a catalog.
+
+First I'll show you how services can publish individual events just like topical events, and then I'll show you how the entire service can be published to a catalog.
+
+I'll open the implementation of one of the visual event handlers and include a publish to topic task so you can see how that works.
+
+After confirming that it's a downstream event, let's take a look at the configuration.
+
+Publishing this particular event to the catalog is a simple matter of finding a catalog topic that you've already published.
+
+And here it is, Employee names.
+
+Notice the little catalog icon and you choose the catalog and event type and there you go, you would publish that individual event.
+
+In our case however, we don't actually need an individual event published, we need the whole logic available.
+
+Publishing a whole service to the catalog takes place in the Interface tab.
+
+You go to the general settings and choose the catalog name from the list there and the little cloud icon publish confirm for the popup and the system will make the service available to subscribers to the same catalog.
+
+We can first verify this locally by going to our show catalogs and going to services and seeing our new service listed there.
+
+But of course, the real proof is to go to another namespace that is subscribing to that same catalog and finding it there and actually using it.
+
+So we go to show catalogs from this subscribing namespace, choose it, choose services, and notice that it's right there.
+
+If we click subscribe and confirm, you should see some changes to the project contents as the subscribing takes place.
+
+Now we'll open up the service and take a look.
+
+First thing you'll notice is that since it's read only, you won't be able to see any of the implementation of the logic, but you will be able to publish to the service events, listen to service event output, and even run the procedures directly if desired.
+
+Just for fun, I'm going to run the select procedure without any parameters and I will get all of the records from the data type, even though the data type is still on the publishing namespace.
+
+To make things a little easier to work with the service, I developed a user interface that behind the scenes interacts with the service events just as if the service were local.
+
+The users first asked which action they want to take, hire, fire, raise or get an employee record and upon choosing to give an employee a raise, we have to ask which employee.
+
+So we do a full select against the data in the data type.
+
+Upon selecting the lucky employee, you just have to enter the percentage increase and now we can do an update against the data in the database and the service sends a handy confirmation when it's done.
+
+I won't show every aspect of this application, but the point is that this service is able to be used as if it were local, even though it is just a subscribed service and running everything remotely.
+
+As you saw in the demonstration, the subscribing namespace can send events to the published service to be processed in the event handlers and call public service procedures directly.
+
+Published services just provide an interface for remote processing.
+
+In our case, even though our client was local and calling the published service event handlers to alter the data in the employees type locally, we didn't even have that data.
+
+Here's how the design modeler depicts subscribed services.
+
+Notice that the green top is more muted and there's a lock icon to show that it's read only.
+
+You would think that since all processing is taking place at the publishing site, that changes to the handlers and procedures might be accessible immediately, but that is not the case.
+
+Both sides will need to update their respective side at some point.
+
+You might have wondered if clients are shareable through a catalog, and the answer is a qualified yes.
+
+Clients can be a whole or a part of a project that converts to an assembly and then is shareable in a catalog.
+
+However, while subscribers would then be able to run the client implementation, details and code would be obscured from subscribers.
+
+Assemblies and how to use them with catalogs are a deeper subject than we can cover in this class, which is why there is an Academy class devoted just to this topic.
+
+The usefulness and advantages of creating and using assemblies are myriad, and the class covers them comprehensively with hands on lab work to reinforce learning about them.
+
+The filename: class/Catalog/142_Catalog_L2_2.2_SvcAssbly.txt

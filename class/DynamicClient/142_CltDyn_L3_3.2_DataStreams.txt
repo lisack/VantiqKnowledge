@@ -1,0 +1,48 @@
+**Summary:**  
+This content provides an overview of dynamic data streams in Vantiq, focusing on their use in client applications. It explains how data streams serve as event conduits and can be bound to widgets for display and runtime code. The text details the creation and modification of data streams, highlighting the importance of unique IDs for widget integration. It also describes a practical example of using a data stream to trigger alerts upon data insertion. The content concludes by encouraging further learning through a lab exercise.
+
+**Original Content:**  
+filename: 142_CltDyn_L3_3.2_DataStreams  
+video url: https://youtu.be/I8O8C8GVbps
+
+Dynamic data streams.
+
+We'll cover where data streams are used in the client before discussing all the ways they can be made.
+
+Have widgets bound to them for display and used in runtime code.
+
+Data streams are an event conduit in and of themselves, and some widgets can also be bound to them for code list display.
+
+In both code and in the client builder, developers can make a number of different types of data streams.
+
+These differ largely from where the messages originate.
+
+On publish and on Resource are essentially the same type of data stream that gets messages from topics, but on publish is more commonly used.
+
+In this video, and in your next lab you'll see examples using the most common of these, but they all operate in much the same way.
+
+To create a data stream in code, you'd need to first make a new instance of a class.
+
+That instance will hold the parameter information that the data stream will need to transfer messages into your client application.
+
+If you want a widget to display data stream messages, you'd need the data stream's unique ID, then set the widgets data stream UUID property to it.
+
+The widget may have other properties that can be set like the X&Y values in bar and column charts or the property to count in a pie chart so set those as well.
+
+In the on start for my security sign in Page, I'm creating a data stream that will give me an alert any time there is an insert in the com dot data dot visitor records standard type.
+
+So now in the security sign in, if I go in as a new visitor and fill out this form, upon clicking the submit button, it will perform the insert and the alert you will see will be as a result of the data stream, not from the button.
+
+We would not have gotten that alert if there hadn't been an insert, but you can actually verify this by checking against the value that you inserted and see if it indeed exists in the data type, which it does.
+
+Data streams can also be changed to meet runtime needs without disconnecting the listeners within the client.
+
+I don't need to show you every step here, because it's almost identical to the process for creating them in the first place.
+
+Create a new parameter type instance.
+
+Set the new parameters within it.
+
+Then instead of instantiating the data stream, you're modifying it with one of these methods.
+
+Now that you've completed all the lectures for this course, take the second lab to complete your actual knowledge and experience of the material.

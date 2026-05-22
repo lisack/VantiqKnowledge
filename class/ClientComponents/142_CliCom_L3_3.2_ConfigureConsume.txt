@@ -1,0 +1,124 @@
+**Summary:**
+
+This video tutorial explains how to configure client components in Vantiq to make them more flexible and reusable. It covers making component attributes visible and changeable for consumers, creating configuration properties, and allowing consumers to customize the component's behavior and appearance. The video demonstrates how to set up configuration properties, such as callback functions and synthetic attributes, and how to manage visibility and interaction for consumers. It also provides guidance on converting client widgets into components and ensuring components are self-contained.
+
+**Original Content:**
+
+filename: 142_CliCom_L1_3.2_ConfigureConsume  
+video url: https://youtu.be/pANOFpeDD4A
+
+Client component configuration Developers can create their components to be more flexible for differing needs.
+
+In this video, we're going to cover how to make component attributes visible and changeable to consumers.
+
+A little while ago, we created this component consisting of 2 pages that allows users to send feedback back to the company.
+
+Now let's figure out how to make it more flexible for reuse in multiple circumstances.
+
+Upon click of the submit button, we know we're going to send the data to a service, but we don't necessarily know which service.
+
+So we're going to make those configuration properties and we'll reference them with this dot configuration dot property name.
+
+We're also making room for the consumer to be able to write their own function to do more with this data by creating a configuration property called send to more, which is a callback function.
+
+Our future consumer may want to change some of the look and feel of the widgets in our component, and that's done by just clicking on whatever you think should be changeable, looking for the little + on the right side of that attribute, and clicking it.
+
+Let's do this for both the background and border colors of this vertical layout.
+
+Now we'll go to the Component Properties configuration tab to see all of the attributes created for this component.
+
+At the bottom, you can see the background and border colors that appeared when I clicked on those little plus signs.
+
+Their name should be a single word, but what the consumer will see is what's in the prop sheet label.
+
+I want to emphasize that none of the rest of these attributes just showed up magically because I clicked on something.
+
+I had to type these in earlier.
+
+At the top set maintenance address is a JavaScript call in function and what it does is change the text values in the address at the bottom of the We'd love to Hear from You page.
+
+This function will be called in the oncomponentstart event handler depending on whether or not the synthetic field is maintenance has been toggled on or off.
+
+Taking a quick look then at this code for this function, you can see that it's just changing the values of the three text fields that comprise the address.
+
+Consumers only need to interact with the toggle, not with the code.
+
+So I will make the code hidden and here's the is maintenance boolean value that I typed in that the user can set to determine whether or not the address will change.
+
+If you remember, we reference e-mail service name and e-mail service event name in our code to know where to send the form data.
+
+Finally, send to more is a callback function for the consumer to write if they so desire.
+
+On the right, you set the property description and the parameters, but the rest is for the consumer to do as they will.
+
+As you saw in the demo, to make widget attributes visible and changeable, just click the + next to that attribute.
+
+It will then show up in the configuration tab of the Component Properties window.
+
+The prop sheet label allows developers to give the properties more descriptive designations so the consumer knows what is being changed.
+
+Besides widget attributes that you've selected, you can also create your own synthetic attributes.
+
+These can be scalar types, JSON or functions for variables used only within the component.
+
+Developers can toggle the hidden property for them so consumers don't have access to them.
+
+There are two kinds of JavaScript functions that can be in the configuration.
+
+The 1st is a call in function which the developer writes, so the consumer might call or might be hidden for internal use only.
+
+Call back functions allow consumers the flexibility to write logic that might be needed at runtime.
+
+In our component we added a boolean synthetic configuration property called is maintenance.
+
+When that is toggled on then the mail should be forwarded to the maintenance department instead of customer satisfaction.
+
+We check is maintenance in the on component start event handler, which we'll call our set maintenance address function if needed to change the address text widget values.
+
+Component also has a callback function.
+
+Consumers write the code for these or not at their discretion.
+
+We're calling it at the end of the submit button onclick handler code and sending the form data as a parameter just in case the consumer wants to do something more with it.
+
+We're in a brand new client now and we'll drag our component in from the components section just like we would any other widget.
+
+Even though our component consists of 2 pages, you will not see that page listing here in the pages, it is hidden from the consumer.
+
+The consumer will only see the attributes we allow them to see from what we set up in our configuration.
+
+I'll toggle on is maintenance and provide names for the service and the service event, and I'll write the function code for send to more to give an alert telling me what's being sent.
+
+Once I make the last two color changes, we'll run it and see how it looks.
+
+Those are the color changes and notice the maintenance address.
+
+Let's bring up and enter something in the form and see what happens.
+
+When we press the submit button, there is our Send to more code in action.
+
+Once we've established our configuration properties, we can access them in code from within the component using this dot configuration dot property name.
+
+As we've covered before, you can create a component straight from the beginning by choosing that option from the Add menu.
+
+But it's not uncommon for developers to 1st build something in the client and decide later to turn it into a component.
+
+In that case, here's a handy reference for converting client widgets into components.
+
+Most of the time, developers should make sure that their components are completely self-contained.
+
+This means that any code or data that is used by the component from another scope should be transferred to that component scope.
+
+C data streams and pages come with the component, but they are not directly accessible to the consumer.
+
+Only nonhidden configuration properties are accessible.
+
+The last bullet point concerns the case where consumers put more than one copy of the component in a single client window.
+
+In such a case, Vantiq automatically renames the component widgets to avoid name collisions.
+
+But in cases where code is referencing a component widget not in the current context, the developer needs to provide that context for the code to work.
+
+The documentation explains this in greater detail.
+
+Heliber's module arise functionality in components and they have total control over what complexity they make visible to the consumer.

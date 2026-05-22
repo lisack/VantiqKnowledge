@@ -1,0 +1,77 @@
+### Summary
+
+The document provides a guide on using AI Design Assistants in Vantiq to accelerate the application design process. By leveraging AI, developers can describe their envisioned application, and the AI will draft an app flow accordingly. The process involves submitting a description, collaborating with AI to refine the flow, and making necessary adjustments before generating a design model. This approach allows for iterative collaboration and customization, ensuring the final design meets the developer's expectations.
+
+### Original Content
+
+**141_Design_L2_2.3_DM_AIAsst**
+
+AI Design Assistants Human AI application design collaborations greatly speed up the design process.
+
+By choosing the AI design assistant, developers can describe what they envision for their application project, and AI will draft an app flow to suit the need.
+
+If you've chosen the AI assistant to help design the project, the window that initially comes up is different than choosing a template.
+
+In this pane, you must first type a description of your envisioned application.
+
+Once a description is submitted, the AI will draw its best guess of how events will flow through your application.
+
+Don't fret if you realize you missed a piece.
+
+Write in what you want added, and the AI will make the adjustments, taking in all that's been described before.
+
+As well.
+
+You and the AI can collaborate on the same design indefinitely.
+
+Or click Restart to return to a blank slate.
+
+Once you're satisfied with the flow, click on Accept Flow to move on to the next step.
+
+Before the AI generates a completed model from the app flow, the developer can still make critical changes, such as naming the tasks that will be used, adding more event streams and clients, and drawing connections to enhance the flow operation.
+
+Once the flow meets your expectations, click the Generate Design Model to see it all come together.
+
+Let's try all this for ourselves.
+
+First, we'll go to Add and Design Model in order to start up the Design Model tool.
+
+Upon creating a new design Model, you'll have the option of either using the AI Design Assistant or selecting a design template.
+
+This time, let's use the Design Assistant.
+
+We're intercepted before we get to the actual design modeler tool because we need to enter a natural language description of what we want to see.
+
+Here's my short, vague make an event driven application that filters input twice before saving to a type.
+
+Upon clicking the send button, the AI comes up with its best guess of what kind of event flow you want.
+
+I want more, so I write after the event stream.
+
+Also, add an analytics branch and click the button again.
+
+One last request, make the first filter before both the analytics and the other branch.
+
+Let's say I'm happy with this result, so I'll accept the flow.
+
+I'm now presented with an editable flow preview window where I can see what the flow looks like so far and even make extensive changes.
+
+In our case, let's add another event source.
+
+Join the streams with a joint activity pattern.
+
+Connect the patterns in the direction of the flow and change the task names for clarity.
+
+If you're not happy with the type of activity tasks with the AI guest, you can change that right in the drop down for the activity pattern as well.
+
+Last but not least, let's add a client to display our analytics.
+
+Press the Generate Design Model button to see the current plan.
+
+At this point, you've already entered the development phase for your project.
+
+All the services and clients have been created with event flow connections between them, and within the services, app flows have been populated by the desired tasks.
+
+The AI tool assists the developer in both the design and development phases.
+
+The filename: class/DesignModel/141_Design_L2_2.3_DM_AIAsst.txt

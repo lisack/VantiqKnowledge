@@ -1,0 +1,133 @@
+**Summary:**
+This content provides an in-depth explanation of how non-service events and topics function within the Vantiq platform. It begins by introducing the concept of catalogs and their role in managing events, particularly focusing on topics as conduits for event messages. The guide walks through creating a schema for an event type, setting up a topic, and scheduling events. It also covers how catalogs can broker event deliveries between namespaces and how to publish topics to a catalog. Additionally, it explains how to subscribe to events from different namespaces and how services can ingest these events. The content concludes by discussing the preference for service events over topics due to their encapsulation of resources and ease of application maintenance.
+
+**Original Content:**
+
+filename: 142_Catalog_L2_2.1_Topics  
+video url: https://youtu.be/yegQObMaPa0
+
+Non Service Events and the catalog.
+
+Now that we've been introduced to catalogs, let's see them in action, starting with simple events in topics.
+
+Since we seldom use events without services, we'll first look at what those are and how they are transported in the Vantiq platform.
+
+If services are not involved, you're already familiar with events messages, which can come from sources, enter and leave services, etcetera.
+
+Topics are a conduit associated with a specific event type that can transport these messages with in a project and with the help of a catalog to other namespaces as well.
+
+Let's define a schema for an event type that will be transported in a topic.
+
+I'm calling my type Ping and it's going to have a single message of type String.
+
+I'll save the type and now I have schema for the topic that I want to make by going to the Add Advanced Topic menu and choosing a new topic.
+
+The name of a topic always has to start with a front slash.
+
+Select or create a package for your topic.
+
+And I highly recommend that you put in a detailed description because topics are somewhat loose in the system, they're not associated with services and therefore it can be hard to figure out what they're for later.
+
+Notice we associated this topic with our cat dot B dot ping message type.
+
+So the schema for the event is known and shows up in the publish message section.
+
+I'm going to schedule an event to be sent every 5 seconds through this topic and that way anything listening for events in that topic will be able to receive them.
+
+To verify, choose Test Data Receipt from the main topic pane and you will be able to see every 5 seconds an event successfully going through the topic.
+
+I shorten the message to Hi and then in a client set up an on Publish event data stream to receive the events and display them in a string widget.
+
+Now that you've seen topics, know that catalogs can broker these event deliveries between namespaces, be they in the same server or another Vatic installation.
+
+Namespaces first connect to the catalog, then can choose to publish their topic to the catalog or register as a subscriber to that topic.
+
+You can publish your topic to a catalog by choosing Publish to catalog.
+
+This will open a pane where you choose which catalog where it says event name.
+
+You can either call it by the same local topic name or make up a new one.
+
+Checking the Is reliable box forces the system to persist the event in a database until receipt is acknowledged.
+
+It should only be used sparingly as this extra overhead effects performance.
+
+I've created an event generator to send a random name out of a set of five through our cat dot B dot sendping topic.
+
+I'll open the topic and verify that the events are flowing by checking test data receipt.
+
+Good.
+
+So now I'll open the topic pane again and this time choose Publish to Catalog.
+
+I'm given the choice of choosing an existing event or creating a new one, which I'll do here.
+
+I can call it the same thing as my existing topic name or make up a new one.
+
+Notice that the scheme is already known because I associated it earlier with that topic.
+
+The purpose of these keywords is so that you can search and find an event type if you can't quite remember its name upon successful registration.
+
+We are now publishing an event every 5 seconds to the catalog, but currently there aren't any subscribers to see it.
+
+Let's go to a different namespace.
+
+Now subscribe to the catalog and do something with these events.
+
+You can see all the catalogs you're connected to by going to Show catalogs.
+
+There's our catalog.
+
+Now let's look at event types.
+
+Names is among them.
+
+You can right click on it to subscribe directly, or you can choose subscriptions and make a new local topic for this event and subscribe to it.
+
+So if you're keeping track, our event has gone from slash ping in one topic to the original namespace, which then got published as slash names to the catalog, which then got published to slash local names in a topic in our new namespace.
+
+Can this event be ingested by a service as well?
+
+Let's find out.
+
+I have a service here called Catch Names, and if you go to the implement tab and choose a source event handler, it will also take events from topics.
+
+I might as well call my event handler catch names as well, and if I select the event stream task and choose the configuration, I can choose a topic as an inbound resource and when I do, the schema structure is automatically filled in for me.
+
+I'll save this service which saves the event handler and then we'll start seeing the events come in.
+
+Just for fun I dragged in a log stream task so we can see exactly what events are coming in and all looks to be in order, so just a review on the receiving end.
+
+You can either choose the event type from the catalog listing or create a new topic from the Add Advanced menu and subscribe to a catalog's event type from there.
+
+In either case, you can keep the same topic name that the publisher gave it or give it a new local name.
+
+Right clicking on a catalog event entry includes the option to view Ledger.
+
+Choose that and the table that appears will be empty because events are not persisted by default.
+
+If you wish to change that, use the Record Event activity pattern configured for the specific events desired.
+
+Now the Ledger will show the events.
+
+Use this option rarely, if at all, as it affects both performance and storage.
+
+And now for the elephant in the room.
+
+If topics are this easy to use, why are they so seldom mentioned in classes and examples?
+
+Bantic discourages topic use in favor of service events.
+
+Service events behave much the same way as topics from a pure transport angle.
+
+Services can send events to each other, to clients, and to catalogs just as topics can.
+
+But services encapsulate other like resources and the functionality associated with them for processing events and maintaining state for the application in memory.
+
+From an application maintenance standpoint, seeing all related resources together in a service makes it much easier to follow the program's inner workings.
+
+I'd like to go out.
+
+The filename: class/Catalog/142_Catalog_L2_2.1_Topics.txt
+
+https://www.youtube.com/watch?v=yegQObMaPa0

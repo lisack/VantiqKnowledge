@@ -1,0 +1,92 @@
+**Summary:**  
+This video tutorial demonstrates how to create dynamic event handlers in Vantiq, both using the client dot add event handler method and through direct coding. It explains the differences between coding event handlers in the Properties pane and using the add event handler method, including how to pass additional parameters like event, page, and extra data. The video also covers creating event handlers for actions not supported by the add event handler method using jQuery or other libraries. A practical example is provided, showing how to add a widget to the canvas, set its properties, and create an event handler for it, specifically focusing on handling the "on change" event for a drop list widget.
+
+**Original Content:**  
+filename: 142_CltDyn_L2_2.2_EventHandlers  
+video url: https://youtu.be/Oka-u93Mskk
+
+Dynamic event Handlers In this video, we'll create some event handlers in code both with and without the client dot add event handler method.
+
+You're well acquainted with the Properties pane event section for a widget on the client canvas, which allows developers to code their event handlers for supported actions right there.
+
+But you can also code for the same actions with the add event handler method for that widget.
+
+Notice that when you do this, you can also pass in the event, the page and extra which is anything you want it to be.
+
+The onclick for the event handler is slightly different than the human readable onclick in the properties pane.
+
+You would see the same camel case onclick if you looked at the name of the function that you're coding if you were to Click to edit the handler there.
+
+Sometimes you might want to add an event handler that isn't one of the ones supported by the add event handler method.
+
+This is possible by creating it in jQuery or some other third party library.
+
+Let's take a look at both forms of event handlers now.
+
+So here's that strange code you were just looking at on the slide.
+
+The first one says we're setting this up for this button.
+
+On entering of the mouse, it's going to animate and go to opacity 0.0, which means it's going to blank out, and then when the mouse leaves, it's going to go back to appearance again.
+
+Let's take a look and see if that works.
+
+In both of these cases, it's going to be over half a second.
+
+Let's take a look.
+
+When I run this, it works exactly as expected, just disappears.
+
+Now I would like to point out if I'm in the right zone, I can still click it and it knows it's been clicked so it's visible, but it continues to exist even when you can't see it.
+
+The next thing I'm going to do is just show you from soup to nuts how you would go about adding a widget to the canvas and creating an event handler for it.
+
+I'm going to go to add.
+
+Let's just pick a drop list.
+
+I could just as easily make this drop list and set its properties dynamically like I've done in the past.
+
+But since we've seen that part of the demo, I'm going to just skip ahead, drag a drop list onto the canvas and change a couple of properties about it so that we can then reference it with our event handler.
+
+And the one thing I'm going to do is make the values the same as the label.
+
+This is just to make it easier to read later when I build the event handler.
+
+When working with a brand new widget, you can get clues as to what kind of events are covered by looking at the event in the property pane.
+
+So we have on context menu, on change, on validation.
+
+We don't have a context menu and we're not validating anything.
+
+So let's write an event handler for on change.
+
+While I'm here.
+
+And just for my own convenience, I'll give my drop list a name I can remember.
+
+So I'm just going to call it DLX and I'll write the on changed event handler for the DLX button on the on client start code right under the button code we just saw.
+
+At this point, you're quite familiar with the client dot getwidget method, which is how we're going to get to our radio button and act on it.
+
+And then all we do is add event handler.
+
+It wants to know what event you're handling, which in our case is on change.
+
+And after that you have a call bug function to do the actual action of the event handler.
+
+In our function, we'll pass in the client so that we can make use of a client method.
+
+And the actual code is simplicity itself, just an alert to tell us what value in the drop list was chosen.
+
+The attribute of a drop list is called bound value.
+
+My client is now in run mode, so I can make a change to my drop list and sure enough, the alert tells me what the new value will be, even though you don't see it yet.
+
+But once I click OK, then it comes to that.
+
+I can do this again and again, and the event handler works.
+
+Florida State.
+
+There are many advantages to writing event handlers for runtime needs, not the least of which is that they can reference resources that only exist at some point during runtime.

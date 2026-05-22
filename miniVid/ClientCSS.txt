@@ -1,0 +1,20 @@
+Certainly! Based on your instructions, here is the conversion of the embedded video HTML to the video's URL:
+
+Original HTML:
+```html
+<iframe width="355" height="200" src="https://www.youtube.com/embed/Mn8LBmxBCgc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+```
+
+Converted video URL:
+```
+https://www.youtube.com/watch?v=Mn8LBmxBCgc
+```
+
+The rest of the document remains unchanged:
+
+```
+filename: ClientCSS.txt
+video url: https://youtu.be/Mn8LBmxBCgc
+
+This video shows where Developers can add custom CSS to the widgets in their Client in the ClientBuilder.
+```

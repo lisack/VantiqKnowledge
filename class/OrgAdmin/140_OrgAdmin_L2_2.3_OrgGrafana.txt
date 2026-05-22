@@ -1,0 +1,62 @@
+**Summary:**  
+This video provides an overview of how Grafana dashboards function at the organizational level within Vantiq. It highlights the differences in dashboard views for organization-level administrators compared to namespace-level views, emphasizing the ability to monitor activity across all namespaces. The video also discusses how to identify and address issues such as event drops due to quota limitations and credit usage, offering insights into resource monitoring and management for org admins.
+
+**Original Content:**  
+filename: 140_OrgAdmin_L2_2.3_OrgGrafana  
+video url: https://youtu.be/dehL7Y98x24
+
+Grafana for Organizations In this video, we'll look at how Grafana dashboards change for the org level.
+
+If you're an org level administrator and in the topmost org namespace, this is the menu that you will see.
+
+If the Grafana option doesn't appear, then you are not an org level administrator for this organization.
+
+Upon opening Grafana, you will be forgiven for wondering if anything is different.
+
+It's true that almost all of the dashboards have the same titles as those at the namespace level, except for the usage review at the very bottom of the list within each dashboard.
+
+However, org admins have the extra privilege of being able to see the activity from across all the namespaces in the organization.
+
+I fired up a lot of activity for three of the namespaces in this organization.
+
+So now when I go to administer Grafana, we should be able to see all that activity reflected in the various resource monitoring dashboards.
+
+Just like before.
+
+Let's go to event processing so we can see all the events that are flowing in the namespaces.
+
+Uh oh, do you see what I'm seeing?
+
+We've got some drops happening because of events that are going over the quota limitation.
+
+Crolling down to eruse the services in a little more detail, we see that load one service one is exeriencing the most drops, which is also something we can verify by looking at some of the other panels.
+
+Let me switch dashboards to service event handler and see if I can find out some more information about what's going on.
+
+I'll zoom in on the time frame of activity.
+
+Oh, and look at that, the execution times are topping 4 seconds for event processing.
+
+Does this mean that our incoming events are not really the problem, but we're running out of credit when the events are being processed?
+
+Let's find out.
+
+This time we'll go to our Org Level usage Overview dashboard, and there it is.
+
+We're not seeing much in the way of quota violations, but you can see we've pegged credit usage at least twice.
+
+Another nice feature of the Usage Overview panels are that you can see all of the disk usage for every single one of your namespaces within your org, including the cumulative total at the top.
+
+And here again is the usage Overview dashboard that is only available at the org level.
+
+And this is where we can see a clear bird's eye view of the general health of the entire org.
+
+We can see here that our org has violated quota and outpaced credit at least twice.
+
+So the org admin can look at the namespaces individually and see where the problems originated and with what resources.
+
+As you remember from the quota lectures, quota is doled out for the whole organization.
+
+Org admins have to keep a sharp eye on the activities happening amongst the namespaces in the org so that no single namespace overuses resources in a way that will affect the other namespaces in the org.
+
+The filename: class/OrgAdmin/140_OrgAdmin_L2_2.3_OrgGrafana.txt

@@ -1,0 +1,72 @@
+### Summary
+
+Collaborations in Vantiq are essential for enabling service logic to interact with third parties, particularly humans, in scenarios where full automation isn't feasible. These collaborations maintain critical information about collaborators and entities, allowing for complex interactions and decision-making processes. Each collaboration has a unique ID and can involve multiple active collaborations simultaneously. Developers can manage collaboration properties and roles through the Service Implement tab. Collaborations are particularly useful in scenarios requiring human intervention, such as locating a missing child, where various stakeholders collaborate to resolve the situation. The system can track activities, maintain conversational context, and manage procedures to activate, close, or update collaborations.
+
+### Original Content
+
+Filename: 143_GAB_L4_4.1_Collaborations
+Video URL: https://youtu.be/NU-OkEbGbIM
+
+Collaborations.
+
+Collaborations are how service logic interacts with third parties, most often humans.
+
+There are situations where applications can't be fully automated because they need to interact with decision makers or other systems to determine the best logic pathway forward.
+
+Often the collaborators are human who can verify unusual readings, conduct repairs, decide the best course of action, grant approvals, etcetera.
+
+Collaborations take full advantage of service state to maintain critical information about collaborators, entities, process AI conversations, etcetera.
+
+Each collaboration has a unique ID, so multiple collaborations can be active at the same time.
+
+Developers can set collaboration properties from the Service Implement tab in the State section.
+
+Not every collaboration has collaborator roles, but they do all have an entity role which must have defined schema.
+
+Collaborations can also keep conversational context for any number of AI conversations, or just a single default conversation just to carry these collaboration terms further.
+
+The situation of interest in this scenario is that a child is missing.
+
+The child would therefore be the entity role.
+
+The collaborators would be all those involved in working together to locate the child in a VANTA collaboration.
+
+School staff might initiate the collaboration by having the application first notify parents and wait for a response.
+
+If the parents haven't responded or located the child within a certain amount of time, then the application can escalate to the police.
+
+The AI might be queried about anything from weather conditions to child behaviors by age and send that information to the other collaborators.
+
+The collaboration keeps track of all of this activity and once the child is found, the collaboration can be closed.
+
+All collaborations have at least one entity role.
+
+Create it by clicking on the Click to Edit blue words.
+
+Next to the Entity roles.
+
+In the Collaboration State Properties pane, set the entity to a schema type, which has a property that can be used to identify the collaboration.
+
+Our child type in this example has a property ID, but also has the child's name, height, age, that sort of thing that's pertinent to the child.
+
+Underneath the Collaboration State Properties pane is the Generate State Entity Properties pane.
+
+Once the entity is created, you'll see your new entity listed in the entity roles along with the procedures that can be generated to manage the collaboration.
+
+Activate, close, get, Activate, and update Activate.
+
+Developers can make changes to these procedures as needed and execute them to manage the collaboration.
+
+When the procedures are selected in this pane, the actual procedures will become available in the service.
+
+Collaborations in Vantiq applications can be very complex with lots of moving parts.
+
+They can also be much simpler when all we need is for our AI in an application to keep conversational context.
+
+In Vantiq, a conversation is an array of chat message types, simple structures that include what type of message it is and what the content of the message is.
+
+We'll see more about how this works later.
+
+Collaborations are for applications that interact with other entities, like humans, and keep the details in memory.
+
+This makes them ideal for maintaining conversational context with large language models, as we'll see soon.

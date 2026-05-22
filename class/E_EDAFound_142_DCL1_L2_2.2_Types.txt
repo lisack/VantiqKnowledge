@@ -1,0 +1,114 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+
+This content provides an overview of how types and state are used in Vantiq to structure and store information from events. It explains the difference between schema and standard types, how they are created, and their role in event-driven systems. The document also discusses the concept of state, its performance benefits, and its vulnerability compared to database storage. Additionally, it highlights best practices for managing data in Vantiq applications, emphasizing the importance of efficient data handling to maintain system performance. The video shows how to create types in the IDE, but doesn't address how to reference them in the Vantiq API.
+
+**Original Content:**
+
+filename: 142_DCL1_L2_2.2_Types  
+video url: https://youtu.be/Hl5QaMzH7po
+
+Types.
+
+Types provide structure and or storage to information from events.
+
+We're also going to introduce the concept of state.
+
+State is not a type, but it does hold data for running applications, so it's worth mentioning here.
+
+Remember the centrality of events in an event driven system.
+
+Sources and services are transport vehicles for events.
+
+Types structure and store events.
+
+There is also program state, which includes events held in memory.
+
+State is much more performant than database storage, but more vulnerable to cataclysmic system failure than writes on disk.
+
+Event types are how the system works with events.
+
+These are essentially the event message with their defined structure and some system data attached.
+
+Schema are a simple, lightweight definition of an event structure.
+
+Think of schema as kind of a description or blueprint of an event type.
+
+Schema are for the system and the developer to know what framework to expect in events, but they generally don't enforce that framework.
+
+Events that do not have the defined structure are therefore not precluded from entering the system.
+
+Standard types not only define structure like schema, but they also store data in a database.
+
+You can think of them as database tables.
+
+Besides the general and properties tabs that schema have, standard types have more tabs for more options for the records that will actually become part of the type.
+
+For storing records, the structure is enforced.
+
+So if you try to put a string value where an integer is expected, as you see in this example above, the system won't allow the records to be inserted.
+
+You make either a schema or standard type, go to the Add menu and choose Type.
+
+Select New Type and then you can fill in the information about your type, its name, what package it belongs to, and whether or not it is a schema or a standard type.
+
+Since this is a schema, there isn't much else to do but fill in the property structure for time purposes.
+
+I'm not demonstrating it here, but you did see description inputs for both the type itself and for each of the properties.
+
+It is good practice to fill in those descriptions for readability later.
+
+Otherwise, to build properties in types, you give them a name and select the type of data that they are.
+
+In this case, we've defined a meal structure, and upon clicking Save, it will show up in our project contents.
+
+To create a standard type, I could do it by the method I just showed you through the Add menu, or if it's close in structure to the schema type I just made, I can make a duplicate and turn that into a standard type.
+
+Now I'll select this for my project contents so we can see the difference.
+
+From here I can add, subtract, or edit any of the properties in the Properties tab, and since this type will be holding records, I can set up indexes and natural keys for organizing those records.
+
+Notice that I can select from among the properties that I created and also the metadata that the system includes with every record, but natural keys are just for my properties.
+
+Once we save, we can start adding database records to our type.
+
+To save the record, click on Add New Record and then Show All records will show you what records you have in your type.
+
+You can even display them in JSON format.
+
+Notice the_ID is part of the metadata that the system is adding to our records.
+
+You can also see menu items for downloading the records into a file, refreshing the display, or deleting all of the records.
+
+Many developers have gotten used to relying heavily on persistent data, but event driven applications on the Vantiq platform are designed to ingest and process upwards of hundreds of thousands of events per second depending on the installation capabilities, and to deal with the information in real time.
+
+Database interactions are comparatively slow and there is a potential for filling up disk space if too much is stored.
+
+Even if your application does need to interact with the database, there are practical ways to avoid bogging down the system with reads and writes.
+
+Avoid the tendency to save every sensor reading.
+
+You only care about the anomalies, so at most store those.
+
+Send writes to another system to store the data.
+
+Cut down on reads by caching the first one and reusing it, assuming the data doesn't change often.
+
+Finally, keep application information in state.
+
+State is any information that the application may need, but instead of reading and writing it to a database, it's held in memory.
+
+Using state is orders of magnitude more performant than reads and writes to a database, but memory disappears as soon as the application stops running or the system crashes.
+
+Fortunately, Vantiq has built in ways to replicate state across clusters, so if one cluster goes downstate is still safe.
+
+And also state can be scheduled to periodically write to a database, so if the whole system goes down, not all is lost.
+
+We will be talking more about state and using it in our labs in this class.
+
+Over the course of the class lab work, you'll be gaining extensive experience with schema, standard types, and state.
+
+The filename: class/E_EDAFound_142_DCL1_L2_2.2_Types.txt

@@ -1,0 +1,65 @@
+**Summary:**  
+Client templates in Vantiq allow developers to create reusable client configurations, saving time and ensuring consistency across projects. By setting up a client with desired features, such as a color scheme or navigation elements, and saving it as a template, developers can quickly generate new clients with these pre-configured elements. This process involves editing client properties and toggling the "Save as client template" option. Templates are stored with a CTP file extension and can include a thumbnail image for easy identification. This feature is particularly beneficial for maintaining a consistent look and feel and for rapid client development.
+
+**Original Content:**  
+Client Templates.
+
+Templates, both at the client and page levels, save time that would otherwise be spent in repetitive work.
+
+A client template allows developers to create future clients with some predefined extras already installed.
+
+Creating the template is exactly like creating a client and adding the futures you want to see preloaded for future clients.
+
+Developers create this once to reuse it indefinitely thereafter.
+
+Think about features you create over and over in your clients, like the color scheme or a home button.
+
+You can save time by building all that once and making it a template.
+
+Let's see this in action.
+
+At my company, we like all our websites with the logo and then a NAV bar and a sidebar with common things.
+
+And of course a working chat bot that I just simply Click to appear and click again to make disappear.
+
+Chat feature is actually a second page and there's some code behind it, but you get the idea.
+
+I want all of my websites to look like this from now on, so this is a perfect candidate to become a client template.
+
+Go into the client properties, choose Edit client properties, go to the Advanced tab and toggle on Save as client template.
+
+Once you click OK and save the client, you now have a client template.
+
+So I'm going to close this client and make a new one based on my client template and see how faithful it is to the original.
+
+Notice it's now a choice that I can pick, which I will when I create my client, and it certainly looks like the original.
+
+Let's check some of the functionality.
+
+Does the chat work?
+
+Yes, it does.
+
+So what a template does for me is create a starting point that's already got all of the code, all of the menu choices, the themes, the color scheme, any number of pages, and I can change any of this as I see fit.
+
+Just in case it wasn't clear in the demonstration, to transform a client into a client template, go to the Client Properties Editor Advanced tab and toggle on the Save as Client Template option.
+
+That's it.
+
+Client template files appear in the documents with the file extension of CTP and PNG.
+
+The latter is for the thumbnail picture in the new client pane.
+
+Here's that thumbnail picture.
+
+Now your templates become full color layout choices.
+
+When new clients are made without a template, there's just a blank space there.
+
+Using templates help maintain consistent look and feel of clients, and save time by doing work once and saving it for use again and again.
+
+This is also a useful feature for rapid client development.
+
+The filename: class/ClientComponents/142_CliCom_L2_2.2_ClientTemplate.txt
+
+https://www.youtube.com/watch?v=-i3eVhQyxFM

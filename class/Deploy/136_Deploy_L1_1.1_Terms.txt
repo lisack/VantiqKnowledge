@@ -1,0 +1,66 @@
+Certainly! Here is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+This video provides an overview of key terminology and concepts related to program distribution in Vantiq. It explains the structure and components of a distributed system, where each namespace is provisioned from an original source. The video discusses different deployment topologies such as hub and spoke, tree, and mesh, and highlights the importance of resource allocation and partitioning in distributed applications. It also touches on the benefits and challenges of distributed systems, emphasizing the role of federations in ensuring secure application distributions.
+
+**Original Content:**  
+filename: 136_Deploy_L1_1.1_Terms  
+video url: https://youtu.be/96096Pl61Os
+
+Terminology and Concepts In this video, we'll cover important terms and ideas surrounding program distribution.
+
+A deployment is a distributed system where each namespace has been provisioned from an original source namespace.
+
+In the diagram, an application system developed in the original project is being deployed to run asynchronously in three different namespaces, AB and C Each of these must be provisioned with the needed resources to carry out its part of the system whole.
+
+Notice, though, that in some cases more than one namespace needs its own copy of the same resource.
+
+Developers allocate application resources by using partitions, each of which represents a future kind of node for the distribution.
+
+Vantiq has tools to facilitate and largely automate project distributions.
+
+Distributed applications run across multiple namespaces which don't have to be on the same Vantage server or in the same geographic location.
+
+A federation is a secure distributed system.
+
+Here are the main components of a Federated application distribution.
+
+Namespaces are each like their own locked vault with the program resources inside.
+
+You can think of nodes as a pathway from one vault to another and the token as the key for access.
+
+In this case, A has a node to B, but B does not even know about A.
+
+This is because node connections only run in One Direction.
+
+A developer doing a deployment has to figure out what resources each part of the distributed system will need to run asynchronously from the other parts.
+
+There is another consideration depending on how the application system will be distributed.
+
+Here are three different topologies, which are sets of namespaces and the nodes that connect them.
+
+The hub and spoke model is good for modular applications that process independently of the others, and the central namespace is what collects and combines their efforts.
+
+Tree topologies are hierarchies in name and practice.
+
+Generally these systems work in a top down manner like an org chart.
+
+In our hierarchy diagram, A has nodes to BC and D, but not directly to EF or G.
+
+You can also have mesh topologies where nodes might have more than one parent connections like the case above for node I.
+
+We can still use the deployment tool for this.
+
+The decision to distribute the application at all requires weighing the benefits versus the drawbacks.
+
+On the plus side, distributed systems increase application scalability and performance through asynchronous event processing, but on the minus side, the application becomes much more vulnerable to network foibles and fallibility.
+
+Federations are secure application distributions across nodes, which are connections to name spaces.
+
+Developers partition application resources based on the topology of their application systems.
+
+The filename: class/Deploy/136_Deploy_L1_1.1_Terms.txt
+
+---

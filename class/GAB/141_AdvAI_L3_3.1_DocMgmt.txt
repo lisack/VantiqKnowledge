@@ -1,0 +1,118 @@
+### Summary
+
+This document provides an overview of document management components within the Vantiq environment, specifically focusing on how these components convert and manage various document formats. It explains the concept of Retrieval Augmented Generative AI (RAG) and how Vantiq developers can utilize a semantic index to enhance AI responses by embedding and vectorizing content. The document also discusses the importance of selecting appropriate language models and strategies for embedding, as well as the use of different components like Unstructured URL and Conversation Memory to manage and transform documents. The document emphasizes the flexibility Vantiq offers in managing semantic indexes and encourages developers to explore different strategies to optimize their projects.
+
+### Original Content
+
+Filename: 141_GAB_L2_2.1_DocMgmt
+Video URL: https://youtu.be/ek410KdZ77A
+
+Document Management Components In the Jan AI Builder environment, there are several components that convert multiple formats of documents in multiple ways.
+
+In some cases, there is more than one component that can handle a particular format.
+
+We'll explain all of this in this video.
+
+Let's do a quick recap on how retrieval Augmented Generative AI, commonly known as RAG, works.
+
+In Vantiq, developers have the option of making custom information available to their large language models.
+
+This knowledge base allows the AI to make more informed responses.
+
+In Vantiq, all this is managed through a semantic index.
+
+The semantic index receives documentation works with the embedding LLM to vectorize the content and store it into the vector database.
+
+In the other direction, when a query is made, it is the semantic index that performs the semantic search against the vector database to find relevant material for responses.
+
+Developers can configure the minimum similarity to restrict material to more closely related embeddings if desired.
+
+On the left is the Semantic index window in the IDE where developers can manually enter documentation to be stored in the vector database.
+
+In the first lab for this class, you also did this in a VAIL procedure.
+
+The component to do this in the Gen AI builder is called Semantic Index Store.
+
+As you see on the right, it takes exactly 1 parameter, the semantic index name.
+
+We could go far into the weeds with this discussion, but suffice it to say, how relevant the responses will be depends a lot on how the information was originally embedded.
+
+Each embedding LLM has a different algorithm with different specializations.
+
+Developers will need to research LLMS to find the best one to fit their project needs.
+
+For instance, some work better with code, some with conversational English, some with other languages or multiple languages, etcetera.
+
+Then there is the whole problem of how the entries should be split up into vectors while maintaining their meaning and context.
+
+For instance, if a document said something like sulfuric acid can cause great harm to human tissue, avoid contact.
+
+But the embedding LLM split those two sentences and vectorized them separately.
+
+The second sentence would be missing important context.
+
+We could mitigate the somewhat with overlap between vectors, but how large should those overlaps be?
+
+Still other vector strategies look to sift out what are known as stop words due to their having little semantic meaning, like the and, uh, in order to maximize relevance of the rest of the entry.
+
+What is the best solution?
+
+That really depends on your own project an.
+
+This is why there are severalGenny Ibuilder components that manipulate documentation for the semantic index store.
+
+Let's look at unstructured URL first.
+
+Unstructured URL uses the open source unstructured library to load content from URLs into Lang chain documents.
+
+It can take a number of formats including markdown, HTML, docx, and PDF.
+
+Additionally, the system can extract text from binary images and PDFs using Tesseract OCR.
+
+In this example, the input was the URL to the JPG image on the left, which unstructured URL was able to process and extract much of the text in the picture.
+
+There are multiple settings for how this component can work with whatever is sent to it, including how the resulting document will be divided read, in what languages, what types of elements to extract like tables, et cetera.
+
+Conversation memory tops the document loaders list.
+
+The main piece of information that the conversation memory requires is the conversation ID.
+
+It accesses the conversation and turns it into a Lang chain document.
+
+On the left is the original conversation, which then went to a Gen AI flow activity pattern consisting of the conversation memory.
+
+Gen. AI component on the right is the final output.
+
+We're back in our Tank Leak Monitor project where I've created a brand new semantic index to contain all past conversations.
+
+And while I'm here, I want to call your attention to the Ingest Gen AI procedure setting.
+
+If you've created a Gen AI procedure for handling documents a certain way, you can execute that for every semantic index entry.
+
+But right now there are no entries, and we're going to change that This time.
+
+I'll create a Gen AI Flow task in the event handler for my Convo input service.
+
+When you drag it into the app flow, you're immediately put into the Gen. AI Builder environment.
+
+Conversation Memory only requires the conversation ID and Semantic Index Store requires the semantic index name.
+
+Back in the app flow, I'll have an error because I need to provide the new task with the conversation ID.
+
+Then we're all set.
+
+I'll now ask a couple of questions in my program and these have made two new entries in my semantic index.
+
+Now we're moving on to the Document Transformers category.
+
+These 4 splitters all work the same way.
+
+They take certain types of content and turn them into one or more Lang chain documents.
+
+Character chunk size and chunk overlap defaults appear in the optional integer parameters at 4200 as shown.
+
+The care and feeding of our semantic indexes is really important, but there's no one best way to do it.
+
+Become familiar with the flexibility Vantiq provides in order to find your best strategy.
+
+The filename: class/GAB/141_AdvAI_L3_3.1_DocMgmt.txt

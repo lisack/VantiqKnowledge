@@ -1,0 +1,125 @@
+**Summary:**
+
+This video tutorial provides a step-by-step guide on configuring cluster access for Vantiq deployment. It covers pre-installation tasks, including setting up Gradle in cluster access properties, downloading necessary tools, and configuring files for deployment. The video emphasizes the importance of setting up a cloud-based infrastructure before deployment and guides users through creating directories, cloning repositories, and running Gradle commands. It also explains how to configure the `gradle.properties` and `cluster.properties` files, manage git branches, and set up security features like sealed secrets. The tutorial concludes with running cluster setup commands and preparing for further pre-installation tasks.
+
+**Original Content:**
+
+Cluster access configurations.
+
+The first set of pre installation tasks mostly concerns getting Gradle in cluster access properties so the installation commands can work contextually.
+
+As I alluded in the previous video, it's assumed that the cloud based infrastructure is set up before the deployment process and these are steps to that process and what will be covered in the class.
+
+In this video, we'll focus on the 1st 2 steps shown.
+
+We'll start by downloading the tools, create a directory in your local file system, and git clone the Gates Deploy Tools repo there.
+
+We will be running a great number of Gradle W commands throughout the installation process.
+
+Always make sure you're in the Gates deploy_tools subdirectory where the Gradle W file is located.
+
+Here we are at Vantiq Gates Deploy Tools GitHub site.
+
+This is what we want to clone in the console.
+
+I'm making a new directory and cloning the repository to that directory.
+
+The Kate's Deploy Tools directory is the base directory for the deployment.
+
+And here's where we'll run our first Gradle W command configure client.
+
+I'm employing a little bit of movie magic to speed this up, but the process for me took about 27 seconds.
+
+Your mileage may vary.
+
+Not that we can see it with a simple LS, but now we have a dot gradle directory and within that a gradle dot properties file that we can change and that file consists of exactly 2 lines.
+
+Please provide your get username and your get user password.
+
+Once you've altered the gradle dot properties file, there is one more gradle W command and that is configureVantiq system.
+
+This command ran very quickly and created the target cluster directory that we'll be working in very soon.
+
+We just finished the sublist for step one on to the sublist for Step 2, shown here.
+
+It's important to make the target cluster subdirectory managed in a git branch, preferably with the cluster name.
+
+You will need to track Inversion changes to this directory, either to your own repo or in one managed by Vantiqh.
+
+See the documentation for details.
+
+After that, we'll be performing a series of tasks to ready our deployment for the specific infrastructure we made for it.
+
+The cluster dot properties file is just that we need to set a few values to work with our system setup.
+
+The provider line comes with a list of possible values.
+
+Delete all but your chosen provider code.
+
+Here's a list of the main properties to configure.
+
+The docs have more, of course.
+
+The Vantiq System_release property is not the server version but, something else entirely the.
+
+Vantiq System Release line item in the cluster Properties file is the version of the cates Deploy Tools that corresponds to the Vantiq Server version for.
+
+Instance if, you were installing Vantiq Server Version 1.33 the, Vantiq System Release would be 3 point 10.0 go.
+
+To the Cates Deploy Repo and look at the release map for an updated version of this file to see the proper Vantiq System release value for your purposes.
+
+Another line item to set in the cluster properties file is whether or not to enable sealed secrets.
+
+If you don't, then the secrets will just be base 64 encoded and therefore easy to convert back and read.
+
+The cube config file in the target cluster subdirectory is a YAML file and essentially the same as the cube config file in your home directory with only the context relating to our current cluster.
+
+Here's what my cube config file looks like.
+
+This step run after the setup cluster command will only be necessary if you want the added security of your credentials being better encrypted than just base 64.
+
+There is a link to the sealed secrets package in the docs.
+
+Now that we've become familiar with what these cluster access pre installation tasks are for, we can see how they are done.
+
+I'm in the target cluster subdirectory and I need to 1st initialize git and create a branch the same name as my cluster.
+
+After that we need to make some vital changes to the cluster properties file.
+
+Your cluster properties file might look a little different, but the basics are the same.
+
+First thing you should be looking for is the provider.
+
+Make sure you choose the proper cloud provider.
+
+We can ignore the commented out helm section for now and move on to Vantage System Release and deployment.
+
+Remember that we figure out the Vantiq system release by going to the Cates deploy repo, looking at the release map and following it for our particular release.
+
+At the time of this writing my release is 139 so I follow it all the way down and it is at 3.14 point 3.
+
+Mine is a production deployment and skipping down to the sealed secrets.
+
+I will need to uncomment this line and set the enabled sealed secrets to true.
+
+Finally, it is highly recommended that you uncomment workload preference equals hard because that will put the software in the proper places in the cluster.
+
+Well that was the cluster dot properties file in target cluster.
+
+This is the cube config file.
+
+Also in the target cluster subdirectory.
+
+Make sure that the current context matches the name of your cluster.
+
+We can finally run our cluster info and setup cluster commands.
+
+Cluster info returns successfully, so let's move on to setup cluster.
+
+This ran successfully as well, so we're going to move on to the optional command configure sealed secrets.
+
+Our setup cluster command created 2 yaml files, deploy dot yaml and secrets dot yaml in the target cluster subdirectory.
+
+We'll cover how to modify them and complete the rest of the preinstallation tasks in the next video.
+
+https://www.youtube.com/watch?v=TOPe6RLrEMg

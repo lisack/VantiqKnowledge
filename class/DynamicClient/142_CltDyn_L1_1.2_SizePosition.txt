@@ -1,0 +1,94 @@
+**Summary:**
+
+This video tutorial, titled "Widget sizing and position," serves as an extension to a previous module, focusing on how to size and position widgets within a Vantiq client. It covers dynamic actions for resizing and moving widgets, explaining how widget size and position settings are inherited from the Widget class. The video demonstrates various scenarios where widgets do not initially respond to size and position changes due to default policies, and how to adjust these settings to achieve the desired outcomes. Key concepts include setting height and width properties, understanding size policies, and using X&Y properties for positioning. The tutorial also touches on widget weight and gravity settings within layout containers, preparing viewers for more advanced topics in future videos.
+
+**Original Content:**
+
+filename: 142_CltDyn_L1_1.2_SizePosition
+video url: https://youtu.be/XJcSoVDvPvk
+
+Widget sizing and position.
+
+Really, this module is like an addendum to the last one.
+
+Just as we could make widgets appear and disappear, stack and fade, we can also size and place them in the client.
+
+The settings covered in this video are inherited from the Widget class, meaning they apply to all widgets in the client.
+
+I'm going to show you a series of dynamic actions that don't appear to work at first, but then will.
+
+Let's start with this button labeled Bigger.
+
+When I press it, the fixed layout gets bigger as expected, but the button itself was also supposed to be bigger and nothing happened.
+
+When I click fix policy, then click bigger, the button finally gets bigger.
+
+Next we have the Move Me button.
+
+I click that, nothing happens.
+
+But then if I click unparent move me and find where it is now drifting on the page and click Move me again, it moves to where it was set to move.
+
+Sync is supposed to move the picture within the container, but you click it, nothing happens.
+
+But then when it's refreshed, notice it's been centered where we wanted it.
+
+Finally, we're clicking the Add Weight button, which takes up a lot more space all of a sudden.
+
+And this will make sense when we go to the slides.
+
+In code, we set the height and width of widgets in the H&W properties respectively.
+
+You saw this happen when we changed the size of the fixed layout widget to 500 by 500 pixels when we clicked the bigger button.
+
+That same button was also supposed to grow itself to 300 by 300 pixels as seen in the code, but it didn't change at first.
+
+Why is this?
+
+It turns out that the button had height and width policies to be sized to parent, so any code attempt to resize it beyond the parent was ignored.
+
+In our fixed policy button, we changed the bigger buttons size policies to explicit and then we could resize it.
+
+Keep the default size policies in mind when resizing widgets at runtime.
+
+To set where a widget should be located inside of a container or on the page, just set the X&Y properties again in pixels.
+
+In the case of the Move Me button, it was already tightly bound in not just one, but two layout widgets, so setting the X&Y had no effect.
+
+So we had to take the button out of those layout widgets, and upon clicking it again, the Move Me button went where the code wanted it.
+
+Don't worry about layouts and their children just yet.
+
+We'll be covering this more in another video very soon.
+
+In the demo, we also saw an example of X sync and Y sync, which moved the top left corner of the picture left by 150 pixels and to 10 pixels from the top of the container.
+
+Remember, we didn't see the change until the display refreshed by toggling the visibility of the fixed layout off and on again.
+
+XC and YC work similarly, but the anchor point is the center of the widget.
+
+Weight changes widget sizes, but not in absolutes.
+
+By default, a widget sharing space with other widgets in a container will divide up the space equally.
+
+This is a setting of 0.
+
+By setting one of the widgets to a value of 1, the other widgets will only take up the space they need, and the weighted widget takes the rest.
+
+If two of the widgets have a value of 1, then they'll split the rest of the space, and so on.
+
+Gravity helps place widgets with in layout widgets by setting the directions they'd like to gravitate toward.
+
+In our example, we see the a button settling in the bottom left corner of the container as the code set for it.
+
+Notice though, that it's not right to the line in either direction.
+
+That's because of the containers margin settings.
+
+We'll discuss these more when we cover more of the complexities of layout widgets.
+
+So far we've only talked about sizing and placing widgets that already exist in the client.
+
+Very soon we're going to be covering how to create them too.
+
+The filename: class/DynamicClient/142_CltDyn_L1_1.2_SizePosition.txt

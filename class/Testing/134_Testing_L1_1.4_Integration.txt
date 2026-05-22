@@ -1,0 +1,189 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides a detailed walkthrough of creating and running integration tests in Vantiq. It emphasizes the importance of setting up inputs to match expected outcomes, ensuring the test environment is stable, and analyzing test results to troubleshoot failures. The process involves creating source events, setting up expected outputs, and using procedures for validation. The content also highlights the use of namespaces for testing and the importance of logs for debugging. Finally, it encourages hands-on practice through lab projects and tutorials to deepen understanding.
+
+**Original Content:**
+
+filename: **134_Testing_L1_1.4_Integration**  
+video url: https://youtu.be/PqLRtyrgbNU
+
+Integration tests.
+
+We've been building up to the complexity of integration tests, and now we're ready to see an actual demo.
+
+Let's make sure we're very clear about the steps to creating and running a test, and then we'll see it in action.
+
+Regardless of whether the test is for a single procedure or a whole project, the basic process is the same.
+
+We need to set inputs to match expected test outcomes.
+
+We need to make sure that the test environment won't skew the results.
+
+And then after the test, we also want to make sure that the regular application function will resume correctly.
+
+And finally, we need to see the results and be able to figure out what went wrong if a test fails.
+
+So we're watching our app accept source events from our MQTT sources, querying the answers table to get the pump information so that we can join just all the things that we did before.
+
+And of course, I had this extra thing, but now we want to create an integration test for this.
+
+Let's go here to the test pane and integration tests.
+
+And I've already created 1, so let's see what I put in.
+
+We have the name, of course.
+
+It's an integration test because that's what we created.
+
+And again, if we want to create a new integration test, all you have to do is click on this.
+
+For our setup, we've got the sense Enrich test and the cleanup Sense enrich test.
+
+You saw those in the last video.
+
+And I'm setting our time out to two minutes, and we're going to save our namespace inputs.
+
+That's what you didn't see before.
+
+So all it did was create a source event and then send the event.
+
+What is the event?
+
+Well, these are the events.
+
+I am sending it something from RPMS sensor one with a value of 1000.
+
+Notice it's got a timestamp here, but we want it to ignore the timestamp on the output, so you'll see that in a second too.
+
+But I've got no delay for pump one in either the RPMS or temp stuff, but a delay of two seconds for pump 2, four seconds for pump 3 and so forth, because I want them to connect properly so that I have the expected outputs.
+
+This is of course going to be for RPMS, sensor 2 and so on.
+
+And this is for the temp sensors, temp sensor 1.
+
+And once the sensors know what pump they belong to, then we're going to reduce the outputs and have only 5 outputs because each of the sensor readings are going to be for each pump.
+
+So our first expected output is for pump 1, and it'll have an RPMS of 1000 and a temperature of 100.
+
+If I didn't want to validate with a particular event outcome, I could also validate with a procedure that would check to make sure that something was happening, or run some kind of procedure that would also have an expected object.
+
+You can do this many many different ways.
+
+Suppose you have some kind of output and you want to make sure that it's within a range instead of a specific output.
+
+You could do that with a procedure.
+
+These outputs will not be in any particular order.
+
+This is important to know because again, we're working with an event driven system.
+
+If you need articular order and things, then go to the advanced section and you can set that up which event will happen before another event and all of this.
+
+That's what the advanced section is for.
+
+But ordinarily you get inputs in no particular order and you get outputs in no particular order.
+
+And as long as these tests does not time out, it will keep looking for those outputs.
+
+So notice we're going to have to wait 2 minutes if there's a problem because it will wait for those outputs for two minutes.
+
+OK, let's save this and run our test.
+
+And remember, this will take a little while because it is building a whole namespace and copying over all the resources that are going to be needed for the test.
+
+Then running our setup procedure, running the test, then running our cleanup procedure before it's going to report back.
+
+OK, this was a success.
+
+Now remember it makes a new namespace, but if the test was a success, that namespace is going to delete itself.
+
+Let's break this test so that we can see the namespace that it creates and go to that namespace.
+
+So let me just create one of my outputs here as having an RPMS of 5000, none of my outputs are supposed to have that, so that'll break it nicely.
+
+Run our test again, even when I did it on purpose.
+
+Seeing a failed test for an integration test is a little bit of a gut punch, isn't it?
+
+But you have several advantages and troubleshooting.
+
+So let's go over the steps.
+
+The best steps were troubleshooting, obviously.
+
+Select it and find out.
+
+Was everything a failure?
+
+No.
+
+You had four successes and one failure.
+
+Your biggest clue is right here.
+
+It was expecting one of the outputs.
+
+Didn't receive it.
+
+What was the output that it was expecting?
+
+It was expecting this 5000 RPMS That might clue you in right away.
+
+Oh, that wasn't the output that this test was supposed to do.
+
+If that's the case, then your answers are solved right there.
+
+But you also have logs that you can look through.
+
+Now.
+
+These logs are extremely detailed because everything is debug mode.
+
+Put it in full size and just start hunting through it to see and it will tell you exactly.
+
+One other clue that you have is that you can go to the testing namespace itself.
+
+And the first thing you should check for when you go to the testing namespace is to make sure that your setup was run correctly.
+
+So let's go to our testing namespace really quick and it will appear blank.
+
+But no problem, the resources are there, you just have to add them back in.
+
+So here's my service.
+
+It automatically copied over the type.
+
+It also automatically copied over the test service because you are running some procedures from tests.
+
+So this gives you a big clue right here that your setup worked well.
+
+But let's get an even better idea.
+
+If you go to the sensors type, it would have copied that over automatically, but it wouldn't have copied over the records.
+
+Let's see if our setup worked properly.
+
+Yes, do not delete the namespace until you're absolutely done with the logs, because the logs will disappear with it.
+
+If you turned off source mocking in your cleanup, the namespace logs will continue to be written.
+
+If you choose the test drop down in the IDE navigation bar, you'll see all the tests that have been created, whether that was from the local rule or procedure editor, a service, or for the whole project.
+
+Select the testing question and you'll see options to run the test, see test history, etc.
+
+Just as you saw for service tests, building project tests follow the same steps As for building tests in a service event.
+
+Captures can be used as inputs and outputs for project level tests, which can be a handy feature for those wanting to simulate events that were previously genuine events.
+
+This concludes the lecture portion of the testing elective class, but now it's time to gain hands on experience creating tests yourself.
+
+Proceed to the lab topic in the class materials and import the lab project into a new namespace.
+
+The lab instructions will be in the project description window and I would like to remind you that for even more hands on experience, I cannot recommend the tutorials enough.
+
+Each of these covers a different testing scenario and will deepen your understanding on how to build useful tests for your own projects.
+
+The filename: class/Testing/134_Testing_L1_1.4_Integration.txt

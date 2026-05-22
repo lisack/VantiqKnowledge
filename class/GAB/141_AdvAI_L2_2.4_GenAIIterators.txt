@@ -1,0 +1,108 @@
+### Summary
+
+This content provides an overview of Gen AI Iteration Components, which are used to execute subflows multiple times in different ways. It covers components such as Fall Back, Loops, Repeat, and Map, explaining their functionalities and how they can be used in application development. The document also describes how to create and use user-defined components within these iteration components, particularly focusing on the Repeat component and its integration with custom Gen AI components. The example scenarios illustrate how these components can be configured and utilized to perform tasks like handling division by zero, iterating with conditions, repeating tasks with custom components, and translating arrays concurrently.
+
+### Original Content
+
+Filename: 141_GAB_L1_1.4_GenAIIterators
+Video URL: https://youtu.be/DmH1QdzrRW4
+
+Gen.
+
+AI Iteration Components Each of these Gen
+
+AI components can run its subflow more than once, but they do so in different ways.
+
+We'll take a look at each of them in turn.
+
+Fall back runs an alternative subflow if the main subflow fails in some way.
+
+In this example, we have a main flow that takes in two numbers and divides one by the other.
+
+Our fall back subflow engages when the divisor is 0.
+
+Since that results in a failure, there can be more than one fall back subflow, so the first fall back could have a second, and so on.
+
+Loops are pretty much like the loop.
+
+While in the app builder, the evaluated condition needs to return as true in order for the loop to keep iterating.
+
+In this very basic example, I've got an input property that started at 0, gets augmented by one each time the loop passes the code block, and finally quits.
+
+Once the condition of the input property being under the value of four is no longer true, Repeat will run its internal subflow multiple times that number depending on the number of configurations set.
+
+Only one code pattern can be used inside the Repeat task.
+
+However, we can make custom code patterns fromGennyi Builder components to get around this.
+
+To see how custom components and repeat components pair up easily, we'll make one of each and use them together to get multiple answers at once.
+
+As I mentioned, the Repeat component only allows 1 component in its subflow, but that component can be user defined.
+
+So we're going to make a user defined component, then use it inside a Repeat component.
+
+We go to the Add menu and choose Gen
+
+AI Component in order to create a user defined Gen
+
+AI component.
+
+This puts us back in the Gen
+
+AI Builder environment and in our case we're going to build a component that will set up a prompt, give it to an LLM, and return a response by clicking on the little + next to prompt template.
+
+We're exposing that property to make it configurable and we'll do the same thing with the LLM property in the LLM component.
+
+Once we save our user defined component, we can now use it and reuse it in any application as we see fit.
+
+In our case, we're going to put it to use in the Tutor service by clicking on the little + next to the public.
+
+We created a Gen
+
+AI procedure that we've called repeat question, but we don't have anything in it yet.
+
+Now we're going to fix that.
+
+Here's our repeat and if we go to the user defined section, we can get a listing of all of our user defined custom components.
+
+Now we can set this up to ask as many questions of the LLM as we want.
+
+So going into the repeat configuration, we'll choose to repeat the prompt template.
+
+We can also define exactly what those property values will be, but we're going to wait on that until we first configure our prompt.
+
+Configuring our user defined component depends on what we expose.
+
+So we exposed which LLM we can use and the template.
+
+So we're going to use just a hard coded template.
+
+And the question will be, what would the ancient philosopher who have to say about what, who and what being the substitution variables.
+
+Now let's go back into the repeat configuration and fix those repeatable template values.
+
+So in both cases, I'm substituting an ancient Greek philosopher for who and the origin of man for what.
+
+OK, let's save it and give it a trial run.
+
+We don't really need to input anything, so I'm just going to give it an empty object and go.
+
+And here is my response from both questions.
+
+I could have done any number of questions.
+
+Repeat will keep running until we run out of values.
+
+Map performs a subflow of tasks for each element of a given array.
+
+Any number of these can be executed concurrently.
+
+In this example, I have a short list of fruits and I want the mall translated into Spanish.
+
+I set the concurrency so that they will all be translated at the same time, and the return list on the left is the result.
+
+However, because each array element was executed concurrently, the return array may not be in the same order as the original.
+
+So I ran it a second time, yielding a second array, but this time with the index numbers pointing to each element's place in the original array, so I actually know what translates to what I'd like to have a.
+
+The filename: class/GAB/141_AdvAI_L2_2.4_GenAIIterators.txt

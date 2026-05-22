@@ -1,0 +1,76 @@
+**Summary:**
+This video provides an in-depth look at various limit and frequency quotas within the Vantiq system. It covers the JSON structure of quotas, focusing on stack depth, execution time, error breaker properties, memory usage, and more. The video emphasizes the importance of understanding these quotas, even if they rarely need to be changed, to ensure efficient system operation and prevent issues like long-running tasks or excessive memory usage. It also highlights the role of system administrators in managing these settings, especially when dealing with Gen AI procedures.
+
+**Original Content:**
+
+Limit and frequency quotas In this video, we'll see that full quota JSON structure again before moving on to learning about each of the limit quotas.
+
+This is the full list of quotas again after watching the last video, you're familiar with rates and credit properties.
+
+Now let's start looking at the limits.
+
+We'll start with stack depth and execution time.
+
+Stack depth is for the execution stack and should not be changed from the 200, which is the default.
+
+Execution time is another, a safeguard intended to keep the system from being bogged down by code that's taking too long to complete.
+
+This property seldom needs to be changed, but if you want to lengthen this time, do consider the ramifications for the rest of the application.
+
+Long running tasks will hog the available execution contexts.
+
+You might think of them as threads, so that any other work scheduled for that thread will block until the long running task is complete.
+
+If a number of long running tasks execute at the same time, they may take all available execution contexts, effectively blocking all other work from executing.
+
+This is a classic queuing problem that can be avoided by keeping each task short lived and arranging the application to guarantee there are at most only one or two of these running at any point in time.
+
+In between the stack depth and execution time, you see the error breaker and its subproperties.
+
+We'll discuss these in the next slide.
+
+The error breaker properties are meant to get the system to stop trying to resolve rules and procedures that fail and cannot be corrected.
+
+It really does act like a circuit breaker for faulty code.
+
+For instance, if there are rules or procedures that always generate an exception error, Breaker shuts them down.
+
+There is generally no reason to change these settings.
+
+In normal operation, the breaker state is closed, which means all code is running as expected.
+
+After a sample of 20 requests, the system will start inspecting the code and if more than 80% of those runs fail, then it will generate exceptions.
+
+The breaker trips to the state open, which suppresses the code execution.
+
+By default, the breaker state will refer to half open after a minute has passed.
+
+Once the code has been sampled twice more and the failure rate drops below 80%, then the breaker will close again.
+
+By default, per cluster, we have 5 million bytes of memory to use on expanding documents, images, or video used in our projects.
+
+Developers might notice some slowness if they want to expand too many images at once while the system waits for memory to free up.
+
+Videos or images large enough to exceed quota all by themselves will error out for projects that iterate through arrays or retrieve records.
+
+Take note that by default these collections are limited to 100,000 elements.
+
+Scheduled service procedures perform periodic tasks for the service, like writing application state to a database.
+
+By default, these can't be executed closer than a minute apart as set in this limit.
+
+If any of the namespaces in an org will be developing Gen AI procedures, you as the System Administrator will need to set up a case worker process and change the case resources quota for the org.
+
+There's a demonstration of both these steps in the Vantiq Server deployment class.
+
+We're down to our last two quotas, audit frequency and error reporting frequency.
+
+Both accomplish the same basic goal, which is to prevent logs from filling up with the same audit condition or error messages, respectively.
+
+There is seldom a need to change either of these settings.
+
+Also, this is a good time to remind developers to take reported audit conditions and errors seriously, because chances are good that multiples of these have been triggered, but only the first or a few are listed in the logs.
+
+Most of the quotas presented in this video won't ever need to be changed, but it's still important to know about them.
+
+https://www.youtube.com/watch?v=kvTdCpuZdvs

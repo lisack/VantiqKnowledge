@@ -1,0 +1,180 @@
+**Summary:**
+
+This content provides an in-depth explanation of stateful service procedures in Vantiq, focusing on how state is managed within services. It covers the concepts of in-memory state, global and partitioned state management, and the use of VAIL types like Map and Value for state replication across clusters. The document also discusses the creation and management of state using Vantiq's automated tools, the importance of making copies of state to avoid errors, and the role of multi-partition procedures in persisting state. Additionally, it highlights the ease of using Vantiq's Visual Event App Builder for managing state and the significance of understanding automatically generated service procedures.
+
+**Original Content:**
+
+filename: 134_PROC_L1_1.3_ServProcState  
+video url: https://youtu.be/O2EvFYV4-cI
+
+Stateful service procedures.
+
+You were introduced to state in the Level 1 developers class, but now we're going to look more closely at how state is managed by procedures in a service.
+
+In memory, state is exactly what it sounds like, Information, also known as state held in memory that exists apart from events.
+
+Because it's in memory only, state kept this way doesn't incur the cost of database interactions.
+
+As a result, in memory state is highly scalable and performant.
+
+We've covered this before and I've also mentioned that just because information is held in memory doesn't mean it can't be fault tolerant.
+
+State can be replicated across clusters so that as long as fewer clusters go down then there are replications, the state is safe.
+
+Also, as hinted in the diagram, developers can write scheduled procedures to periodically write the values in the state to the database to ensure some persistence at a minimal performance trade off.
+
+There are two types of state management, global and partitioned.
+
+Global state exists as a single copy associated with all instances of the service.
+
+Procedures that access this state all converge at this one place.
+
+Partition state will have multiple copies, also known as partitions, split by a certain designated properties known as the key.
+
+Under the covers this is dividing up the state between members of a Vantage cluster and allowing for greater concurrency and throughput as each partition can be accessed and processed separately.
+
+The diagram here is based on the application system you built in the level 1 developer training.
+
+We have sensor information coming from 5 pumps and this time we want to collect both global and partition state, but they look like the same thing.
+
+The global collective state will keep statistics on the average speeds and temperatures of all of the pumps.
+
+The partition state pump state will only do this on a per pump basis.
+
+State is managed with services and access through procedures that are within those services.
+
+State is expressed as a type as you can see in the screenshot I have here of a services state pane.
+
+Once the types are filled in and the state is saved, the system initializes the state types automatically.
+
+Service procedures that utilize state have to declare how they will be accessing that state.
+
+You see here a service procedure that is setting and getting a global value type without the global designation.
+
+Before the procedure keyword an error occurs complaining that the partition key wasn't supplied.
+
+Multi partition procedures can access all of the state and that is very useful for scheduling service procedures to persist state in the database once in a while.
+
+There are two VAIL types specifically meant for state because they can be replicated across clusters.
+
+These are Map and value, unlike the other types.
+
+Both Map and value types can be replicated across clusters, but they cannot be persisted directly in a database.
+
+The concurrent service is a Vantiq service full of procedures for managing state.
+
+You already heard how calls to map and Value within this service create the types best used for state.
+
+Now you see some more.
+
+All of these are straightforward and well documented.
+
+We're probably never, ever going to have to make your own state because the automated tools in the app builder are so good.
+
+But I went ahead and did it just so that we have something to to see in my state.
+
+Here I created two types of state both in global and partitioned.
+
+One is of type value, it's event count and the other is name state.
+
+And I made that a map.
+
+It is initialized which means it's already run its initialization procedure in order to put pop these into existence.
+
+Which means concurrent dot value was run for this and concurrent dot map was run for this.
+
+For the global state, all I'm doing now is putting in the value for that state.
+
+And in this case, I used update and get which is a procedure available to me because concurrent dot value is run taking in the count.
+
+If the count is null, I'll make it 0, otherwise I'm going to add to the count and that's it.
+
+This is for the partition state.
+
+It was created with concurrent dot map and one of the procedures available to concurrent dot map is compute.
+
+And that is how I'm setting the values for concurrent dot map.
+
+I'm taking in something called current.
+
+I'm replacing current with something called state.
+
+There's a reason for that and I'll explain it later.
+
+But then I'm taking the state, putting in the values for the state, and all I'm doing is checking to see if there's a new highest score in town.
+
+And then I'm returning it again.
+
+Very, very simple.
+
+I want to pause here and point out if you make any changes to a service procedure that affect the procedure signature, a pop up will ask you if you want to repair the interface too.
+
+Click repair interface.
+
+So the interface settings for the procedure are correct once again.
+
+So now let's go to my event handler.
+
+I went ahead and made a visual event handler because it's so easy to take in this.
+
+What also is very nice is see my service procedures down here.
+
+Because I created them in the service, they are available as activity patterns.
+
+So I dragged over keep counts and now it's counting all the events.
+
+I also dragged over highest score after splitting it by name because that is the partition correct?
+
+So I've partitioned it by name and then when I pass in the parameters to highest score, it asks for those parameters.
+
+It needs the partitions key.
+
+You've passed in event dot name, and then I'm also passing in the event itself.
+
+And finally, just for fun, I'm filtering it by Maria in order to see how it runs with just one of the names instead of looking at all of the names.
+
+What is passing in is a student's name and the test scores.
+
+So I have a student name and a test score, a student name and a test score.
+
+So let's see how this runs.
+
+Firing up the generator.
+
+OK, everything's going.
+
+The subscription for keep counts and notice it's just counting along.
+
+There we go.
+
+We expect that.
+
+And let's take a look at our log stream and notice that we're just checking with Maria.
+
+It found a high score of 99 and so far that has continued to be the high score, which is why you see multiple events with just the high score of 99 because of course it's checking anything higher.
+
+Nope.
+
+OK, I mentioned in the demo that I was making a variable and copying the state and working with my copy.
+
+This is because while the code is running and changing values in the state, some other procedure could be doing the same thing.
+
+It's better to make a copy to avoid the confusing and intermittent error that will crop up in your application when those collisions occur.
+
+The other thing I said was that you're probably never going to have to work with your own state variables from scratch.
+
+That is because the Visual Event App Builder tools already do so much for developers automatically, and the Accumulate State pattern in particular allows developers to set up any information they want to use in their applications and perform any operations on them that they choose.
+
+Any procedure a developer makes designated multi partition will automatically appear at the bottom of the service state pane, where developers can designate how often they want it to run.
+
+Multi partition procedures run for each partition, and while they can be used for any useful housekeeping purpose, persisting state is a common one.
+
+Here's a simple example of a procedure that iterates through a partition, states keys, collects the value by each key and inserts it into a standard type.
+
+The key set and get procedures from the concurrent service make this a very straightforward process.
+
+Even if most developers won't need to create their own state variables and write their own service procedures to work with that state, understanding what the automatically generated service procedures are doing is important.
+
+The filename: class/Procedures/134_PROC_L1_1.3_ServProcState.txt
+
+https://www.youtube.com/watch?v=O2EvFYV4-cI

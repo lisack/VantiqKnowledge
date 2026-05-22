@@ -1,0 +1,71 @@
+**Summary:**  
+This content provides a guide on how to configure app components in Vantiq to make them customizable for consumers. It explains the process of making components more flexible by using component attribute properties, synthetic properties, and custom generation code. The guide details how to expose properties for consumer alteration, create synthetic attributes, and add custom code during component generation. It emphasizes the importance of making components adaptable for different scenarios by allowing consumers to configure attributes like Max distance, source name, and Geo API secret.
+
+**Original Content:**  
+Configuring App Components There are three main areas where app components can be customized for consumers.
+
+We'll look at each of them in turn.
+
+Here's where we left off in the last video.
+
+By default, nothing is customizable, and if the creator doesn't change that, the consumer will only be able to use the component in cases where the operation will be identical to the original.
+
+Let's see how we can make our component more flexible through a component attribute properties, synthetic properties, and component generation code.
+
+Component attribute properties are denoted by small plus signs in the configuration panes.
+
+Just click on that plus sign to expose the property so the consumer can alter it as desired.
+
+Supply a meaningful property name so the consumer knows what they're changing.
+
+By default, the attribute will be required, which means the consumer must supply the value, but uncheck that toggle to supply a default value for the consumer to change or not.
+
+Rather than have my consumer change the distance filter conditions, I'll instead create a synthetic attribute called Max distance for the consumer to change once and which can be then referenced in the code revisiting the distance OK filter.
+
+Then we can set it based on the value of Max distance.
+
+Denote the variable with a dollar sign and put it inside curly braces.
+
+Max distance is referenced in two other places in our component, the two far filter and the setup comparisons transformation task, and it's with a dollar sign and curly braces each time.
+
+Finally, in the component property pane, click the Custom Generation procedure button and look for the area where we can add our own code right when the component is created.
+
+In this case, we want to check to see if our Geo lookup source exists and if not, create it.
+
+We'll also let the consumer choose the name for it.
+
+Notice that in this special coding area, synthetic attributes are referenced by the config object, then the attribute name.
+
+Besides the source name, we will have to create the synthetic attribute geocode API to hold the API key for our remote source.
+
+Both source name and geocode API attributes are referenced in our VAIL block task called get geolocations using the dollar sign curly brace reference like we did before for Max distance.
+
+We've finished making our changeable attributes, and we'll see how the component works in the next video, so let's review what you just saw in the demo.
+
+To make an attribute of any activity task within the component visible and configurable in the consumer, just click the little + next to it.
+
+These will show up in the component configuration pane, and you can change their names to make them easier to understand.
+
+You can also set up default values for them.
+
+You may also want to create a few configurable properties of your own which you can do in the Component configuration pane.
+
+The Max distance, source name, and Geo API secret are all synthetic properties.
+
+Also within the Component configuration pane, clicking on the Custom Generation Procedure button reveals the VAIL code that initiates the generation of the component.
+
+Scroll down to the section that starts with Begin Custom Generation Code to be able to insert your own code to be executed when the component is generated.
+
+Properties in your configuration are available through the Config object.
+
+Remember that in our component we need to be able to make API requests to a geocoding website, so there needs to be a source established for that in the consuming application.
+
+This code here checks to see if the source is already there and if not sets one up.
+
+The config dot source name references the name of the source, which is settable as a configurable property in the component.
+
+By exposing various configuration attributes of the component, developers can make them more flexible for reuse in different scenarios.
+
+The filename: class/AppComponents/141_AppCom_L1_1.3_ConfigureAC.txt
+
+https://www.youtube.com/watch?v=6g_rdFxmlNU

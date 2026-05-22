@@ -1,0 +1,68 @@
+**Summary:**
+
+This video tutorial demonstrates how to use request parameters and localization in Vantiq clients. It builds on a previous video by showing how to perform localization and retrieve launch parameters. The tutorial explains how to use `client.requestParameters` to get query parameters from the launch URL, and how to set up localization by configuring global and local symbols. It also covers generating and importing localization files, and testing the localization by changing the display language based on URL parameters.
+
+**Original Content:**
+
+filename: 142_LaunchClients_L1_2.2_LocaleRequesParams  
+video url: https://youtu.be/IN7jmnVdmb4
+
+Request Parameters and Localization Demonstration.
+
+Clients can use their launch parameters for a variety of purposes, including choosing the locale.
+
+This video in some ways is a continuation of the previous video where we discussed the steps to localizing clients but didn't see them performed.
+
+Now we'll see both localization demonstrated as well as how clients retrieve and use their launch parameters.
+
+The way to retrieve the query parameters from the launch URL is with client dot request parameters, which returns the key value pairs.
+
+We're adding this code to our onstart for the start page.
+
+If the user adds locale equals CU to the URL when launching the client, we'll change the display to Zulu.
+
+So I'm just showing how this client is completely in English, even all of our default values have no dollar signs, nothing.
+
+But I can set this client up to be internationalized by going to the client properties localization tab.
+
+And I'll first set up some global symbols.
+
+And these are just key value pairs denoted with an @to make a global type of widget dot its function.
+
+I can also turn just about all the text in my clients to translatable local symbols by choosing.
+
+Click here to generate any missing localization symbols.
+
+That asks if sure I am and it sets up all the values for me, even on other pages.
+
+So now let's go back to the Client Properties localization tab and generate our default dot JSON file.
+
+Or you could export properties, but the procedure is the same.
+
+Save the zip file to your local file system, then decompress the zip file to find the default dot JSON or default dot properties file.
+
+I've double clicked on the JSON file and you can see that it's a listing of the local and global symbols and their values in English.
+
+Make a copy of this file, call it your two letter code for the language dot JSON, and then translate all of those English values into the language of your choice, like I've done here with what Google Translate thinks is Zulu.
+
+Once you have your default file and any number of language files, compress them into a new zip file together.
+
+In the localization window, choose Import localization Files, put them in and do make sure that it acknowledges that both the default and your language files are both there.
+
+Pick your new language from the drop down under force locale.
+
+When testing to see it when it runs, we'll save first and then run it from here.
+
+But before I do, one thing I want to point out is that I've changed the contact us to the global symbol at button dot contact and you can see that wherever it is, it will consistently translate to the language of your choice.
+
+You can also see that the local symbols translated to the language of our choice as well.
+
+OK, you saw the code in the slide that checks for the parameters.
+
+So I have and locale equals zoo.
+
+What happens when I start this browser window?
+
+And just as we expected, it is Zulu from the get go.
+
+The filename: class/LaunchableClient/142_LaunchClients_L1_2.2_LocaleRequesParams.txt

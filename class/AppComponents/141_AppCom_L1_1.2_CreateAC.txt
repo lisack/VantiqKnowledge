@@ -1,0 +1,78 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+This video tutorial demonstrates how to create reusable app components in Vantiq by transforming a bike messenger delivery service app into a component that can be adapted for other delivery services, such as pizza or flowers. The process involves selecting tasks within a visual event handler flow, saving them as a component, and configuring it for flexibility and reuse. The video also explains how app components can be managed, configured, and exploded back into separate tasks if needed. This approach is beneficial for developers who frequently create similar functionalities across different projects.
+
+**Original Content:**  
+filename: 141_AppCom_L1_1.2_CreateAC  
+video url: https://youtu.be/BZcnaJ0GfGI
+
+Creating app components.
+
+In this video we'll look at a use case and turn it in to an app component.
+
+I've created a bike messenger delivery service.
+
+When an order comes in, I'm transforming the event to better fit what's going to be required by my geocoding API.
+
+Then I have Vail code that queries that API to get the Geo coordinates of the pickup and delivery points after filtering out bad addresses.
+
+Then we calculate the distances between the two points to make sure the distance isn't too far for our bike messengers.
+
+Finally, we notify an available rider in the message.
+
+The rider can see the pickup and delivery points on the map and even zoom in to get closer detail.
+
+Upon choosing the job, the application receives confirmation from the mobile app that the collaboration can now be closed.
+
+Here's a recap of what you saw in the demonstration.
+
+Incoming orders are evaluated by their information accuracy and distance, and the application reacts accordingly.
+
+One day, the owner of a pizza delivery shop next door happens to see this app and immediately wishes his business could use something like this.
+
+He mentions this to the florist down the street and how she wants it too.
+
+You get to thinking about this and realize that a lot of the functionality of this app could also work for pizza and flower deliveries.
+
+So it makes sense to create an app component that can be reused with just a tweak here and there.
+
+So now I want to create a component from some of this app flow.
+
+By clicking Create Component I can draw a rectangle around the tasks I want and shift Click to select the rest.
+
+Once I click the Save component button, my original app flow is unaffected and what pops up is the component window.
+
+Here is where we can make some changes to the component so it will work for pizza and flower delivery services and not just bike messenger services.
+
+App components can be created from scratch if you choose that option from the Add menu, but otherwise from within a visual event handler flow.
+
+Just group select all the pieces that will be part of the component and then click on the Save component button.
+
+Your original app flow will be unaffected, but a duplicate of what you selected will now be accessible from its own pane.
+
+From the consumer's point of view, App components essentially behave like any other activity pattern.
+
+They're available in their own components category, and to use one, you just need to drag its name into the app canvas and connect it to any other task, just like you would any App activity pattern.
+
+With the component selected, the configuration menu will show all the configuration options that the creator established.
+
+We'll see a demonstration of this working after we've configured this component to be more flexible for reuse.
+
+Developers set the properties that will be accessible by consumers, but consumers can at least see interior structure of the component by clicking on the green expand button when the component is selected.
+
+Right clicking on the component includes the explode component option.
+
+This is different.
+
+Exploding the component converts it back into separate activity tasks, and it will no longer be a component.
+
+When you're finding yourself creating functionality in projects that is similar to something you've done before and will be doing again, consider making a component to reuse.
+
+As we're going to see in the next video, you can make these components flexible so that they can be tweaked to better fit a specific purpose.
+
+Vantiq tutorials include an exercise just for learning app components.
+
+Be sure to check it out.

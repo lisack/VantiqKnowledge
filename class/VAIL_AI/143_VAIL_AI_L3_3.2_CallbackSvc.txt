@@ -1,0 +1,78 @@
+### Summary
+
+The Vantiq callback service is a crucial tool for facilitating communication between services and clients, particularly in AI applications involving conversation widgets. Although not technically an AI service, it plays a significant role in AI conversations by enabling communication between a conversation widget on a client and a VAIL procedure in a service. The service includes procedures like `register` for setting up event pathways, `invoke` for sending data, and handling responses. The callback service is particularly useful for soliciting user information during AI conversations, even though it is not inherently an AI operation.
+
+### Original Content
+
+Filename: 143_VAIL_AI_L3_3.2_CallbackSvc  
+Video URL: https://youtu.be/baz5TBh9iuM
+
+The Vantiq callback service.
+
+The callback service is not technically an AI service, but developers use it often in AI conversations involving the conversation widget in the client.
+
+The callback service has some procedures for facilitating communications between services and between a service and client.
+
+You might be thinking that services already have ways to send data to each other, and you would be right.
+
+For AI applications, the primary reason why callback is used is for communication between a conversation widget on a client and a VAIL procedure in a service.
+
+More on that in a minute.
+
+The register procedure in the callback service is for setting up the event pathway where the communication will take place.
+
+If you're using a conversation widget, the register procedure is usually not necessary to use.
+
+The Invoke procedure sends data out to the established event pathway for any entity that is listening to it.
+
+If the timeout parameter isn't supplied, the procedure will wait forever for a response, so be sure to provide one.
+
+The call back send response comes from a receiver back to the invoking entity.
+
+The invocation ID is part of the data object that is sent out and the response is whatever the receiver wishes to send back.
+
+I'll start with an example using all three procedures.
+
+What's returned from the register procedure is the event pathway, and what comes back from invoke is whatever data the responder wants.
+
+But since I know it's a string, I'm just going to log that to.
+
+I created a rule not associated with the service to listen on that event pathway and send back that response.
+
+Notice that the callback ID is consistently go, the invocation ID came with the event, and I'm sending back the data Marco a string.
+
+So let's run our service procedure and see what's logged.
+
+At the bottom is the pathway, which is what the rule was listening for.
+
+Technically we would have expected Marco first because it was the response and the invoker was waiting for the response before you saw polo, but in an event based system, they're logged asynchronously.
+
+Now let's look at how the callback service is super useful in conversations.
+
+Right away, we can skip callback dot register because we've already set up the procedure this conversation will be working with.
+
+So in this procedure, we're running callback dot invoke, asking what their favorite color is, waiting a minute to get a response.
+
+Otherwise we will respond with, well, I guess it's black.
+
+Both sides do still need to know what the conversation ID is.
+
+It's passed into this procedure.
+
+But how does the conversation widget know?
+
+And then every time I submit a new message from the conversation in the onset in request event handler, I'm making sure to send that convo ID to the service procedure.
+
+So now let's run it.
+
+I type in anything and it comes back with what's your favorite color?
+
+And it's waiting for my response.
+
+I'll type in orange and it responds back.
+
+If I do this again and I wait an entire minute, then the catch clause response kicks in.
+
+Take away here is that the callback dot invoke procedure is an especially powerful tool for soliciting more information from a user during an AI conversation, even though this operation isn't actually AI.
+
+The filename: class/VAIL_AI/143_VAIL_AI_L3_3.2_CallbackSvc.txt

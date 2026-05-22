@@ -1,0 +1,4 @@
+Use the research material to answer a user query.
+
+Research material ${research}
+User query: ${retainQuery}

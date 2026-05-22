@@ -1,0 +1,66 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+
+This content provides an overview of the responsibilities and tasks of a namespace administrator within Vantiq. It highlights the importance of understanding where development should occur, emphasizing that development projects should only be hosted in developer namespaces. Namespace administrators manage access by inviting existing users and setting their privileges. They are responsible for monitoring namespace-level audit logs and using tools like Grafana for system monitoring. The content also touches on the importance of backing up projects, a task often performed by developers who may also serve as namespace administrators.
+
+**Original Content:**
+
+filename: 140_OrgAdmin_L1_1.2_NSAdmin  
+video url: https://youtu.be/P7q5kA_SpC8
+
+Namespace Administration.
+
+The scope of administrative responsibility for namespace admins is of course smaller, but there are still tasks to perform.
+
+As a namespace administrator.
+
+Be aware of where development should take place.
+
+The system in each org have root namespaces where administrative work is done.
+
+Catalogs are namespaces dedicated to brokering resource access between namespaces.
+
+These three types of namespaces should not have development projects in them.
+
+Only developer namespaces should host development projects.
+
+Namespaces serve to provide an isolated project workspace within an organization, so very often application developers are also the administrators of the workspaces where they are working.
+
+But this doesn't have to be the case.
+
+Namespace administrators do not have the authority to add new users to the system like org admins do.
+
+They are instead inviting existing users on the system to have access to the namespace and the privileges they can grant are user or developer.
+
+Developers can work on application projects, but users can only run them.
+
+I wish to give another user access to this namespace, so I go to Administer Advanced pending invites.
+
+It brings up a list of all the invites I have pending, which is none, but I click plus request and create one.
+
+The only information I really need to supply is the e-mail address, the rest has defaults.
+
+I can also authorize users to use my namespace by choosing that namespace from Administer Namespaces and going to Manage Authorizations, clicking Authorize User and inviting that individual to the namespace with the privileges I set.
+
+Namespace administrators should also be checking the namespace level audit logs.
+
+The data query behaves exactly like it did for the org level logs.
+
+We looked at the org level quota exceeded before and nothing came up, but now at the namespace level.
+
+Notice that we do have an application that has some issues.
+
+This looks like a slide leftover from the org administration lecture, but namespace admins also have audit logs and Grafana dashboards to consult.
+
+Grafana supplies custom dashboards for system org and namespace administration monitoring, which we will see later.
+
+We didn't discuss this during the lecture, but I'm including here links to the documentation and the short elective class about Vantage version control system tool.
+
+Backing up projects is a developer level administrative task, but many namespace administrators are also developers, so it does bear mentioning.
+
+The filename: class/OrgAdmin/140_OrgAdmin_L1_1.2_NSAdmin.txt
+
+---

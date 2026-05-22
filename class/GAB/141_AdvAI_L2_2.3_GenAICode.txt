@@ -1,0 +1,20 @@
+### Summary
+
+This video tutorial focuses on the Gen AI Code Components within Vantiq, specifically how developers can integrate their own code into the Gen AI flow. It highlights the use of code blocks, which are snippets of Vail or Python code, and discusses the limitations of built-in system service procedures within these blocks. The tutorial also covers the native L cell component for custom Python code and the differences between the procedure component in Gen AI Builder and App Builder. An example is provided where a procedure is used to document performance issues, demonstrating how to set up a large language model with a prompt and make tool procedures available for tasks like API calls.
+
+---
+
+Filename: 141_GAB_L1_1.3_GenAICode
+Video URL: https://youtu.be/jjsQ5ajM5dE
+
+Gen.
+
+AI Code Components In this video, we'll cover the Gen AI components that allow developers to insert their own code into the Gen AI flow, starting with code block. We've already talked about code blocks. These are just snippets of Vail or Python code inserted into the Gen AI procedural flow. Be aware that built in system service procedures are not supported in code block which includes popular commands like log.info, math dot random and so on.
+
+The native L cell component allows developers knowledgeable in Langchain to write a custom Python code block to meet a need specific to their project which hasn't been addressed by other Gen AI component offerings yet. You would think the procedure component in the Gen AI Builder is just like that in App Builder, but it isn't because it's limited to calling VAIL procedures, and some operations like directly inserting into a standard type will give you an authorization error.
+
+We're back in our Worker performance service, which calls the eval question Gen AI Procedure. It turns out that I have to carefully document Bob's bad performance if I want him gone, so I've got a procedure I'll call to do exactly that. I've deleted my old Bob branch code block and I'm replacing it with a procedure task. I'll call it the same name as the procedure name. Selecting from the list of failed procedures isn't hard, but for the parameter input, make sure you put it into a return statement like this.
+
+In my procedure, I'm sending a timestamp and the question asked to a new service called Queue Tracker. Queue Tracker stores the information into a data type. Now when Bob tries to avoid doing his job, we have the proof saved. The tool here is exactly the kind we encountered in Lesson 1. Using this component, the developer can set up a large language model with a prompt and make your tool procedures available to it, just like you did for submit prompt. In this example, we're using a tool to provide an API call which will tell us the current weather in San Francisco. This couldn't have been known from the large language model's training or a semantic search.
+
+The filename: class/GAB/141_AdvAI_L2_2.3_GenAICode.txt

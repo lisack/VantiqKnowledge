@@ -1,0 +1,129 @@
+**Summary:**
+
+This content provides an overview of execution quotas in Vantiq, which are designed to prevent system failures by limiting the resources an organization can use within a Vantiq installation. It explains how quotas are set by default, how they can be adjusted by system administrators, and the importance of associating namespaces with organizations to enforce quotas. The document also details the types of quotas, such as rates and credit quotas, and their impact on system performance. It emphasizes the importance of monitoring quota violations and suggests design changes to address issues before increasing quotas. The content concludes by highlighting the generous default settings of Vantiq quotas and the importance of understanding these limits.
+
+**Original Content:**
+
+Execution quotas Vantiq reduces the risk of catastrophic system failures through quotas.
+
+Quotas effectively set limits on the resources an organization can use within a Vantiq installation.
+
+Even if there is only one organization, it limits the conditions under which applications can exhaust certain execution resources.
+
+By default, the quotas are set so that each org has an equal share of resources.
+
+However, system administrators can change the quota allocations if desired.
+
+Quotas apply wherever there is an organization.
+
+If you have namespaces not within an organization, which can happen if you create a namespace straight from the system, the quotas aren't in force.
+
+Obviously this is dangerous, so always make sure namespaces in the system are affiliated with an organization.
+
+This is the list of quotas allocated by default to each provisioned organization.
+
+The JSON here is split to make it easier to read.
+
+These are enforced per cluster member, so A3 member cluster will have aggregate limits three times what is shown here in this video.
+
+We'll go over the rates and credit quotas that you see on the left and the rest in the next video.
+
+Spoiler alert.
+
+Rates, credit quotas, and Kate's resources are the most often changed, and the rest are very seldom altered from their defaults.
+
+As stressed before, because quota changes impact the entire installation, only the System Administrator can modify them.
+
+Here's what the editor pane for an organization looks like.
+
+Upon expanding the quota editor pane, the default quotas are not visible.
+
+System administrators make the desired changes in JSON format, and this is merged with the rest of the settings already in place.
+
+Rates and credit are closely related.
+
+Rates reflect the rate in actions per second at which you introduce new actions the system must execute, and credit is the work queue.
+
+The rates execution property is the limit on the number of new rules and procedures that can be invoked every second.
+
+Streams refer to how much code can be executed per second in terms of the number of operations.
+
+This quota can be largely ignored.
+
+It's mostly here to detect infinite loops.
+
+The rates receive message property limits the rate at which messages can be ingested from sources.
+
+Credit encompasses executions and the work backlog together.
+
+Total credit is an approximation of the capability of each virtual machine.
+
+Credit quotas were put into place to reduce the chance that an application could exhaust system memory.
+
+By default, an organization is limited to using 20% of all the resources in a system, but per the queue ratio, the system will keep processing new work until the queue exceeds 200% of the quota, after which work will drop.
+
+If the credit allocations exceed 100%, organizations and applications within these organizations will divide up the resources evenly up to the system limits, which can result in slow performance as the best case scenario.
+
+The worst is if work has to drop.
+
+At that point, the developer's application has failed.
+
+Here's what that failure looks like in these resources.
+
+REST calls will return code 429.
+
+Websockets slow way down until they stop altogether, Event handlers will grind to a halt, and rules will not invoke.
+
+In other words, suddenly nothing's working and you, the developer, could be very confused.
+
+After all, your earlier tests ran successfully, So what's happening now?
+
+Quota violations are a good thing to check out.
+
+Credit violations are likely to be the most common issues developers will encounter as their applications scale up, so it's important to know where to look for them.
+
+We haven't covered Grafana yet, but this will prove the easiest way to see at a glance what problems are occurring.
+
+Query the system and audit logs to find quota violations.
+
+Don't ignore the problem if you see only one error.
+
+Duplicates are suppressed so the applications disk storage doesn't fill up.
+
+The error may not be reported in the faulty namespace unless it's the only one in the org.
+
+Follow events upstream for the problem.
+
+Credit violations mean that work is piling up faster than the system can deal with it.
+
+Most of the time, though, the solution is not to just increase the quota, but rather to make some changes in the design.
+
+First.
+
+Look what's coming in.
+
+Is the flow of events continuous or in spikes?
+
+Are those spikes somewhat predictable, like the end of the day or the end of the month?
+
+Can they be staggered to avoid the rush?
+
+Could there be fewer of them with more information?
+
+Now do be careful with that last strategy.
+
+There will be fewer events to intake, but if it makes the processing even more resource intensive, the result will still be execution quota violations.
+
+Consider distributing the application to more machine resources, be that edge or more virtual machine, cluster nodes, etcetera.
+
+In memory state processing is much more performant than database writes and retrievals.
+
+Finally, do as much synchronous processing within the system to avoid network latency between nodes.
+
+Only after addressing every possible design issue should you resort to increasing the quota.
+
+Vantiq sets its quotas as generously as possible, and most developers will never run into the limitations.
+
+Still, it's good to know where the guardrails are.
+
+https://www.youtube.com/watch?v=TkIQvNuHepk

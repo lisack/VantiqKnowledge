@@ -1,0 +1,53 @@
+**Summary:**  
+This content provides a guide on integrating third-party software, such as Key Cloak and Open AI, with the Vantiq platform. It covers setting up Key Cloak for secure logins, creating new admin users, and integrating Open AI by setting up access to a Kubernetes worker. The process involves creating secrets, updating configuration files, and deploying Vantiq to ensure the system AI functions correctly. The video concludes with a reminder of the ongoing responsibilities of system administrators and suggests further learning through a User and Namespace Administration class.
+
+**Original Content:**  
+Integrated software setup Vantiq is a fully integrated platform and that begins with the server.
+
+Key Cloak is one such third party product integrated with Vantiq which handles secure logins to the system.
+
+It's a good idea to make more administrators to Key Cloak, just like we did for our Vantiq system.
+
+Once you get to the Key Cloak Administration UI, enter the credentials for your admin username.
+
+Creating a new Key Cloak Admin is a pretty straightforward process.
+
+On the left, choose Users and then the Add User button to create a new user.
+
+Once you enter all the info and press Create to confirm, you'll find yourself in the Details tab for that user.
+
+Go to Role Mapping and assign Role, then choose Admin.
+
+Upon clicking Assign, that new user is now an admin.
+
+We need to integrate Open AI with the Vantiq system and set up access to a Kubernetes worker to the system namespace for it.
+
+To accomplish this, we need to make a couple more secrets and run generate secrets again to add them to our stored credentials.
+
+In my console, I've prepared a couple of files for the secrets I'm going to need.
+
+One is the new secrets dot yaml file where you can see I can add an access token to the system namespace.
+
+And you can see I've created the Vantiq AI Assistant N dot TXT file with one line only that keeps the API key for my Open AI back in the system namespace.
+
+As the System Administrator, I go to administer advanced access token and create a new access token with the proper profile and suggested name from the GitHub repo instructions.
+
+Once I make sure that access token is copied to my clipboard, I will update the secrets dot yaml file and also make sure I put my API key for open AI in the other file.
+
+Then I can run Generate secrets, make sure you're in the main installation directory to run the Gradle command, and of course, ensure that it finished successfully.
+
+We'll now run Deploy Vantiqh again.
+
+You can now ensure that your system AI is working by going to the AI Documentation Assistant and typing some kind of innocuous question like this one.
+
+Running the Deploy Vantiq command again will take less time since it's only making a few small changes.
+
+Look for the confirmation that your secrets were picked up like as shown.
+
+This video marks the end of the system administration tasks required to initialize a Vantiq installation and set it up with first time users.
+
+Of course, system administrators have ongoing tasks to ensure the ongoing health of the system.
+
+Take the User and Namespace Administration class to learn more.
+
+https://www.youtube.com/watch?v=PybQcOWfcoY

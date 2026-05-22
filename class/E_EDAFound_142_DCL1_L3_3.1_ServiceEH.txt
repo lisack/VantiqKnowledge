@@ -1,0 +1,106 @@
+**Summary:**  
+This video provides an overview of developing Service Event Handlers in Vantiq, focusing on the low-code development tools available within the Service Builder. It explains the different modes of the Service Builder, including interface, implement, and test modes, and how developers can handle events using visual app flows or Vantiq's proprietary programming language. The video also covers the management of application data in RAM, the use of state for fault tolerance, and demonstrates a simple application using Visual Event Handlers (also known by the initials "VEH") to process patient vital signs. By the end of the video, viewers will understand how to create and manage Service Event Handlers, configure activity tasks, and chain services for modular application logic.
+
+**Original Content:**  
+filename: 142_DCL1_L3_3.1_ServiceEH  
+video url: https://youtu.be/9v7Rr4ZjUwg  
+
+Service Event Handlers Project development happens in Services.  
+
+In this video, we'll concentrate on the low code development tools available to developers in Services.  
+
+When you choose to create a Service, what pops up is the Service Builder.  
+
+From here, you'll instantiate and work with the resources associated with the Service, be they program state, several kinds of procedures, and event handlers.  
+
+The Service Builder has three modes.  
+
+Developers designate what public events the Service will ingest and send out.  
+
+In the interface mode, procedures, signatures, and descriptions can be declared here.  
+
+In the Implement mode, procedures are written and events are actually handled.  
+
+And of course, the test mode is where developers set up progression tests for all or part of the Service and can even set them up to be run automatically in full test suites.  
+
+Developers will spend the majority of their time in the Service implement mode.  
+
+It's where we build the program logic.  
+
+When inbound events come into the Service, they can be handled in one of two ways.  
+
+The visual representation of program logic that you see on the right is called an app flow, and it's created by stringing together logic blocks of VAIL code called activity patterns.  
+
+You can see the list of them on the left of the app Flow canvas, including join, limit, etcetera.  
+
+In this class, we'll learn how to handle events visually, but they can also be handled entirely using Vantiq's proprietary programming language.  
+
+The event handlers are the areas for accessing procedures.  
+
+Public procedures can be executed from outside the Service.  
+
+Private procedures are just for use by the Service.  
+
+We won't be able to cover Gen  AI procedures in this class, but the Academy offers 2 comprehensive generative AI classes available upon completion of the Foundations course.  
+
+Services can also retain application data in RAM.  
+
+The State pane within the Implement tab allows developers to set up what information they want held in memory, but they can still take advantage of State without lifting a finger.  
+
+When developers use tasks in the Visual Event Handler that use State, the Service manages it and even automatically generates procedures that developers can use to work with their State data.  
+
+State, even though it's held in memory, can be made more fault tolerant to catastrophic failures in a couple of different ways.  
+
+At the top there is the replication factor.  
+
+Developers can designate copies of the state to be maintained in separate clusters so that if one cluster goes down, state is not lost.  
+
+Also, developers can write procedures to capture the state and write it to a database, then set it up as a scheduled procedure to run at designated intervals as a scheduled procedure.  
+
+Here's a simple application to demonstrate Visual Event Handlers.  
+
+In this one, we're taking in patient vital signs, enriching that data with more patient information, then on a per patient basis getting vital signs statistics and checking for anomalous readings which will go to another Service.  
+
+The thick blue lines show that processing is happening by patient ID.  
+
+After that split by task.  
+
+To add even more logic to this Visual Event Handler, we will pick another task, drag it to the end of our statistics so that we can display those statistics on the dashboard we are publishing to this Service's own outbound event.  
+
+And that's exactly what the dashboard is listening for.  
+
+As soon as we save the changes in the Service, you will start to see the statistics show up in our dashboard.  
+
+In this case, its average heart rates per patient ID updated every second.  
+
+And by selecting an individual listing in the table, we can see more information about their vital statistics that also came from the Service.  
+
+I mentioned that we're also filtering for anomalous readings and sending them to another Service. 
+
+And here's the Visual Event Handler for that other Service.  
+
+Here we're contacting the patient in the mobile app to see if they're OK.  
+
+If they don't get back to us fast enough, then we call an ambulance for them.  
+
+Here's the alert that a patient gets and when they open that up they can confirm that they need help or they can insist that they are fine.  
+
+This is the alert that the paramedics get with full details about the patient and where to find them.  
+
+By the end of the labs, you will know how to do every step of this application yourself.  
+
+Upon starting a Visual Event Handler, the system automatically places an event stream task in the canvas for you.  
+
+On the left is a multi category palette of activity patterns.  
+
+You choose and drag these onto the canvas to build the logic like a flow chart.  
+
+When you select an activity in the canvas, the configuration pane slides in from the right.  
+
+Here's where you turn the activity pattern into an actual activity task configured for the specific needs of this event processing flow.  
+
+Most application logic takes place in Services.  
+
+Services can be chained by ingesting events from other Services, which lets developers modularize application logic.  
+
+The filename: class/E_EDAFound_142_DCL1_L3_3.1_ServiceEH.txt

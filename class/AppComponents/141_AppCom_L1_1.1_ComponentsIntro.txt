@@ -1,0 +1,63 @@
+**Summary:**  
+This video introduces the concept of components in Vantiq, which are custom modules that developers can create to streamline repetitive tasks in their projects. The video covers different types of components, including App Components, GenAI Components, and Client Components, explaining their purposes and how they can be created and used within Vantiq's builder tools. App Components are used in service visual event handlers, GenAI Components are custom tasks for GenAI procedures, and Client Components are custom widgets for clients. The video also provides a brief overview of where and how these components are created in the Vantiq IDE.
+
+**Original Content:**  
+Components.
+
+Each of the builder tools in Vantiq allow developers to create custom components.
+
+So what are components and what do they look like in those different building tools?
+
+Components are custom modules that developers can create to save themselves time and effort when building repetitive functionality in their projects.
+
+Consumers don't see all the code and other work that went into them and can configure them for their own purposes based on what properties the developer chose to expose.
+
+In this video, we'll do a brief survey of the types of components developers can make in Vantiq, starting with App Components.
+
+These are custom made app activity tasks for use in service visual event handlers.
+
+An app component can be as simple as a single VAIL task that performs a conversion that you, the programmer have to do often, like miles to kilometers.
+
+App components can be composed of many other activity tasks too, as we'll see in our use case later.
+
+The GenAI Builder also allows developers to create custom GenAI tasks.
+
+Developers choose to do this from the Add menu as if they were building a GenAI procedure, but the result will be a component that can be dragged into any number of other GenAI procedures.
+
+Much like App components, GenAI components are essentially custom GenAI tasks with the details of their inner workings obscured.
+
+But for the properties the developer has chosen to expose, GenAI components behave much like App components.
+
+Just as an aside, if you're wondering how GenAI flow tasks in App Flows differ from GenAI custom components, it's a fair question.
+
+A GenAI flow activity task, like a GenAI custom component, can be comprised of multiple pieces that collectively behave like 1 task.
+
+That said, GenAI Flow activity tasks don't allow developers to expose their desired configurable properties and these tasks also cannot be saved and reused.
+
+They also cannot be made part of app components.
+
+We also have client components for creating custom made widgets.
+
+Select the compound layout desired and choose Create Component and the whole thing will behave as a single widget for use in other clients.
+
+Client components have their own Academy elective devoted to them.
+
+So that's all we'll be saying about client components in this class.
+
+This will just be a quick look of where components are made in the IDE.
+
+Notice first in the Add menu we've gotGenny I component here and as well as Advanced App Component.
+
+If you want to make an app component without starting first in the visual event handler, this is exactly where it would happen.
+
+More often than not, though, you'll create an app component by group selecting various tasks within the App flow and then choosing Save Component.
+
+To make a GenAI component, you have to start from the Add menu, choose to call it something, and then create it from what looks like the GenAI Builder tool at that point.
+
+But whatever you save will then become a full component.
+
+When using the Add menu to create a new client, you can choose to make it a client component instead at that time, or click something in a layout widget and you'll see the Create Component button show up.
+
+Create components to bundle complex operations into a single functional module.
+
+https://www.youtube.com/watch?v=ZB_af7x6oAw

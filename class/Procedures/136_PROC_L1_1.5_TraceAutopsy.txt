@@ -1,0 +1,64 @@
+**Summary:**
+Vantiq developers can utilize the autopsy tool to trace and debug their code in an asynchronous event-driven system. Unlike traditional debuggers, autopsies allow developers to step through code that has already executed, providing insights into what happened during runtime. To use this feature, developers must enable tracing, which is resource-intensive and typically set to last for two hours by default. Tracing can be configured for specific resources or globally, and it helps in generating autopsies for each event run. The autopsy tool is essential for real-time systems, and developers are encouraged to take the Autopsy Debugger tutorial for practical experience.
+
+**Original Content:**
+
+Tracing in autopsies, debuggers step through live code in an asynchronous event driven system.
+
+The action of using a debugger would therefore change how and when events would enter the system.
+
+How can Vantiq developers see what their code is doing?
+
+Vantiq solves the problem with its autopsy tool.
+
+Autopsies work much like debuggers, but they step through code that's already executed, allowing the developer to see line by line what happened in the code when it was running.
+
+To hold all executed code for a possible autopsy would be a lot of overhead, so developers who want to see autopsies of their code need to turn on tracing.
+
+The tracing option is available at the top of panes that use fail code, but you may need to expand the area below the NAV bar to see it.
+
+Tracing is resource intensive, which is why by default it will only stay on for two hours.
+
+If you want to trace a resource for more or less time than that, go to the Debug Configurations pane, choose New, select a single resource or toggle on Global Configuration to trace all of them.
+
+Then choose Tracing and set the expiration for the desired amount of time.
+
+Logging and profiling also provide a lot more information about the resources and are also resource intensive.
+
+Shown here is a procedure at the top left that feeds events to the service visual event handler, which in turn triggers a rule at the bottom left.
+
+We will turn on tracing for all of them.
+
+Once we run the application, we can see the autopsies that are produced.
+
+Here are the 8 autopsies produced from eight runs due to 8 events.
+
+Let's look at one of them.
+
+Use the green buttons to step forward or backward.
+
+You can see the variable values on the right as we do.
+
+Bear in mind that turning on tracing for a visual event handler means that you will be getting autopsies for all of the activity tasks.
+
+For every single run of all of the events in our procedure, we looped through several iterations, which is faithfully recorded in the autopsy.
+
+This first run did not have any errors, so let's make one.
+
+I'm going to add a divide by zero error in one of the VAIL blocks in the visual event handler, and let's see how Vantiqh catches that error.
+
+There is a list of errors.
+
+Let's get the details encountered.
+
+Exception during execution division by zero.
+
+We can even look through the system generated code to see where our own code clashed with it after the fact.
+
+Autopsies are necessary for real time systems and you'll need to turn on tracing to create them.
+
+Take the Autopsy Debugger tutorial to get some hands on experience working with this vital tool.
+
+The filename: class/Procedures/136_PROC_L1_1.5_TraceAutopsy.txt
+
+https://www.youtube.com/watch?v=Z5Uq8zPBQH0

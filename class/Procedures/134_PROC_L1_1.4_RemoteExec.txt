@@ -1,0 +1,161 @@
+**Summary:**
+This content provides an overview of remote processing in Vantiq, focusing on how to connect namespaces and execute procedures remotely. It begins by reviewing the method of connecting namespaces using a catalog namespace and then introduces nodes federation for secure connections. The document explains how to set up nodes, use access tokens, and execute procedures using the "Processed By" clause. It also covers syntax options, error handling, and the advantages of distributing event-driven applications.
+
+**Original Content:**
+
+filename: 134_PROC_L1_1.4_RemoteExec
+video url: https://youtu.be/Y84lVGMv8us
+
+Remote Processing.
+
+Today we're going to see how Vail allows for remote processing.
+
+First, we'll review the method of connecting namespaces that you already know, and then we'll move on to another way which includes processing remotely and programmatically.
+
+In your Level 1 labs, you connected events between 3 namespaces via a catalog namespace.
+
+If you remember, the catalog should not have any other projects on them and they set up mesh connections for the distributed application.
+
+Another way to connect namespaces is via nodes federation.
+
+That is, secure connections are maintained by the fact that the connections are one way and require full authentication either by a username and password or an access token, which in this case is blacked out.
+
+In our example above, properties are a way to pinpoint selective nodes when several are connected by their properties.
+
+Both delivery mode and client options are due to the fact that nodes connect via networks which can be prone to interruptions.
+
+Client options are where the developer can set vertex HTTP client options related to the connection.
+
+See the docs for more details.
+
+Once saved, developers can test their node connections with the green button on the pane.
+
+Once the nodes are established, developers initiate remote processing with the Processed By clause.
+
+Execute statements and Data Manipulation language statements are both equipped to include Processed By in their syntax.
+
+First, I'll show you the basics of how Processed By behaves and then we'll dig deeper into the syntax and options available within this clause.
+
+Hello, and let me show you a couple of aspects of the processed by behavior.
+
+You see here I have a simple procedure that calls a procedure called called.
+
+Here is my procedure called called and all it does is return a string.
+
+I run this and it says I'm a local copy of the procedure.
+
+What if I want to call this remotely to another namespace?
+
+In order to do that I first need to make a node.
+
+Nodes are here in the deploy menu, go to deploy and nodes and I already have one created out.
+
+Let me show you what it is.
+
+Notice it has the property remote 1 is yes and the other thing it has here is a test node connection button when you want to check to see if indeed it connected properly.
+
+I just pressed this button and successfully connected to the node.
+
+OK, but I'm not happy to just make one node.
+
+I want to make another node from this namespace.
+
+In order to do that, I first have to go to the namespace I want to connect to.
+
+And in this case, it looks very different because it's an old version of the product, but that's OK.
+
+So we're going to go to administer, which works in both things in advanced and access tokens.
+
+This is where you create an access token.
+
+Remember this, you did this once.
+
+I'm going to call it Node connector.
+
+Set the expiration for a while from now.
+
+Now I can copy this once I go back to my original namespace.
+
+I have now copied the access token in the clipboard.
+
+So now when I go to deploy and nodes and new node, I make sure to change my credential type to access token and copy that in.
+
+Now all you have to do is put in the Uri and be sure to give it a node name.
+
+And the other thing I'm going to do is give it a property and give it a value of YES.
+
+Now I've created 2 nodes.
+
+I can see them when I go into my deploy nodes remote 1 and remote 2.
+
+They have the properties of remote 1 and remote 2 both set to yes.
+
+So now I execute called, that's going to look for the local copy.
+
+But if I execute called and processed by all, it's going to look at all of the nodes and let's take a look.
+
+See it looked at, found remote one.
+
+It found remote 2.
+
+Notice it did not find the local copy.
+
+So process by all is only going to look across the nodes.
+
+It's not going to look locally.
+
+Now I'm going to call it process by remote 1.
+
+So only remote 1 is going to respond to this.
+
+Let's save this and sure enough, I am the remote one.
+
+Copy of the procedure here is the full syntax of the processed BY clause.
+
+Developers who want to make sure at least or only one remote operation took place can use the exactly 1 or at least one phrases.
+
+The query constraint is where to specify characteristics about the nodes for processing.
+
+In our demo, we used ARS properties associated with the nodes.
+
+We also used all which produced more than one result.
+
+These are always returned in a non deterministic sequence within limits the time the system will wait for the remote processing on each node in the sequence to produce results.
+
+If the time is exceeded, the system will produce an exception.
+
+The until statement will be evaluated after each node result and will stop the remote call if the statement evaluates as true.
+
+The context to clause directs the request status to the variable named after it.
+
+This will be an object with two properties, the status of value success and the node whose value is the instance of the node in question.
+
+Onremote error also directs information to the variable named after it, which has three properties, status and the node instance, but also the exception describing the error.
+
+Now we know that when we call something remotely, if there is more than one result that's going to be called, we get a sequence.
+
+So for each instance of the sequence, we're going to have this context take place, execute called as happy, and then context to happy.
+
+If everything is fine, it's going to say all is well, otherwise it's going to give a remote error.
+
+One of my procedures is going to continue to be fine.
+
+The other procedure, I'm trying to divide something by zero and let's see what happens.
+
+That gives me a true.
+
+So both of them ran.
+
+One of them said all is well.
+
+The other said no, there's a problem here.
+
+Notice no errors show up here because there are no errors here.
+
+They all happened remotely.
+
+Distributing event driven applications has a lot of advantages as we even mentioned in level 1 training.
+
+The filename: class/Procedures/134_PROC_L1_1.4_RemoteExec.txt
+
+https://www.youtube.com/watch?v=Y84lVGMv8us

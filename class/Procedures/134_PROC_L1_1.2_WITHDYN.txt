@@ -1,0 +1,120 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+This content provides an overview of using the WITH clause and dynamic procedure calls in Vantiq. It explains how the WITH clause is an optional part of a procedure statement that allows developers to set attributes such as permissions and properties. The video delves into how procedures can be called dynamically by their properties using the EXECUTE statement, which allows for more flexible and dynamic function calls. The example demonstrates calling procedures by name and by properties, highlighting the benefits of setting properties for categorizing and dynamically invoking procedures.
+
+**Original Content:**  
+filename: 134_PROC_L1_1.2_WITHDYN  
+video url: https://youtu.be/rcYFuFVoBhs
+
+The WITH clause and dynamic procedure calls.
+
+There is a part of procedure declarations that is worthy of its own video, and that is the WITH clause.
+
+We'll go over the various settings in that clause before delving deeper on how to call procedures dynamically by their properties.
+
+The WITH clause is another optional part of the procedure statement that comes after the parameters and return type, which begins with the word WITH.
+
+Within the WITH clause, developers can set certain attributes about the procedure itself.
+
+The keywords profiles, ARS PUBLIC, and ARS GROUP are all aspects of the permissions either the application user or the procedure itself will assume when the procedure runs.
+
+When a namespace is first created, only two profiles will exist, User with only read privileges on data types and admin with all privileges.
+
+Developers can make more.
+
+Developers can also set users in groups and only the groups listed in the ARS group will be able to execute the procedure.
+
+If ARS PUBLIC is true, then all users can run the procedure by declaring dependent resources.
+
+Not only will the Rocedure be linked to those resources in the resource Grah, but deleting any of those resources will also delete the Rocedure.
+
+Let's zero in now on how the statement can set properties for procedures.
+
+What are properties?
+
+Anything you want them to be.
+
+In this example, the with statement includes 2 properties, Region and Department, each with values.
+
+This is the format properties need to follow a key and a value.
+
+Setting properties for procedures is useful for categorizing them, helping developers understand their function at a glance, but they really come in handy for dynamic function calls.
+
+Well, here are three procedures.
+
+Let me start with this one down here procedure AUS new hires and it's got the properties of EMP with the value of this year and region with the value of Australia and then it's going to return three names.
+
+This one over here is JP new hires with properties EMP equal to this year and region equal to Japan and it's got three names to return.
+
+Here is the procedure that's going to call one or both of them.
+
+And if you just want to call a single procedure, of course you just do.
+
+But that by name, and you're not going to be shocked to find out that it behaves exactly as you expect.
+
+It only called the Australians.
+
+But you can also call procedures by property with the EXECUTE statement.
+
+If you execute all procedures where the ARS properties dot EMP key is equal to the value of this year, will it run both procedures?
+
+Let's find out.
+
+And it does.
+
+In the demo you saw procedures invoked two ways.
+
+1 was by directly calling it and the other was by employing the execute statement to invoke all procedures that match the desire properties.
+
+So let's talk about the execute statement a bit.
+
+Executing all procedures by properties will indeed execute all procedures by properties in the namespace.
+
+Let me show you what I mean.
+
+We have here 5 different procedures in five different packages.
+
+And the calling procedure.
+
+If I want to call a procedure like so, I can just do it directly.
+
+If I do that, it's only going to look in the package where it is, and in this case, that's Australia.
+
+That's expected behavior.
+
+If I add an execute statement to it and call it directly and run it, we still have just Australia because that is the package where this is.
+
+If I want to execute all procedures with the name of sales report, I can do that.
+
+All right.
+
+So I've changed this execute statement just a little bit to execute all procedures with the name of sales report.
+
+You would think that it would still look locally, wouldn't you?
+
+But no, nothing runs because there is no procedure called sales report.
+
+The name of the package is part of the name of the procedure.
+
+So if I do something like this instead of calling it directly, it's not going to look within the package for this name.
+
+It's going to just look for something by the name of sales report.
+
+But now let's call something by their properties because all of these sales reports have in common is that they all have the ARS property dot report of sales.
+
+So let's change our execute statement to reflect a property.
+
+We've changed our execute statement to reflect the property.
+
+What happens when I run this?
+
+Everything runs.
+
+So India, Japan, France, Australia, and the USA all ran because we did it by properties instead of by name.
+
+In summary, set properties in procedure declarations if you want to be able to call them dynamically.
+
+The filename: class/Procedures/134_PROC_L1_1.2_WITHDYN.txt

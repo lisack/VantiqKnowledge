@@ -1,0 +1,94 @@
+**Summary:**
+This video provides an overview of Vantiq on the edge, explaining its purpose and how it is used. Edge computing allows for faster, more responsive computing power by processing data closer to where it is needed, reducing network latency compared to cloud-based applications. The video discusses the different sizes and scales of edge computers, from local data centers to microcontrollers, and explains that Vantiq edge installations are standalone and can operate offline. It outlines the minimum system requirements and installation methods for Vantiq on edge devices, with a focus on using Docker containers. The video also covers administrative tasks necessary for managing an edge installation, such as creating organizations and users, and emphasizes the importance of securing the system. The video concludes by highlighting the benefits of combining edge and cloud computing for optimal performance.
+
+**Original Content:**
+
+Vantiq on the Edge What does Vantiq on the edge look like and how is it used?
+
+We'll answer those questions in this video.
+
+Edge computing is about facilitating faster, more responsive computing power near the places that need it.
+
+Cloud based applications are powerful and resistant to catastrophic failure, but can be subject to network latency due to greater distance from the source.
+
+Edge computers vary greatly in size and scale.
+
+They can be anything from local mech data centers all the way down to laptops and micro controllers.
+
+Vantiq edge installations are Vantiq platform installations.
+
+They aren't clustered like cloud installations, but they can run offline or in places with spotty networks.
+
+Edge applications generally speaking do some local processing then upload the results to a cloud based installation for further processing and or persistence.
+
+Here are the minimum system requirements for a Vantiq installation.
+
+There will be additional software requirements depending on the type of installation you choose.
+
+There are three ways to install a Vantiq server on an Edge device.
+
+Of these, the Docker container method is the one you're most likely to use for a single device like a laptop or NVIDIA microcontroller.
+
+This is because the graphics processing libraries, Mongo DB, and full AI functionality are automatically installed at the same time.
+
+The edge image is.
+
+Here's a demonstration of using Docker on a Mac laptop to install Vantiq on the edge to give you some idea of the steps involved.
+
+From my home directory, I'm going to go ahead and move to my edge directory.
+
+The docker dash compose dot yaml file is as follows.
+
+This was pretty much a cut and paste straight from the manual.
+
+The only thing I needed to change was the image number and add a line to the volume for bootstrapping later.
+
+The config directory has the license dot key file, the public dot PEM file, and the bootstrap dot JSON file.
+
+If you're going to be bootstrapping, starting up the installation is a matter of two docker commands.
+
+The first is to log into key dot IO where the docker image is installed, and the second is Docker compose UP-D.
+
+That will fire up the edge installation.
+
+Here is the Docker Desktop window where we can see the containers and their log files in real time.
+
+No matter how the server is installed, the next steps require a bit of installation administration.
+
+Most developers have never been organization administrators, let alone system administrators.
+
+But as the owner of an edge installation, that's exactly what you are.
+
+The installation comes with just one System Administrator login.
+
+As the System Administrator, you'll need to create organizations and add users to your edge installation.
+
+You may ask why you should bother with the administrative housekeeping tasks if you're the only one going to be using the Edge system.
+
+Even so, you want your namespaces to be protected from crashing your system through resource overuse.
+
+Also, the initial system password is the same for everyone, so it's good to change that as soon as you can.
+
+Here we are in our system namespace as user system in our brand new installation of the Edge, and in Administer Users we will change our user password for the system.
+
+Type in a new password here, then verify it in the pop up.
+
+This is also where you can create new users who can become org administrators or developers in your system.
+
+To create an organization, go to Administer Organizations and select New.
+
+Here you can see I've already created one called Acme, but now we'll make a new one called My Company.
+
+Here is also where you will create the organization starting namespace as well as designate which user will be the administrator for the org and supply the org password.
+
+Distributing application systems across edge and cloud installations delivers the best of both worlds.
+
+Use edge computing for faster response.
+
+Use the cloud for stability and deeper computing power.
+
+The installation guide details how to begin with Vantiq on the edge, including links to the third party dependencies the server requires.
+
+Also, check out the Administrator's Guide if you're not familiar with the system level administrative tasks you'll need for your installation.
+
+https://www.youtube.com/watch?v=iXuHybqBD6E

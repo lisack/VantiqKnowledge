@@ -1,0 +1,119 @@
+**Summary:**
+This video provides an overview of using generative large language models (LLMs) within the Vantiq platform. It covers the integration of AI assistants to streamline development processes, including design models and service visual event handler configurations. The video explains the types of LLMs, focusing on generative models, and demonstrates how to add and configure them in Vantiq projects. It also highlights the use of LLMs in applications through service visual event handlers and Gen AI Builder, emphasizing the importance of securely managing API keys and secrets.
+
+**Original Content:**
+
+filename: 143_AIFoundation_L2_2.1_GenLLMS
+video url: https://youtu.be/h068p7NlQpM
+
+Using generative large language models, we'll first briefly review the mini development AI assistants available in the Vantiq platform before turning our attention to integrating your own in projects.
+
+Vantiq has embedded AI functionality to shortcut the development process in most of its development tools, including the design model, client document search, and even in some of the service visual event handler activity pattern configurations.
+
+In this video, and in the class Elective as a whole, we'll be focusing on how to effectively use AI as a part of your own projects.
+
+We'll define a couple of terms.
+
+First, a large language model, or LLM, is an algorithm trained in natural language.
+
+There are two types of these, generative and embedding.
+
+Generative AI is the generic term used for employing one or both types of LLM to complete language tasks.
+
+Let's take a closer look at the generative large language model.
+
+Feed it a simple question and it will return a natural language response by default.
+
+This will be with a helpful demeanor.
+
+You can also send whole conversations and it will respond as the AI part of that thread in a conversation.
+
+The model can be conditioned to respond in a certain way or with a certain emphasis or even in another language.
+
+There are many types of large language models and these have different strengths and weaknesses.
+
+Some are faster, some are more accurate in their responses, or work better with question and answer formats, code formats, etcetera.
+
+Developers have to do a little research to select a model that works best for their projects.
+
+There is another way to provide context for generative large language models to make informed responses, and that's where embedding large language models come in.
+
+More on that later.
+
+Now that you know something about how generative AI works, let's move on to how to use it in the Vantage platform.
+
+To add a large language model to use in a development project, choose LLMS from the Add menu, then click the New button in the LLMS pane to add a new one.
+
+When you choose the type, drop downs and fields will automatically appear to get all of the needed information for that model.
+
+The easiest way to change the configuration is to do it in the LLM playground.
+
+We'll learn about that later.
+
+By default, the LLM will have a generic helpful demeanor, but you can use the system prompt to give more customized directions to the LLM.
+
+With a designated generative large language model, we can now use AI in an application.
+
+One way is through a service visual event handler activity pattern.
+
+The System Submit Prompt activity pattern makes use of a generative LLM to get an AI response to a prompt.
+
+In the configuration window, select the generative large language model to be used, then the prompt.
+
+The prompt for this activity pattern can be a string or a chat message array.
+
+Another way to use a generative LLM directly is in the Gen AI Builder using a LLM component.
+
+Used on its own, it will take the input as a prompt, but another component upstream in the procedural flow can refine it.
+
+I have a client here that lets users type in something that a generative large language model can rephrase for them.
+
+So in this example, we're saying mean things about Bob, but we've chosen diplomatic as what we want to see rephrased.
+
+When we submit, we're going to get back something that is indeed more diplomatic.
+
+We can choose other options for our input, including sarcastic, laconic, and Japanese.
+
+Here's the sarcastic response, the as few words as possible response, and a Japanese translation.
+
+Using LLMS in our products starts with a secret that's in Administer Advanced Secrets.
+
+To make a new secret, you just enter the name and the secret value.
+
+To integrate a large language model, go to the Add menu, choose LLM, new LLM, give the LLM a name, package name, choose Generative for the type, and then choose a model name based on that.
+
+The API key secret is where you've created your secret and you reference it there.
+
+By default, the system ensures that the AI will have a helpful demeanor, but you can add further instructions here.
+
+LLMS can be queried directly from within Service Visual Event handlers orGenAI procedures.
+
+In the visual event handler.
+
+It's the Submit Prompt activity pattern that does this.
+
+And notice we're just setting the prompt and the LLM and nothing else.
+
+And that is how our rephraser worked the first time around.
+
+Now I'll comment out the line of code that uses the visual event handler and instead call the generative AI procedure directly.
+
+In Gen AI procedures, we use the LLM task in much the same way, setting up which is the LLM and what is the prompt and rerunning our rephraser.
+
+From the Gen AI procedure you can see we have pretty much the same results because it is after all the same LLM model.
+
+This is just a quick review from the demo.
+
+The API key for the AI you'll be using needs to be embedded into a secret, which is just a container for securely holding information.
+
+To create a secret, go to Administer Advanced Secrets or create it from the new LLM pane.
+
+Bear in mind that if the project is exported, the secret will not transfer.
+
+Also, once you make a secret, you cannot retrieve the value from it.
+
+This is an intentional security feature.
+
+Don't forget that AI assistance is available all through the development process, even as you're creating AI applications.
+
+The filename: class/143_AIFoundation_L2_2.1_GenLLMS.txt

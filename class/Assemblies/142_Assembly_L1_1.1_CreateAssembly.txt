@@ -1,0 +1,64 @@
+**Summary:**
+
+This content provides an overview of creating assemblies in Vantiq, which are tools for reusing entire projects. Assemblies allow developers to make their projects reusable by others, offering a "black box" approach where the author decides what resources are visible and alterable. The process involves converting a project into an assembly, configuring its visibility, and potentially publishing it to a catalog for others to install. This method is particularly beneficial for developers working on similar projects, as it saves time and effort by allowing for easy integration of complex functionalities. The content also hints at a subsequent video that will cover further configuration details.
+
+**Original Content:**
+
+filename: 142_Assembly_L1_1.1_CreateAssembly  
+video url: https://youtu.be/Oz9gXOgZrn4
+
+Creating assemblies.
+
+Assemblies are a tool for reusing whole projects.
+
+I'll provide more details about what assemblies are before demonstrating a project that will turn into an assembly in subsequent videos.
+
+We'll then learn how to configure assemblies for reuse and then how to use them as consumers.
+
+Developers who find themselves building projects that are similar to one another could benefit greatly by authoring an assembly to make that functionality reusable to consumers.
+
+Assemblies are like a black box unless the assembly author chooses resources to be visible.
+
+How much the consumers will see under the covers depends on what the author wants to make visible and alterable.
+
+Another really useful feature of assemblies is that they can be published to a catalog.
+
+Subscribers will see the listings and be able to install the assembly into their own namespaces.
+
+Once the author has built a working project, he can convert it to an assembly from the project's menu.
+
+It's highly recommended that all the resources in the project be part of the same package.
+
+This is to avoid possible resource name collisions in the Consumers namespace.
+
+Once you choose the Convert to Assembly option, the assembly pane appears, where authors can refine what will be visible to and alterable by consumers.
+
+Here's a project designed to employ AI to quiz users on lecture material from the Foundations class.
+
+The user selects the lesson and the AI builds 3 questions based on the lecture, evaluating the user's responses along the way.
+
+In this project we have a single client and corresponding service with the conversation managed by collaboration state which is set up when the client starts.
+
+When the page starts, a service procedure is called to search for desired documents to populate the drop list.
+
+Once a choice is made from the list, the AI is prompted to create a three question quiz based on the lecture transcript and finally the collaboration closes when the client does.
+
+To turn this project into an assembly, just choose Convert to Assembly from the Project menu.
+
+This will open the assembly pane to set up what users will see and what they can configure for their purposes.
+
+From here, we can also publish our assembly to a catalog if the current namespace is connected to any other namespaces connected to the same catalog will now see that assembly as available for install.
+
+We'll make a namespace now and connect it to our catalog, but we won't subscribe to the new assembly until we make some changes to that assembly first.
+
+If we were to go to our new namespace now and try to install the assembly, we would see that something downloaded, but no actual resources would be visible.
+
+In the next video we'll cover how to set up what the user can see and what changes we can allow the user to make so the reusable project can be more flexible for other users.
+
+Vantiq Assemblies allow developers to create once, then tweak slightly for related uses, saving much time and effort along the way.
+
+Making whole projects reusable in this way also allows consumers to integrate highly functional and complex functionality in a simple plug and play format.
+
+I highly recommend the developers take the Assemblies tutorial to better understand just how flexible and useful assemblies can be.
+
+The filename: class/Assemblies/142_Assembly_L1_1.1_CreateAssembly.txt

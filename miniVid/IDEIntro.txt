@@ -1,0 +1,7 @@
+Certainly! Based on your example, here is the conversion of the embedded video HTML to the video's URL:
+
+```plaintext
+https://www.youtube.com/watch?v=0qmNPVh8844
+```
+
+This URL corresponds to the video that introduces Vantiq's integrated development interface (IDE).

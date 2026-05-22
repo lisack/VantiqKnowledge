@@ -1,0 +1,43 @@
+**Summary:**  
+This content provides an overview of system maintenance for the Vantiq platform, emphasizing the importance of ongoing monitoring and maintenance to ensure the system's health. It highlights the use of infrastructure reporting systems, log and metrics management, and the setup of a Heartbeat application for 24/7 monitoring. The Vantiq CLI is recommended for performing maintenance tasks efficiently. The content also points to additional resources and Academy classes for further learning.
+
+**Original Content:**  
+System Maintenance Now that the Vantiq platform is U and running, ongoing maintenance and monitoring assure that the system is in good working order.
+
+We'll review and discuss some important tools to ensure the health of your installation.
+
+Let me say at the outset that all the details for performing these tasks are very well documented in the links provided at the end of the video.
+
+The purpose of this lecture is just to provide an overview, to make new system administrators aware of what should be done to maintain a Vantage server installation and to review the tools available to facilitate the work.
+
+We'll start by mentioning infrastructure reporting systems.
+
+The tools available for keeping logs and managing cloud infrastructure metrics might not be sufficient in some cases.
+
+System administrators will likely want to look into log and metrics management for their cloud provider or a third party product like Sumo Logic.
+
+For 24/7 monitoring, consider setting up a Heartbeat application for the installation.
+
+You'll need either a second installation off site to monitor the messages or use Vantiq's Monitoring services.
+
+The Cates Deploy Tools documentation includes template projects for both the sending and receiving applications.
+
+Just a reminder, the command line interfaces of the infrastructure tools make it easy to build installation information reports from shell scripts.
+
+Systems administrators should absolutely learn about Vantiq CLI for performing certain maintenance tasks.
+
+In this short example, both the lines that start with the word Vantiq are CLI commands.
+
+Within this small shell script, the Vantiq CLI performed a full backup of a developer's namespaces on an installation, all 360 of them.
+
+The Vantiq CLI saves a great deal of time and effort for tasks like this.
+
+And of course, your cloud provider dashboards are a good way to see something of what's happening with the cluster.
+
+These are the links to the main documents for performing Vantiq System administration and monitoring tasks.
+
+I also want to call your attention to the two Academy classes listed at the bottom.
+
+These will be vital to helping you learn your administration duties.
+
+https://www.youtube.com/watch?v=HGNQDzDLIeI

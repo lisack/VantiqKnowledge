@@ -1,0 +1,746 @@
+### Summary
+
+This video provides an in-depth overview of the Software Development Life Cycle (SDLC) as applied to the Vantiq platform. It emphasizes the importance of following the SDLC phases for successful project outcomes, regardless of the project's complexity. The video categorizes development projects into six types, from simple demos to complex enterprise systems, and discusses how each benefits from the SDLC. It covers the phases of capturing requirements, development, testing, deployment, operations, and maintenance, highlighting the tools and practices that facilitate these processes in Vantiq. The video also touches on the role of DevOps in integrating development and operations to streamline the SDLC.
+
+<iframe width="355" height="200" src="https://www.youtube.com/embed/RweONMwfwnU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+---
+
+### Original Content
+
+Filename: 134_SDLC_L1_1.1_SDLC_Long  
+Video URL: https://youtu.be/RweONMwfwnU
+
+0:00  
+Good software is more than just knowing how to use the tools on the Vantiq platform.
+
+0:05  
+Follow the phases of the Vantiq software development life cycle for the best project outcomes.
+
+0:12  
+Developers need to 1st consider what kind of project they will be building and how tightly the SDLC will apply to it.
+
+0:20  
+We'll also discuss how development and operations work in tandem with agile processes in the Vantiq software development life cycle.
+
+0:31  
+To reach these objectives, we need to 1st establish the kind of project in consideration the phases under which it will be developed, validated and deployed, and finally maintained.
+
+0:42  
+So let's begin at the beginning.
+
+0:44  
+What type of development will your project be?
+
+0:50  
+It's important to know the class of the application you'll be building because this helps to determine the degree of figure to apply to the development lifecycle.
+
+0:59  
+Development projects fall into roughly 6 different categories listed here, from the least robust and least complex demo down to a full system wide enterprise.
+
+1:09  
+We'll discuss how to best approach each of these in turn.
+
+1:14  
+Demos and POC's are small scale systems designed to demonstrate the effectiveness of Vantiq with respect to usually a small number of capabilities.
+
+1:24  
+A demo tends to be a basic proof of feasibility.
+
+1:27  
+A POC might be a bit more fine-tuned, addressing a set of capabilities most relevant to a potential customer.
+
+1:34  
+Both need to be lightweight and rapidly produced, which means there will be little rigor, complexity, or scalability here.
+
+1:42  
+Sales engineers create a lot of both of these types in the course of their outreach to prospects moving up in complexity.
+
+1:50  
+We come to the pilot application.
+
+1:53  
+Professional services develop these at the customer's expense and their purpose is to prove, not just demonstrate, that the Vantiq platform can deliver an application or system that meet all of the customer's criteria.
+
+2:06  
+Pilots are generally not complete enough to be fully deployed, but pilots do need to be scalable and robust as very often they are the foundation for the next phases in development.
+
+2:17  
+Developers writing these kinds of applications should therefore be ever mindful of the next stages of development and apply a good amount of rigor at this phase to avoid headaches in the future.
+
+2:30  
+These next three types of development projects can be characterized as enterprise applications, as all will be deployed for use.
+
+2:38  
+The main distinction between these 3 levels of projects are in their complexity and scale.
+
+2:44  
+Lightweight applications are generally small scale because there are a limited number of users and the availability and functionality are constrained to meet basic requirements.
+
+2:55  
+Enterprise applications are usually the hardest to develop of all the phases because they must grow to encompass many more users and extend their functionality to many more uses.
+
+3:06  
+Here's where good design for scalability and rigor in implementation are most important.
+
+3:12  
+Enterprise systems don't generally have higher availability or scalability needs than enterprise applications, but there is added complexity and integrations between applications and among other systems.
+
+3:25  
+In summary, these six classes of software development, ranging from less rigorous rapidly developed demos and POC's to more extensive pilots and onto full deployed application of varying scale and integration, all benefit from the software development lifecycle.
+
+3:42  
+To repeat, the software development life cycle must be implemented for every project to ensure that developers are working with the correct requirements, designing well, putting proper tests into place, etcetera.
+
+3:55  
+Vantiq, being a fully functional application development platform, greatly facilitates SDLC compliance with good tools for every phase of the development process.
+
+4:05  
+In Vantiq, we tend to merge the design and development phases into one because our platform lends itself well to this ability.
+
+4:13  
+But even if customers delineate their SDLC phases differently than ORS, Vantiq will still map closely, certainly in the main points.
+
+4:22  
+Finally, while it's important to adhere to the SDLC guidelines in development, there are degrees to how tightly this happens.
+
+4:29  
+For the small projects like demos or POC's that require a little rigor, it will be applied more lightly, but developers should always keep the various phases in mind and plan accordingly.
+
+4:42  
+With the preliminaries out of the way, let's move on to the software development lifecycle phases.
+
+4:51  
+Here's the list in a nutshell.
+
+4:53  
+Most developers are already familiar with some form of this list.
+
+4:57  
+The first step in any development project is to capture the business requirements for it.
+
+5:02  
+As stated earlier in Vantiq, it's easy to architect, design, and implement simultaneously, so that just looks like the one development step.
+
+5:11  
+Customers using their own development life cycle may break this into more steps, but the pathway is the same.
+
+5:18  
+Beyond the debugging and troubleshooting of the development step, formal testing validates data and ensures that regressions are caught quickly.
+
+5:27  
+Deployment migrates the application into its operating environment, where further troubleshooting and testing can check for any issues that crop up.
+
+5:36  
+Along with formal testing, operations and maintenance will be ongoing for the life of the application as it is improved and upgraded over time as a function of the agile development process.
+
+5:49  
+In the next two slides, we're going to look at how to apply Vantage software development life cycle to the development of first at POC and then for an enterprise application.
+
+6:00  
+Proofs of concept are very lightweight, rapidly developed applications with functionality limited to what developers want highlight for the customer.
+
+6:10  
+Business requirements at this level are often not formally captured, but the developer certainly has something in mind to drive the design.
+
+6:18  
+There is little rigor for this type of project and therefore testing simply verifies that the proof of concept is working for now.
+
+6:25  
+Likewise, deployment will probably not migrate to a new environment but remain where it was developed.
+
+6:32  
+One caveat to this is if the developer has the POC to the customer to evaluate personally.
+
+6:38  
+In that case, deploying to a business this environment might boost performance.
+
+6:43  
+The developer might make tweaks to the POC here and there to improve the appeal, but unless the customer asks for more features, enhancements are unlikely.
+
+6:53  
+Nonetheless, even for a simple, quick application such as this one, the developer should keep the SDLC in mind and work through the phases, even if it's only a light application.
+
+7:05  
+In contrast to the POC, every phase of the SDLC should be implemented for enterprise applications.
+
+7:13  
+1 great way to capture business requirements is to use a system modeler while sitting down with the customer.
+
+7:19  
+A high degree of rigor is expected here to ensure scalability, availability, performance, and so on, with good analysis, documentation, and code management along the way.
+
+7:31  
+Testing should cover all critical features of the product.
+
+7:35  
+Enterprise applications need to be designed for ongoing operations and maintenance enhancements, which also means it will be deployed often from the source, so keep the source secure.
+
+7:46  
+Let's dig deeper into the details of the SDLC for enterprise applications, starting with how to capture the requirements.
+
+7:55  
+Capturing the requirements for the project is the first phase of the SDLC.
+
+8:00  
+When developing customer applications, it's imperative that the requirements are well documented and agreed upon by all parties.
+
+8:08  
+Besides the obvious benefit of fewer misunderstandings, any future changes to those requirements will also be easier to assess for the impact on the work and timeline, et cetera.
+
+8:19  
+This doesn't need to be a fancy document.
+
+8:21  
+In fact, one good way to capture business requirements from the customer, and even to fully engage all parties in the process, is to use the system modeler.
+
+8:30  
+The system modeler is easy to understand and doesn't require technical skills, so it's a good choice for multi user participation in defining what the application should do and also to help the customers see how events drive the functionality.
+
+8:45  
+If a requirement is complicated, however, rather than dragging and dropping a large number of events and reactions, it's probably better to jot down a few notes.
+
+8:54  
+We'll be covering how to use a system modeler in the next lesson.
+
+8:59  
+It's good to engage the customer and diligently capture the business requirements, but this process could go on for a long, long time with ever diminishing returns.
+
+9:08  
+How do you know when what you have is enough?
+
+9:11  
+Certainly no set of requirements is going to be perfect, no matter how much time is spent on them.
+
+9:17  
+Knees will likely undergo some degree of metamorphosis as the project matures, but we want to avoid major changes that could require a complete reset of the whole project.
+
+9:27  
+Even with the Agile model, where the requirements taken are more for the immediate future and subject to rework, it's good to have at least a high level understanding of what the whole project should produce.
+
+9:38  
+To that end, the customer should feel that the list adequately and correctly reflects the business criteria for the application.
+
+9:46  
+The developer, in turn, should feel confident that there is enough detail to build an application that will satisfy the customer.
+
+9:54  
+After the requirements phase of the Vantiq software development life cycle comes the development phase.
+
+10:01  
+Many other versions of SDLCS split architecture, design and implementation into separate phases, but in Vantiq this is not necessary as a tools to accomplish both largely overlap with the Agile method.
+
+10:14  
+These are performed iteratively as well.
+
+10:17  
+Good documentation is essential, especially for enterprise applications and systems.
+
+10:23  
+This need not be a formal 50 page report, but do provide a clear explanation of the overall architecture, design, performance and scalability models.
+
+10:32  
+Security plan.
+
+10:34  
+Good models bring problems to light early in the process, so employ the discipline of writing down what the solutions are going to be.
+
+10:42  
+Take for example, the performance model.
+
+10:45  
+If you're going to be building a highly scalable application, thousands of events a second, you need to architect the system upfront to anticipate what the needs will be.
+
+10:55  
+The plan may not be perfect, but it's better than building something 1st and then wondering if it's scalable.
+
+11:01  
+Code and the related system resources likewise should be archived often and the source managed so that as developers debug and test along the course of development, they can quickly undo something that didn't work well.
+
+11:14  
+It's also good for showing the customer the evolution of the project should there be questions.
+
+11:20  
+Looking through the changes, developers further gain a sense of what the flow of the cycle is going to be.
+
+11:26  
+Once integrated with the Vantiq platform, syncing Vantiq projects and retrieving earlier steps is very easy.
+
+11:35  
+This slide details a bit more about what we're looking for when we talk about building models.
+
+11:41  
+Models are a great way to reason about the applications.
+
+11:45  
+They should define the key elements of the project from both the developer and customer perspectives.
+
+11:51  
+But models don't need to be too extensive just for a good understanding of the product architecture.
+
+11:57  
+Take for example, the performance model.
+
+11:59  
+We don't need to know precisely how many lines of code are going to be executed in a procedure or rule.
+
+12:05  
+What we do need is a macro understanding of the resources that will be used, a good approximation of the number of events we're going to see, the number of database queries, and so forth.
+
+12:16  
+You can classify the complexity of code for certain features as small, medium, or large.
+
+12:22  
+Small does not require a great deal of logic.
+
+12:25  
+Medium is more complex, maybe iterating over several arrays.
+
+12:29  
+Large complexities will need further consideration on how they should be designed because Vantiq has a limit on how long a single computation can run.
+
+12:38  
+If they're too long, they will likely need to be broken up.
+
+12:42  
+The model will help you understand how to go about this.
+
+12:47  
+It's good to develop iteratively.
+
+12:50  
+We don't recommend any particular agile method.
+
+12:53  
+Whatever is comfortable for you and best predicts the development phase is fine.
+
+12:58  
+Using the agile method is not an excuse to neglect good practices during each iteration.
+
+13:04  
+Some element of architecture and design is important, even if it's just a few notes on a piece of paper.
+
+13:10  
+Then write the code and eliminate errors.
+
+13:13  
+Don't leave fixes for the next phase.
+
+13:16  
+You want to leave each iteration with a running application.
+
+13:19  
+You also need tests for function performance, security for whatever are critical issues.
+
+13:26  
+One more warning.
+
+13:28  
+Don't put off the most difficult problems until the last iterations of the project.
+
+13:33  
+This will practically ensure a schedule overrun.
+
+13:36  
+In fact, it's a good idea to get the hard things done up front.
+
+13:40  
+Once those are out of the way, it's much easier to predict how the rest of the project will go.
+
+13:47  
+Let's move on to the testing phase.
+
+13:49  
+This is absolutely required for enterprise applications.
+
+13:54  
+Testing is probably the number one Achilles heel of software development.
+
+13:58  
+No one wants to do it.
+
+14:00  
+No one wants to make the investment to make it systematic.
+
+14:03  
+However, doing so greatly reduces the costs over time and makes it much more reliable.
+
+14:09  
+Be thorough with test coverage.
+
+14:11  
+Test all of the functionality of the application.
+
+14:15  
+Verify the robustness of the program with both the valid and invalid inputs.
+
+14:20  
+You'd be surprised how many applications crash with a single string of bad input.
+
+14:26  
+Create a series of well defined, repeatable tests to run against specific scalability targets and use them with each development iteration.
+
+14:35  
+Don't neglect creating tests for availability and security as well.
+
+14:41  
+Because we're using iterative development and will later be discussing DevOps, the tests should be developed as automated regression tests.
+
+14:50  
+The process will be much smoother and ultimately the system will be much more reliable if these tests can be applied consistently with each iteration.
+
+15:00  
+Speaking of regression testing, these should be designed to be able to run on any copy of the code across different environments and systems.
+
+15:09  
+Developers and QA will need to run them for different purposes.
+
+15:14  
+Developers want to see the effects of their latest changes.
+
+15:18  
+QA will verify that the program is working as expected and wherever it's intended to run.
+
+15:23  
+There's a pre production phase where the tests can verify that the application has been installed correctly.
+
+15:30  
+Automation in testing should include the test runs, the verification of the results, test reports, and failure notifications.
+
+15:38  
+Automated testing during the development process almost guarantees that problems will be detected and fixed quickly before the application goes into production.
+
+15:49  
+Keep tests alongside the code in the source management system so that there are always tests that match each version of the product.
+
+15:57  
+That way, if there's ever a need to go back to a previous version of the application, the tests for it are all still readily available.
+
+16:07  
+The Vantiq platform contains a very comprehensive suite of tools which greatly facilitate creating and automating tests against running applications.
+
+16:17  
+Unit tests are for individual rules and procedures.
+
+16:21  
+An integrated test covers a whole project by creating a new namespace, copying the project to it, and then running the test there.
+
+16:29  
+Test inputs and outputs are easy to simulate by using the capture tool to capture real inputs and outputs that can then be repurposed for test inputs and outputs.
+
+16:41  
+Finally, suites and the Run policy allow for easy scheduling and run repetition.
+
+16:47  
+This has all been covered in our Level 1 Developer Certification class, so this slide just serves as a reminder of the role these test tools will play in the software development life cycle.
+
+17:00  
+Eventually we come to the deployment phase, which may be composed of several activities.
+
+17:05  
+You have to migrate the system from the development environment to the staging or production environment.
+
+17:11  
+It's best to arrange the application so that it can be deployed with Vantage Deployment tools.
+
+17:17  
+The tools both automate the deployment and support multiple environments, so deployment to the test, staging and production environments should be straightforward.
+
+17:27  
+Place all the deployment configurations under source management with good documentation so these can be understood and reproduced by other personnel later.
+
+17:37  
+If for some reason the Vantiq tools do not encompass all the deployment requirements you have for your system, please notify us.
+
+17:45  
+We're always seeking to improve all of our tools to meet business needs.
+
+17:51  
+Deploying to save the Vante cloud will involve one set of procedures, but you might also be adding the complexity of deploying to a more distributed environment.
+
+18:01  
+In order to deploy successfully, first consider the lay of the land, or topology, if you will.
+
+18:07  
+Where will the product be deployed and what pieces will be running in those installations?
+
+18:13  
+What restrictions exist in the connections between all those systems?
+
+18:18  
+Private deployments in data centers frequently see networking restrictions.
+
+18:23  
+It's important to keep workers of access, networking, and other impediments for present and future deployments.
+
+18:30  
+Equally important are notes on the workarounds and solutions used during deployment.
+
+18:36  
+Besides all of the above, with edge deployments even more questions arise.
+
+18:41  
+Will the deployment be manual or remote?
+
+18:44  
+Are there special teams that do deployments at the production sites and how well versed are the unvanted deployments?
+
+18:51  
+Will you have to write up a simpler deployment protocol that they can follow?
+
+18:55  
+With networking restrictions like firewalls, In which direction can those connections be made?
+
+19:02  
+Now we come to the operations phase of the software development lifecycle.
+
+19:06  
+Too often this phase is but an afterthought for development organizations.
+
+19:11  
+But the operations phase is absolutely critical if the application is going to provide value over time.
+
+19:17  
+Developers should be thinking ahead to the operations phase, even during development and testing.
+
+19:24  
+The models we build should consider storage and other usage, uptime, scalability, and other capacity planning.
+
+19:32  
+Regression and functionality tests also work in tandem with operations to ensure proper execution and robustness.
+
+19:40  
+Monitor all aspects of the application to look for errors for improvement and maintenance.
+
+19:46  
+The maintenance phase can be further complicated if customers are managing the applications along with the infrastructure, the eVantiq and underlying software installations and so on.
+
+19:57  
+So we're going to just focus on application for now.
+
+20:01  
+It's not enough to hope that your application is working well, you need to know how well it is working.
+
+20:07  
+There are lots of tools to help you do this, including Vantiq's integrated Grafana component, which provides much of the required information.
+
+20:16  
+It's easy to write something to periodically ping the deployed application and send a notification to the right people if a response doesn't come back.
+
+20:25  
+Finally, key port overtime on errors, storage usage, and Vantiq quotas.
+
+20:32  
+Grafana is a key tool that Vantiq offers to help monitor application operations.
+
+20:38  
+It's especially useful during development and operations, checking for scalability.
+
+20:43  
+The Usage overview screen shows quota overages, credit threshold violations, and reports on how much this space is being used.
+
+20:52  
+All of these are vital for capacity planning.
+
+20:56  
+Another useful Grafano screen is for rule executions.
+
+20:59  
+You can see how well your rules are running, how many events they're processing, their speed, response time, how well they're responding.
+
+21:07  
+That is errors from dropped executions and failures.
+
+21:11  
+The usage overview screen also highlights errors clearly.
+
+21:15  
+There are a couple of critical things to note when interpreting Graphana graphs.
+
+21:20  
+1 is that if the system is indicating that you're dropping messages or you're getting errors, you need to diagnose that problem right away.
+
+21:27  
+Your system is not working correctly.
+
+21:30  
+There may be exceptions.
+
+21:32  
+If you happen to have a system that is only sampling data, then it will drop the other messages, but most systems don't work that way.
+
+21:41  
+Just because you know errors will occur and you've become somewhat numb to them being there doesn't mean that you should ignore them.
+
+21:49  
+In reality, they mean that some aspect of the application is not working correctly.
+
+21:55  
+A good model to have.
+
+21:56  
+Every error needs to get checked out and every error needs to be fixed.
+
+22:03  
+Running out of quota is not an indication that you need more quota.
+
+22:07  
+Many times it's an indication that there is something in the application that isn't running correctly and should be investigated.
+
+22:15  
+Check the application first.
+
+22:17  
+Make sure it's working as it should.
+
+22:19  
+Make sure it's not putting giant instantaneous loads on the system, and only when those things are OK should you consider if more resources are needed for the application.
+
+22:30  
+Quotas are for rate limits like messages per second and a new rule invocations.
+
+22:36  
+Very often.
+
+22:37  
+If there's a need for it, these can be increased.
+
+22:40  
+Credits, on the other hand, are for resource limits.
+
+22:43  
+How much is running at once and in a multi tenancy system, credit prevent one application adversely affecting others in the installation.
+
+22:52  
+It's an obvious truism that if more work piles up faster than the system can process what they already have, there will be credit overages.
+
+23:01  
+This generally doesn't happen in normal workload, but rather this is caused by the system being inundated with a large sudden bursts of work.
+
+23:10  
+We'll cover this in a bit more detail.
+
+23:15  
+This screen shows an application that's running at just a little under 4000 events per second.
+
+23:21  
+The device processing rule lower left is the main rule of the application.
+
+23:26  
+You can see that the value spiked about 5000 operations when it first started up.
+
+23:32  
+Then it settles down in the 3 1/2 to 4000 range.
+
+23:37  
+Over on the right, where you can see execution times.
+
+23:40  
+The averages are relatively low, but we do experience a spike on a regular basis.
+
+23:46  
+That's because this particular application is presenting the system with a very heavy load, approximately 130,000 of transactions every two minutes, and it applies all of those events at one time.
+
+24:00  
+So you see the spike and then you see it calm down.
+
+24:03  
+Once we process the events and get back to regular function, do you see the little blue-green line on the left?
+
+24:10  
+This indicates that there were some dropped execution requests and that's because we exceeded our credit limit and that was caused by a start up spike when we first started up the application.
+
+24:22  
+Of course, this is something the system shouldn't be doing and should be solved.
+
+24:31  
+Just to highlight the overage once more, here's the usage overview screen for the same application.
+
+24:37  
+It's showing the requests processed along the top and to take a look at the quota violations at the bottom right, we had a credit failure at execution and at its peak it was dropping about 600 operations a second.
+
+24:52  
+So about 600 executions were dropped when the application first started.
+
+24:57  
+If you look closely, there's another little bump on the end, which will also need to be investigated.
+
+25:04  
+So you can see that this screen really highlights violations.
+
+25:08  
+Check it often for violations during the operations phase of your application.
+
+25:14  
+Certainly the maintenance phase of Vantiq Software Development Lifecycle involves bug fixing, but it also encompasses making augmentations to the application.
+
+25:24  
+Again, automated regression testing is critical to the maintenance phase.
+
+25:29  
+After a bug fix, the only way a developer can be confident that the application can be redeployed is to run it through the tests first.
+
+25:39  
+Developers will also be extending the functionality of the application because they're building the system iteratively.
+
+25:47  
+As far as application extensions go, there are going to be two ways to extend the system.
+
+25:53  
+1 is to do it in a loosely coupled fashion.
+
+25:57  
+This would involve building more applications and integrating them in the existing system using Vantiq, Event Broker and Service Catalog.
+
+26:06  
+Existing applications may need modification too, but it is very important to make all the changes backward compatible.
+
+26:13  
+It's not iterative to introduce new features that will force adaptations on old systems.
+
+26:19  
+Lastly, we'll briefly explore the role DevOps has in the Vantage software development lifecycle.
+
+26:29  
+DevOps is a notion that development and production operations can be brought together and therefore correspondingly shorten the SDLC.
+
+26:38  
+Once again, this will be an iterative process.
+
+26:42  
+Continuous integration and continuous deployment.
+
+26:44  
+Facilities include automated regression tests, code management, good records and documentation, automated bills to target systems.
+
+26:56  
+Vantiq has the tools in place to facilitate DevOps continuous integration and deployment needs.
+
+27:02  
+Simultaneous design and development is already easy in a low or no code system, but the test component, integration with source code managers, and integration tools to connect to other systems all make Vantiq very nimble in an iterative DevOps process.
+
+27:19  
+The Vantiq command line interface, or CLI, is the main scripting tool that we use for continuous integration and deployment.
+
+27:27  
+For instance, Vantiq performs continuous bug fixes and improvements with rolling upgrades over installations every three or four days, the deployment of which is automated in the CLI with little discernible downtime to the user or site.
+
+27:42  
+Reliability model ties the operations team closely with development, which makes the operations team much more technically adept at improving operational functions of the system.
+
+27:56  
+Regardless of how robust you're trying to make a development project, it will be more complete and error free if it's created through the phases of Vantiq SDLC.
+
+28:06  
+DevOps may combine the development and operations phases of the project, but this is just an acknowledgement of what we already know.
+
+28:14  
+No project is ever truly complete.
+
+28:17  
+It remains in the development throughout its useful life.
+
+28:21  
+Thank you.
+
+The filename: class/SDLC/134_SDLC_L1_1.1_SDLC_Long.txt

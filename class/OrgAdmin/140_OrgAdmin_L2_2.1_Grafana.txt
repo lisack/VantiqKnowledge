@@ -1,0 +1,46 @@
+**Summary:**  
+This video provides an overview of using Grafana within the Vantiq platform, specifically for monitoring Organization resource usage and performance. It explains how to access Grafana, navigate its dashboards, and utilize its features for both namespace and organization administrators. The video also covers how to interact with dashboard panels and customize the display for better readability. Future videos will explore the specific dashboards for namespace and organization administrators in more detail.
+
+**Original Content:**  
+filename: 140_OrgAdmin_L2_2.1_Grafana  
+video url: https://youtu.be/QyXzXI-WZGo
+
+Grafana Whether you are a namespace organization or System Administrator, you'll be needing to monitor the usage and performance of the resources under your purview.
+
+Grafana has customized dashboards for each of these administrative responsibilities.
+
+Grafana is an open source third party product included in all clustered Vantiq Server installations.
+
+The data shown in the various dashboards comes from specialized queries against a time series database that keeps records of what happens on the Vantiq platform.
+
+In this video we'll cover how to access Grafana and look at the ways of navigating the software.
+
+And in the next two videos, we'll delve into the customized dashboards for the namespace administrator and then those for the org admin.
+
+To access Grafana from any namespace, choose Grafana from the Administer menu.
+
+To see the list of available dashboards, open the main menu at the top left, choose Dashboards, and then open the General folder that appears.
+
+Here we see the first three names on the list, all having to do with apps.
+
+Click on any entry in the list and you'll be directed to the dashboard.
+
+Along the top will be these configurable properties.
+
+Do bear in mind that the wider the time frame and the more frequent the refresh, the more load will be put on the Grafana system, especially if there is a lot of activity to report.
+
+Most of these controls are self-explanatory, but take a look at the green share button at the top.
+
+Choosing to share the window means saving a snapshot of it to a file or opening up the live reporting in a new browser window.
+
+Each individual dashboard panel also comes with controls.
+
+Click on the panel title to choose different ways to engage with the panel.
+
+Selecting a portion of the graph will freeze and expand the chart to that time frame.
+
+Clicking on the legend at the bottom of the dashboard will change the display to just that resource and even alter the range to make the chart more readable for it.
+
+In the next two videos, we'll look at the Grafana dashboards for namespaces and org respectively, and you'll see some of these navigation features in action.
+
+The filename: class/OrgAdmin/140_OrgAdmin_L2_2.1_Grafana.txt

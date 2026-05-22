@@ -1,0 +1,9 @@
+Compare the two responses called "AnswerNew" and "AnswerBase" to the query, and return a percentage of how alike the two answers are.  Succinctly explain the main differences. Put the response in this structure:
+{
+	question: ${q},
+	isAlikePct: {}
+}
+
+The query: ${q}
+AnswerNew: ${newAnswer}
+AnswerBase: ${baseAnswer}

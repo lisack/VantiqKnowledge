@@ -1,0 +1,9 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+filename: VCS.txt  
+video url for versioning: https://youtu.be/Nx89YZVb1g0  
+video url for merging: https://youtu.be/FxmJ4o96Z7M  
+
+These two videos, which need to be shown together, demonstrate how to use Vantiq's Version Control System, or VCS. Developers use the VCS for versioning their projects, and merging work done in another namespace. VCS should not be mistaken with VQS.

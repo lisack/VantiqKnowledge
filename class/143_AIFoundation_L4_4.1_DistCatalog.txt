@@ -1,0 +1,164 @@
+**Summary:**
+This content provides an overview of the Vantiq Catalog and its role in distributing application systems across different namespaces and servers. It explains the architecture of the Vantiq development platform, focusing on how namespaces and catalogs facilitate secure connections and resource sharing. The video guides users through creating and managing namespaces and catalogs, establishing connections using access tokens, and publishing resources to catalogs. It emphasizes the importance of catalogs in enabling distributed applications and highlights the types of resources that can be shared. The content also touches on the process of publishing services and semantic indexes to catalogs and provides a brief mention of further learning opportunities in an advanced class.
+
+**Original Content:**
+
+Application System Catalog Architecture.
+
+In this video, we'll mostly be discussing how the Vantiq Catalog brokers connections between nodes, even across different servers.
+
+We'll start with a quick primer on the structure of the development platform itself.
+
+Let's say this is the project you've been working on, containing all the resources.
+
+You've created.
+
+The type, the service, the client, all of it.
+
+You've been building this project within your namespace.
+
+Namespaces are isolated work environments for developers to securely work on their projects.
+
+Vantiq recommends 1 project per namespace to avoid problems like naming collisions, but multiple projects per namespace are possible.
+
+A namespace is part of an organization or org.
+
+There can be any number of namespaces within an org.
+
+Any number of orgs, in turn, are tenants within the whole Vantiq Server installation.
+
+Notice I called the piece you're working on a project, not an application.
+
+That's because applications don't have to live just inside one namespace.
+
+They can be distributed across multiple namespaces on the same org, or in other orgs, or even across Vantiq Server installations.
+
+Not every application needs to be distributed, of course.
+
+This slide serves as a reminder that to spread processing across multiple nodes or not is a trade off between more processing power and network follow ability.
+
+Namespaces established connections through nodes for secure federation.
+
+These connections are one way.
+
+If namespace A creates a node to namespace, BB will not know about A unless B creates a node to A.
+
+They can be accessed by name or set properties.
+
+This is the node pane when connecting another namespace to your namespace.
+
+Although there's a way to create a node connection when creating a namespace from your current one, which we'll see later.
+
+In Vantiq's Federated system, other entities gain access to namespaces by the namespace access token.
+
+These are used by creating nodes between namespaces using the Vantiq API command line interface.
+
+Basically, any entity outside of the namespace needs the namespaces access token in order to interact with the resources there.
+
+All of this brings us to the Vantiq Catalog, which is what we'll be using to distribute our lab application system.
+
+A catalog makes resources available between namespaces by serving as the broker between publishers and subscribers.
+
+It's important to mention that at runtime, the two namespaces share their own mesh connection for publisher subscriber communications, and the catalog is not involved, so it cannot be a single point of failure.
+
+Catalogs start off live as namespaces, so let's go to Administer namespaces and choose Plus Namespace to create a brand new namespace, and we'll just call it something like Catalog.
+
+Once we save, the new namespace will exist, but we won't see it right away.
+
+We have to switch over to it by clicking on our current namespace name and selecting it from the list that pops up.
+
+We will then be switched over to our new namespace where the project wizard will ask us what kind of project we want to start with.
+
+Notice that I said empty because this is going to be a catalog and catalog should not have projects in them.
+
+Go to Administer Advanced Catalog to create a catalog.
+
+Press to confirm in the popup and optionally give it another name and then you have your catalog.
+
+We need to create an access token so that other namespaces can connect to our catalog.
+
+Choose new token, give it a name and change the expiration date if you want to.
+
+Don't worry about the other options.
+
+And once you click Create, the token will be saved in your computer's clipboard.
+
+Let's go to another namespace now and connect our new catalog to that namespace.
+
+This is accomplished by going to show catalogs, choosing Connect, and pasting our new token in the space provided.
+
+The URL needs to correspond to where the catalogs server is.
+
+Once the connection is made, the new catalog will appear in the list.
+
+Upon clicking on the listing, you'll see the four different types of resources that can be shared, and there's absolutely nothing in them right now because no one has published to it.
+
+If you're creating a brand new namespace from a namespace that's already connected to a catalog, you can easily connect this new namespace to the catalog as well.
+
+Give it a name and then choose Connect to Catalog at the bottom and select your catalog from the list.
+
+Here's a review from the demo.
+
+Remember, the catalogs start off as regular namespaces and are converted to catalogs from there.
+
+Here's a recap of the two ways we just saw for connecting to a catalog.
+
+Use this slide as a reference.
+
+Once a namespace connects to a catalog, there are four types of resources listed.
+
+Events, either in topics or services, are used in event driven applications.
+
+Assemblies are installable projects.
+
+There is a whole other elective class devoted to how to configure and consume assemblies, so we won't cover them here.
+
+In the AI driven applications for this class, we'll focus primarily on how to access service public procedures and semantic indexes.
+
+Once subscribed, the resource appears in the local project contents and behaves like a read only local resource.
+
+Even though subscribers can see and execute public procedures from within services published to the catalog, in reality the execution is still taking place in the originating namespace and affecting the resources there.
+
+But how do the resources become available in the catalog in the 1st place?
+
+The short answer is simply that they are published to that catalog.
+
+Here's an example from a service in the General settings of the Interface tab.
+
+In the bottom of the pane, you see that this service has the option of publishing to either or both of the two catalogs listed.
+
+This is because the namespace is connected to both of these catalogs under the Publish column.
+
+The X signifies that the service has already been published to that catalog.
+
+Oh, the cloud icon indicates that it has not.
+
+Notice that next to the published catalog listing, the Update cycle icon is enabled.
+
+This means that the developer has made some change, and clicking on the update icon will push those changes to the catalog.
+
+Publishing A semantic index works exactly the same way.
+
+To publish a service to the catalog, go to the Interface tab, General Settings, and it is at the bottom.
+
+We have 3 possibilities here.
+
+We're going to publish to our new catalog and confirm our choice in the popup.
+
+I mentioned that semantic indexes behave exactly the same way, although I guess you don't have to go to a tab.
+
+But here's the list of all the catalogs I have at the bottom.
+
+I'm going to choose the new one we just made and confirm.
+
+Let's go to our catalog now and verify that the listings are there.
+
+Go to show catalogs, choose our new catalog, and under services we should find our chat boss.
+
+And under semantic indexes, we'll find our C dot B dot therapy.
+
+Catalogs are one easy way to distribute application systems.
+
+There is a lot more to catalogs than we can cover in this class.
+
+Developers can learn more in the Advanced Selective class for the catalog.

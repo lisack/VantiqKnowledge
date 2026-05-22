@@ -1,0 +1,106 @@
+### Summary
+
+This content provides an overview of using Guardrails in the Gen AI Builder to manage AI interactions effectively. Guardrails are tools designed to intercept and redirect inappropriate AI interactions, ensuring that applications maintain professionalism and ethics. The document explains the use of two components: Guardrails AI and NVIDIA Nemo Guardrails. Guardrails AI is simpler to implement, while Nemo Guardrails offers more precise control over user and LLM interactions. The document includes examples of configuring Guardrails AI tasks and discusses the differences in functionality between the two components. It also highlights the importance of using Guardrails to maintain ethical AI interactions and recommends a hands-on tutorial for further learning.
+
+### Original Content
+
+Filename: 143_GAB_L3_3.1_Guardrails
+Video URL: https://youtu.be/Ar4XXyzee34
+
+Guardrails Guardrails are a good way to stop or redirect inappropriate AI interactions.
+
+In this video, we'll first define what Guardrails are for before diving into the details on how to use the Guardrails components in the Gen AI Builder.
+
+Generally, AI will do its best to respond to user input, but that's not always a good thing.
+
+Guardrails can intercept both user requests and AI output before your application does something unprofessional.
+
+The Gen AI Builder has two components for using Guardrails from open source, Guardrails AI and NVIDIA Nemo Guardrails.
+
+The Guardrails AI component is arguably easier to use right away, but the Nemo Guardrails offer deep precision of all aspects of user and LLM interactions.
+
+Let's look at the Guardrails AI component first.
+
+A Guardrails AI component can be set in the Gen AI flow either before or after the LLM being queried.
+
+Currently there are 5 built in validators that developers configure for checking the prompt entering the model or the response from the model.
+
+I'll show you how this works.
+
+We have a client that uses conversation widgets to interact directly with Gen AI procedures.
+
+Our first question uses no guardrails.
+
+We'll ask why the sky is blue and you can see it's running through the procedure flow and gives us an answer.
+
+Now let's drag in and configure a guardrails AI task before the LLM gets it.
+
+We'll call it No money, and we'll configure it to avoid any mention of money.
+
+The format for how to set this up is in the documentation, but as you can see, it's pretty straightforward.
+
+We'll save the Gen AI flow, and then we'll ask a new question.
+
+How much is a pair of socks?
+
+Let's see what our new guardrail does about this.
+
+After some deliberation, our answer is a completely normal answer about the cost of socks, complete with dollar signs.
+
+And if you think about it, it makes sense.
+
+The input didn't directly talk about money, and the output is not restricted from talking about money.
+
+Notice though, that if my query more directly references money, I do indeed get the expected exception.
+
+What happens then if I have the guardrail after the LLM instead of before, so that it's no longer guarding the input but instead the output?
+
+And I asked the same question.
+
+What do you think will happen?
+
+Let's save and run our client again To our question, how much is a pair of socks are?
+
+LLM will want to answer in monetary terms, but the guardrail no longer allows it.
+
+Nvidia's Nemo Guardrails component works somewhat differently than Guardrails AI.
+
+You'll need to read the documentation carefully to learn how to write the colang files to set up what will be checked in inputs and outputs.
+
+Additional configuration and prompt refinements can be set up in YAML files.
+
+Not all of the capabilities in Nemo Guardrails are available in the Gen AI Builder, which explains the color coding you see on this slide.
+
+Green signifies that the features in that category of guardrail also fully work in Vantiq.
+
+Dialogue is yellow because only single user intents work at a time.
+
+Execution is likewise yellow because only Nemo's built in actions are accessible to the component.
+
+Otherwise, use tools for actions you want performed.
+
+The Gen AI Builder tool already has Semantic Index and RAG components to accomplish retrieval tasks.
+
+Use those instead of Nemo's retrieved chunk settings.
+
+If you want to take advantage of some of these extra capabilities, you can create your own server to offload the processing and add them.
+
+You can see where to enter all the Kolang and YAML documents for the component to use to accomplish the guardrail work.
+
+Rather than being placed either before or after the LLM task like we did in our Guardrails AI demo, this component is more comprehensive.
+
+Both generative and embedding Large language models are set here, along with all the configurations, input, output, and dialogue rails.
+
+Together, this component can be very finely tuned to craft generative AI interactions free of any embarrassing surprises.
+
+On the left is a simple example of a Colang dialogue rail that anticipates some kind of greeting from the user, refuses any questions about money, and instructs the LLM to return a diffident query about how it can help.
+
+On the right, there are two outputs.
+
+The input for the top 1 was just a simple hey.
+
+For the second, we asked about the cost of socks and noticed that it won't answer the question directly because that's about money.
+
+Guardrails are useful for maintaining generative AI, professionalism and ethics, among other reasons.
+
+I highly recommend that you try the Hands on Gen EI Builder tutorial, which includes short exercises for both the Guardrails AI and Nemo Guardrails components.

@@ -1,0 +1,79 @@
+**Summary:**
+The Design Model tool in Vantiq is a powerful resource for developers to transform application system concepts into tangible application resources. It allows developers to visualize and create connections between Services and Clients, making the design process both conceptual and practical. The tool offers options to collaborate with AI, use prebuilt templates, or start from scratch. Developers can drag resources into the model, create new Services, and establish event flow connections. The Design Model tool not only aids in designing application structures but also facilitates the creation of main project resources and their interconnections. For a deeper understanding, taking a class is recommended.
+
+**Original Content:**
+
+filename: 142_DCL1_L3_3.3_DesignModel  
+video url: https://youtu.be/zvl0rC07PWI
+
+Design Model This is just a brief introduction to the Design Model tool.
+
+You'll gain some experience with this tool in your labs, but we won't go into the more advanced features here.
+
+Developers use the Design Modeler tool to turn application system concepts into application resources.
+
+The Design Model tool is a couple of important tools in one First, developers can use the modular to see a clearview of how events travel between Services and Clients and from and to other entities beyond the namespace.
+
+The tool isn't just conceptual.
+
+When a developer draws a line from one Service to another that creates actual Service, outbound and inbound connections.
+
+Choosing a theoretical Service or Client makes it real and editable.
+
+One of the ways to start a Design Model is through the Add menu, and upon choosing a new Design Model, you'll see this pane.
+
+Developers can choose to collaborate with AI to design an application, work from a prebuilt application template, or choose empty to build from scratch.
+
+On the left side of the Design Model pane is a pallet of resources that can be dragged into the model.
+
+The Service and Client options are for incorporating Services and Clients that have already been created.
+
+Dragging in an external resource is for documentation implementation purposes, in case the developer wants to make note of what sources enter the system, the database involved, etcetera.
+
+Here's what a new Service looks like when it's first dragged into the model canvas.
+
+By double clicking on it, you can give it a name and actually create a new Service.
+
+Right clicking on it lets you edit it.
+
+Once it's made, you can see the blue plus signs for input and output Service events.
+
+The green top and bottom plus signs are for inbound and outbound events to and from external entities, respectively.
+
+Developers build the event flow connections between Design Model entities by drawing them.
+
+Let's go to the Add menu and create a Design Model from scratch.
+
+We'll select New Design Model, then give it a name and a package and choose Empty for our template.
+
+This brings us to a blank Design Model canvas and you see the choices on the left that we can drag in like New Service that will actually create a Service for us in the application.
+
+Double or right click on it in order to change its name and choose whether or not you want to a Service, including system Services.
+
+But most likely you will create a new Service out of this saving.
+
+The Design Model also generates that Service for the application.
+
+To open it, just right click on it, choose Edit in Service Builder, and it will pop right up.
+
+Dragging in and labeling externals does not add any resources to the application, but it's great for clearly visualizing your design.
+
+If you've already created a Service in your application, drag in Service in order to select it and make it represented.
+
+Also in the design.
+
+To create an outbound event from one Service to an inbound event to another Service, simply draw it and name both sides of the event.
+
+Client options in the Design Model work exactly the same way.
+
+Client represents an existing Client and you can choose from the list and new Client will generate either a new or existing Client.
+
+Drawing a connection from a Service to a Client will create an inbound data stream of the event type in the Client.
+
+The Design Model tool allows architects to simultaneously design application structure while getting a jump on development by creating the main project resources and the connections between them.
+
+To learn how to get the most from the Design Model tool, I highly recommend taking the class.
+
+The filename: class/E_EDAFound_142_DCL1_L3_3.3_DesignModel.txt
+
+https://www.youtube.com/watch?v=zvl0rC07PWI

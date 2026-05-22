@@ -1,0 +1,61 @@
+**Summary:**  
+This content provides a guide on using client page templates in Vantiq. It explains how to add a page from a template to a client project, highlighting that page templates come with their own code and data. The document also distinguishes between client and page templates, noting that page templates adapt to the client settings, such as color schemes and navigation bars. It provides instructions on creating and using page templates, emphasizing that they serve as a starting point for further development and are fully customizable.
+
+**Original Content:**  
+Client page templates.
+
+So here's the client I made based off the client template.
+
+And one thing it didn't come with was a mission statement that I would work with either this or this, you know, basically an about us page or something.
+
+So let's add one.
+
+If we go to our client properties down here, it says add page from template.
+
+That's right.
+
+We can use a page template.
+
+I'm going to use our about us page 2 and here it is.
+
+So it becomes a page just like any.
+
+And I want to point out one thing.
+
+So does does this page about us page 2 have it come with any data?
+
+Why yes, it does.
+
+So if I wanted to use any state in the client, it's already here.
+
+Notice there's a context menu, The code is already there for it too.
+
+So this page template came with its own code and with its own data.
+
+And I wanted to show how the sidebar is not part of the page.
+
+That was part of the general setup for the client, but this code for the context menu and the data setup was all here.
+
+As you saw in the demonstration, page templates are templates for client pages.
+
+The main difference between client and page templates is the scope.
+
+For instance, in this picture we see that the page has a sidebar, but that is because the client settings included a sidebar.
+
+The page template is inserted into the client project as a page and therefore takes on whatever the client settings are, including the color scheme and navigation bars.
+
+Data streams are a client scoped source, so page templates don't have them, but page templates can include page level data objects.
+
+To create a page template, go to the context menu for that page and choose Save Page as Template, given a name and package name and save.
+
+Selecting a page template for use starts from your client.
+
+Choose Add Page from Template in the client context menu and choose the desired template from the list.
+
+Both kinds of templates provide a starting point for further development.
+
+All of the template code, data, widgets, etc.
+
+Are accessible and changeable by the template consumer.
+
+https://www.youtube.com/watch?v=3L1EPiQCqfQ

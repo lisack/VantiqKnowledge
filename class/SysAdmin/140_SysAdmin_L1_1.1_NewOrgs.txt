@@ -1,0 +1,63 @@
+**Summary:**  
+This content provides guidance on creating new organizations (Orgs) and managing users and quotas within a Vantiq multi-tenant installation. It emphasizes the role of system administrators in setting up Orgs, assigning Org admins, and managing quotas, especially when using Generative AI features. The document outlines best practices for assigning admin roles, creating namespaces, and managing user privileges to ensure efficient resource use and system protection.
+
+**Original Content:**  
+New Organizations, Users, and quota Organizations or Orgs are the tenants of a multi tenanted Vantage installation.
+
+In the process of creating Orgs, we'll be creating Org admins and setting quotas for those.
+
+Within the system there are organizations and within orgs are the project namespaces where the development work takes place.
+
+System administrators must create the orgs in order for there to be a place for project namespaces.
+
+Neither system nor org root namespaces should have development work on them.
+
+Developers should have namespaces within orgs.
+
+By sending an invitation instead of making yourself the org admin, you are making the invited one the org admin instead.
+
+As a System Administrator, you should first make yourself the admin of the org, then add a user and give them Org admin privileges to create another org admin.
+
+If this person wasn't already a user on the system, he or she will become both a Vantage user and an Org Admin if any of the namespaces within the org are going to be using Generative AI.
+
+Org administrators are tasked with downloading the Gen AI Flow service connector as a project for the root org namespace, but by default they will get an error that there is not enough quota.
+
+You as the System Administrator should set higher quotas for all orgs that are going to be using Gen AI features in their projects like what is shown here.
+
+If you want to make an existing user and org admin, start from the org namespace and pull up his or her user profile and change the privileges to include org admin for the organization.
+
+By the way, if you want more system administrators, the process is identical but start from the system namespace and set the privileges to system admin.
+
+Even system administrators should be homed within orgs.
+
+Do not set the system namespace as that home.
+
+And this is the same admonishment from the last slide.
+
+It's true that from the system namespace you could invite a brand new user to be another System Administrator, but Vantiq highly recommends that the user should be homed in at least an org level namespace first.
+
+This is to protect the system from resource overuse.
+
+We'll be talking about quotas soon.
+
+In order to create orgs in an installation, I must be in the system namespace, and to create that new organization, I'll go to Administer Organizations and choose a new organization.
+
+Give your org a name, a name for the org's root namespace which will be created then.
+
+It is best practice to make yourself the administrator first.
+
+Here is also where you make changes to the default quota.
+
+If namespaces with the org will be using generative AI, give them more Kate's resources right away.
+
+Once you've finished filling out the pane, press Save to save it.
+
+If you switch into the new Org root namespace, any changes you make to users here will make them users within the org, either as org admins, developers, or just users who can see things but not make new resources.
+
+Both the invitation expiration and the e-mail subject line are changeable, and set privileges at the pencil at the top right.
+
+If you make the new user a user developer, you will also need to set his home namespace, but in this case the new user is another org administrator.
+
+Remember that his best not to create new users directly from the system namespace, but rather choose a user already homed in an org and then add their sysadmin privileges in order to make a new sysadmin system Administration tasks such as managing orgs and users all take place under the Administration menu tab in the IDE.
+
+https://www.youtube.com/watch?v=r8LRYCCsfKA

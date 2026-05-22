@@ -1,0 +1,94 @@
+**Summary:**
+
+This video, titled "Organization Administration," is the first in the Organization Namespace Administrator class series. It provides an overview of the different types of administrators within the Vantiq platform, focusing on the role of the Organization Administrator. The video explains the responsibilities of an Organization Administrator, which include managing users and permissions within an organization, monitoring resource usage, and enabling Gen AI development. It also covers practical tasks such as inviting new users, setting privileges, and managing namespaces. Additionally, the video discusses the importance of monitoring system resources using tools like audit logs and Grafana to prevent quota violations.
+
+**Original Content:**
+
+filename: 140_OrgAdmin_L1_1.1_OrgAdmin  
+video url: https://youtu.be/F5eC-koeHoU
+
+Organization Administration This is the first video of the Organ Namespace Administrator class.
+
+The System Administrator role is covered extensively in the Vantiq Deployment and System Administration class.
+
+In this video we'll review the different types of administrator on the Vantiq platform before focusing on the Organization Administrator job.
+
+In a Vantiq installation there are three administrative tiers, System administrators, Organization administrators, and namespace administrators.
+
+Here's a very basic diagram of a multi tenanted Vantiq installation.
+
+You see the whole installation in dark blue, with each organization within containing a varying number of namespaces.
+
+Orgs are the tenants of the multi tenant installation.
+
+The System Administrator carries the responsibility of keeping the whole system healthy.
+
+Organization administrators perform a variety of tasks for an org and namespace administrators per view namespaces.
+
+In this class, we're going to be covering org and namespace admin duties in detail, starting with Organization Administration.
+
+As an org admin, your job will include bringing developers and users into the system within your org and also managing their permissions.
+
+You'll be responsible for monitoring resource usage on an ongoing basis and performing a one time task to enable Gen AI development in the org.
+
+In order to manage most org tasks, you'll need to be in the root namespace for the org.
+
+From there, the Administer Organization menu option will be visible and the screenshot on this is what you'll see.
+
+The information listed in blue opens up to show the org configurations set by the System Administrator and are only changeable by the sys admin.
+
+To invite new users to Vantiq and the org, go to Administer Users and choose the new User option.
+
+Alternatively, org administrators can add new users to the system while simultaneously giving them privileges in a new or existing namespace.
+
+Org admins can also remove users from access to any namespaces in the org for which they previously had permissions.
+
+Let's see these user related tasks actually performed.
+
+Now I first want to demonstrate that if I'm just in a regular namespace and not the org root namespace, when I go to administer and users, I can choose to create a new user, but it's going to give me an error message because I do not have that permission.
+
+As the org administrator.
+
+I need to go into the org namespace and go to users and then I can create a new user.
+
+Once you supply the user's e-mail and other pertinent information, do make sure you go to the top right and set the privileges intended for this user.
+
+Having set this user's privileges to user, Developer will also create a home namespace for that user.
+
+If we were ever to remove that home namespace, the user's access to the whole organization would also be revoked.
+
+Org admins can also create new users through the namespaces they'll have access to.
+
+When we create a new namespace, we have the opportunity to set the authorization level and administrator for that namespace.
+
+If the namespace already exists, select it from the list, then choose Manage Authorizations and add a new user and permissions.
+
+At that point, the intended new users get an e-mail that looks like this, and upon clicking to accept the invitation, they can either log in or create a new account.
+
+In order to activate the Gen AI development tools within the namespaces in an org, the administrator will need to import the Gen AI Flow Service project into the org's root namespace.
+
+We're starting off in the documentation this time because the link to the Gen AI Flow Service project is right here.
+
+Click on the link to download the zip file, which will then import into our org root namespace.
+
+Once it's imported, go to Administer Advanced Service Connectors and you can see the Gen AI Flow Service.
+
+While loading theGenai flow service is a one time task, you should be checking system resources on an ongoing basis and one way to do that is through the audit files.
+
+By going to administer audits, you get to this query page and you can select for specific issues that you're looking for or to see the whole thing here.
+
+I've just selected for authorization failures and I can see I have quite a bit.
+
+But now I'm really curious, have I ever exceeded quota in this org?
+
+No, thankfully.
+
+Org administrators need to monitor org resources on an on ongoing basis.
+
+Checking audit logs is one way to detect if there have been quota violations.
+
+Grafana is a dashboard based monitoring system included with the Vantiq platform which allows administrators to see impending problems so they can be dealt with before they become quota violations.
+
+This tool is so important, we cover it in more detail later in this class.
+
+The filename: class/OrgAdmin/140_OrgAdmin_L1_1.1_OrgAdmin.txt

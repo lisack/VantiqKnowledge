@@ -1,0 +1,98 @@
+**Summary:**  
+This video tutorial explains how Vantiq integrates with external entities through service sources. Vantiq, an event-driven platform, uses sources to bring events into the system. These sources can connect to various internet entities, including camera feeds, sensors, APIs, and legacy systems. The video covers predefined source configurations, Enterprise Connectors, and Vantiq Camel assemblies for connecting to third-party entities. It also provides a step-by-step guide on setting up a source and creating a service to receive messages, using an API for cat facts as an example. The tutorial emphasizes the importance of services in receiving events and offers resources for further learning about integration with Vantiq.
+
+**Original Content:**  
+filename: 142_DCL1_L2_2.1_SvcSources  
+video url: https://youtu.be/A0mYY7_gLEw  
+
+Service Sources In this video, we'll discuss how Vantiq integrates with outside entities.
+
+Vantiq is an event driven platform, and sources are what bring those events into the platform.
+
+Sources can connect anything on the Internet, from camera feeds flagged by object recognition software to simple sensors, to applications program interfaces provided by web services.
+
+Even legacy systems and others that don't push events can be pulled to pull them in.
+
+We also have a mobile app so people themselves can interact with Vantiq applications.
+
+Vantiq has predefined source configurations based on specific messaging protocols and online web services like MQTT or an API.
+
+These are our built in sources.
+
+To use them you'll need little more than their Internet location and maybe your credentials.
+
+Other sources called Enterprise Connectors or Extension sources are hosted on Vantiq GitHub website and they greatly facilitate the making of connections with more specialized entities like JDBC databases and object recognition camera feeds.
+
+Still another way of connecting to 3rd party entities is through Vantiq Camel assemblies, available from a public catalog.
+
+These can be used to connect dozens of different popular web entities, with more being added periodically.
+
+The Vantiq Academy integration class has details and examples on how to connect reliably to outside entities in your labs.
+
+In your labs, we'll be working with the built in source configurations.
+
+To connect an event source, go to the Source pane.
+
+Once the type of source is selected from the list, a customized Properties tab appears so developers can complete the configuration.
+
+For the most part, incoming events should be received by services dedicated to listening for them.
+
+To see how this works, we'll create a source now from an outside entity and a service to receive the messages.
+
+I have just logged in and find myself in a brand new namespace, and I'm going to choose empty so that we learn how to do things from scratch.
+
+We'll skip the version control system for now and find ourselves in a brand new empty integrated development environment.
+
+The ad menu is where we'll find most of our tools, including one to set up a source to bring events into the project.
+
+In my case, I want to pull an API for cat facts.
+
+Packages are a way of scoping and organizing your resources.
+
+They consist at minimum of two lowercase words separated by a dot.
+
+For my source type, I'm going to choose remote, which will give me all the configurations I need to get out to the API.
+
+I'll show you a cool way to retrieve the message type later, but for now we just need the Uri and any authentication properties that may be part of it.
+
+This particular API doesn't have any, but I do want the incoming event to come every 3 seconds, so I will pull for it using this polling property.
+
+Once I save, the test data receipt button becomes activated.
+
+I can use this to make sure I'm successfully getting those events.
+
+You can click on an event to take a closer look at it, and this is also how you can create the data type for it.
+
+The package name is included too, so I'll save.
+
+Now I can create a service to listen for that source from Add service.
+
+I choose New service, give it a name and a package name.
+
+On the left is a choice of handlers for incoming events.
+
+We'll choose source, of course, and let's make it visual so we don't have to write a lot of code.
+
+We'll just give it a name and create it.
+
+This is the first task in our visual event handler.
+
+Select it to change anything about it by choosing Click to edit Next configuration.
+
+We will now set this up to listen for our particular source.
+
+You saw that our inbound resource was set to sources, and then we chose the actual source from the drop list.
+
+And we're also going to choose the schema type from the drop list as well.
+
+Watch what happens once we save.
+
+That's right, our source is now feeding us a cat fact every 3 seconds.
+
+We can verify this by dragging a log stream task so that we can see the cat facts in the console as they come in.
+
+And once we've saved, we'll look at the log messages and there are our cat facts.
+
+Sources bring events into the Vantiq system, and generally services receive them.
+
+We can't go into great detail about integration topics in this class, but there are a number of resources available to increase your knowledge and experience in building a connection between any Internet entity and the Vantiq platform.

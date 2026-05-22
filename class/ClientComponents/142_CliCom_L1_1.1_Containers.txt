@@ -1,0 +1,99 @@
+**Summary:**  
+This video tutorial provides an overview of widget containers in Vantiq's client, focusing on layout widgets. It explains the common attributes of these widgets, their class hierarchy, and how they inherit properties and methods. The video also discusses the concept of parent and child widgets in layout structures, the impact of layout changes on child widgets, and how to manipulate widget positions using margins, gravity, and weight. Additionally, it covers practical steps for adding widgets to layouts and configuring them to create organized client dashboards.
+
+**Original Content:**  
+Widget Containers The container widgets are the layout widgets in the client.
+
+In this video, we'll cover what attributes are common amongst the layout widgets.
+
+First, understand that all widgets in the client are descended from the widget class.
+
+A widget container class inherits all the properties and methods of the widget class like background image, URL, and bring to front.
+
+There are many more.
+
+Consult the Client reference guide for the full list.
+
+Neither the widget nor the widget container classes are draggable to the client canvas, but all the layout widgets descended directly from the widget container are.
+
+Of course, they also inherit all the properties and methods up the chain, and most of them have a few of their own sampled here.
+
+Between class hierarchy and layout hierarchy, we have a little bit of a terminology clash, so we'll rectify that here.
+
+In the previous slide, the class inheritance of the widgets can be described in terms of parent and child classes, But when we talk about parents and children for layout widgets, we're just talking about the container structure.
+
+So here in this example, I have a fixed layout enclosing a grid layout and a button.
+
+The grid layout in turn encloses icon and number widgets using the parent child terms.
+
+Here both the fixed and grid layout widgets are parents because they have widgets inside of them which are known as their children.
+
+Every widget in the client has a parent.
+
+The parent of the fixed layout is the page.
+
+If a widget is programmatically removed from a parent and not re parented somewhere else, it will cease to exist.
+
+What happens to a layout widget also happens to his children, such as when it's moved or made invisible or even removed.
+
+Also notice that the two widgets in the grid layout are specifically in the leftmost grid positions.
+
+They can be moved manually or programmatically to other positions if needed, and the number of grid columns and rows can be altered as well.
+
+Margins and gravity allow developers to set the relative placement of child widgets within a layout widget.
+
+In the top examples, the flow layout has five icon widgets within them.
+
+All the margin settings set to 20 assured 20 pixels of spacing all around each of the icons.
+
+In this case, the width was fixed explicitly, otherwise the right side would have been the same distance away as the other sides.
+
+When the inner margins are 0, the icons within group tightly together, top to bottom and left to right.
+
+Place the widgets right against the layout widget borders as shown.
+
+Gravity sets which way a widget with room in the layout should lean, so to speak.
+
+See the money icons in the light green vertical layout.
+
+Most of them are still at the default horizontal gravity of center, but one of them is left and the other right.
+
+The outermost layout widget contains the vertical layout and also a grid layout.
+
+If we wanted that whole grid layout to be close to the top, we should set its vertical gravity to top.
+
+Right now it's at the default center.
+
+Weight is useful when the layout widget has an explicit size.
+
+In this example, we have a horizontal layout with two buttons inside.
+
+The developer here has set the horizontal weight of the left most button to 0, which means it will remain the same size.
+
+But the right most button weight is 1, so as the display changes it will take all of the remaining space in the layout.
+
+Layout widgets are in the layout category in the very top of the client.
+
+I'll drag in a fixed layout now and put some things into it.
+
+There are two ways to put something in a layout.
+
+When dragging in a widget to the layout, it is the top left corner that needs to align in the layout space in order to be part of it.
+
+Dragging a layout to a widget will not result in that widget becoming part of the layout.
+
+Developers can also put items in layouts from their listing in the edit menu.
+
+Drag the resource on to the layout desired and it will become part of that layout.
+
+I'm going to add a horizontal layout, drag in the layout that I already had, and I'll pull out one of the buttons to the outermost layout.
+
+As you can see, widgets in layouts get extra configurations, not the least of which is horizontal weight, so that when I resize the outermost layout, notice that the button changes size to accommodate the new space.
+
+The layout configuration is where you can also see the horizontal and vertical gravity settings.
+
+Tack layouts within other layouts in order to create the client page that you want.
+
+The Layout Manager guide gives meticulous instructions with many examples how to use layout widgets for building well ordered client dashboards.
+
+https://www.youtube.com/watch?v=o9OktVgroTo

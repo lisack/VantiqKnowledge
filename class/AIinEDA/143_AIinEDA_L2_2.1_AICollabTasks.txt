@@ -1,0 +1,81 @@
+**Summary:**
+This content provides guidance on setting up and managing contextual AI conversations within Vantiq using collaboration activity patterns. It explains how collaborations maintain service state for ongoing situations, making them suitable for AI conversations. The document outlines the steps to set up service collaborations, manage AI conversations, and utilize entity roles. It also describes how to establish and manage collaborations, including naming conversations, using conversation parameters, and closing collaborations to reclaim memory. The content emphasizes the importance of collaboration state in tracking processing and maintaining conversation context.
+
+**Original Content:**
+
+
+
+Collaboration Activity Patterns Collaborations keep service state about ongoing situations, which makes them ideal for maintaining AI conversations too.
+
+To set up what parameters will be used in a service collaboration, go to the Service Implement tab and choose State.
+
+To manage one AI conversation or more, you'll need an entity role, but not necessarily a collaborator role.
+
+If you do not name any conversations, the default managed state for the conversation will be the only accessible conversation in the service.
+
+Click on the Entity role to bring up the pane on the left.
+
+You only need one entity role for any number of conversations.
+
+All entity roles are associated with a schema type with a property that can be used for identifying the entity in a collaboration.
+
+On the right, developers can name their conversations.
+
+If you don't do this at all, you still have one conversation named default.
+
+Otherwise, set up any number of conversations by giving them names.
+
+For AI conversations, the established collaboration activity pattern often starts the collaboration, which in turn keeps the conversation in service state.
+
+Establish existing collaboration checks to see if there's already a collaboration, and if so, then processing downstream continues for that collaboration.
+
+Establish existing collaboration or Create new collaboration also looks for a match and if one isn't found, it opens a new collaboration for downstream processing.
+
+Finally, the Do not open multiple collaborations for one entity will block all downstream processing if a match is found.
+
+Collaborations are identified in one of two ways.
+
+The first is a combination of one or more event properties with the name of a collaboration entity role.
+
+The second way to match a collaboration is by knowing the actual collaboration ID.
+
+In this example, you can see that we're keeping track of our collaboration by pairing the sensor ID of our tank, identifying it with the tank of the collaboration entity.
+
+Now Collaboration state will keep track of any processing associated with the collaboration about that particular tank, including all the conversations.
+
+The two AI activity patterns Submit, Prompt and Answer Question include these parameters for choosing if and how to participate in a conversation.
+
+The Use Conversation parameter makes the conversation available to the AI and its response becomes an AI typed entry in that conversation.
+
+If you do not supply a conversation name, then the system will use the default conversation.
+
+Conversation Properties will add a Properties object to the conversation when it is started.
+
+This is useful for holding extra information associated with the conversation in state and Answer.
+
+Properties adds a Properties object to attach to the response.
+
+Finally, there's a Conversation context prompt to help the AI remember the objectives of the conversation as a whole.
+
+Now let's look at how we used a collaboration in order to manage our AI conversation.
+
+From the state settings in the Implement tab, we go to entity roles and notice I have a single entity role of tank of type sensor type, and that's it.
+
+I don't need a collaborator role or a named conversation.
+
+I know it's a new conversation if there's no conversation ID, so it passes that filter, and then I'm using an established collaboration activity pattern in order to start my new collaboration.
+
+Notice we're setting up this collaboration based on the entity role name and the sensor ID within the sensor type.
+
+After that, the Keep Collab and Get collab for End are both established collaboration tasks, both set to establish existing collaboration, and also matched on tank and sensor ID.
+
+I happen to have two different semantic indexes for this application, 1 based on tank A and 1 based on tank D Notice that both of these answer question activity tasks are taking part in the conversation with a simple toggle on of use conversation.
+
+Finally, we need to close the conversation and the associated collaboration, and we do that by first using an established collaboration in order to get the right context, and then finally close collaboration in order to complete the collaboration.
+
+When the user is finished with the AI conversation, developers should make sure to close the corresponding collaboration to reclaim the memory.
+
+The collaboration with the conversation can be persisted to a database if desired.
+
+**Video:**
+<iframe width="355" height="200" src="https://www.youtube.com/embed/Xc5JJpwnRrc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

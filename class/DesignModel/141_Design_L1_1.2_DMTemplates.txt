@@ -1,0 +1,101 @@
+### Summary
+
+The content provides an overview of using Design Model Templates in Vantiq to streamline application development. It explains how developers can choose from four prebuilt application templates to jumpstart their design process. The video guides users through selecting a template, such as the IoT System template, and describes how the system generates a model with predefined structures and tasks. Developers are shown how to configure these templates to suit their specific needs, including setting the number of inputs and defining processing logic. The content emphasizes the efficiency of using templates to reduce development time by providing a skeletal structure that developers can modify rather than starting from scratch.
+
+### Original Content
+
+**141_Design_L1_1.2_DMTemplates**
+
+Design Model Templates The Design Model tool can be reached either from the Add menu or by choosing to generate from a system model.
+
+Right at the outset, the developer has a choice of what template or no template to use.
+
+In this video, we'll talk about the four prebuilt application templates that are available to jumpstart application design and development.
+
+Let's head into the platform and right away go into the new Design Model pane.
+
+Here's where we can select to either start from scratch or choose from among four prebuilt templates.
+
+For now, we're going to try the IoT System template.
+
+Each comes with a basic description of the application structure and allows you to set how many inputs you want in your system.
+
+For our purposes, we'll try 10.
+
+After a few seconds, our model generates one service, ingests the events from ten sources, then feeds them to the next service for processing.
+
+At least some processing results from all the 10 streams are displayed on a dashboard.
+
+Let's take a closer look at what kind of processing infrastructure there is in the service.
+
+As expected, our service has 10 inbound events in its interface.
+
+Let's take a deeper look at how the implementation infrastructure was implemented for each of these.
+
+Quite a few tasks have been set up for us, but they haven't been fully configured so there are going to be errors.
+
+At the top of the app flow we have an event stream followed closely by an analytics pattern that has already been pre configured.
+
+With a fixed time window and some of the statistical operations checked.
+
+The developer may only need to fill in the inbound properties within each blue section.
+
+The system has placed a skeletal structure of activity patterns and configured them in anticipated ways, but the developer still has to fill in the blanks and make changes to suit the full needs of the project.
+
+Each template selection includes a brief description of what the app flow will entail.
+
+Also, here's where you can configure the number of event streams coming into the system.
+
+After the Create button is clicked, the system automatically builds both the design and the services and the clients needed to create the type of application.
+
+Recall that in Vantiq, the design and development phases of the software development life cycle are almost a single phase.
+
+You're seeing that here.
+
+In each built in template, the first service will collect the events to send to the second service, which drives most of the logic for the application.
+
+Here is the default visual event handler for the app flow associated with the closed loop template.
+
+There's quite a bit of infrastructure already in place and even categorized in these blue fields.
+
+All the developer now has to do is to define the acceptable value range for the filters should no further action be needed.
+
+If the value is within the expected range, the developer can eliminate the state equal target filter entirely and use the other filter to listen for unexpected values.
+
+Store Update is an accumulation state activity to hold values.
+
+Computer Required Change is the action plan for what to do to bring the value or future values into the acceptable range.
+
+Finally, Send to Control system sends the processed event to the outbound service event.
+
+The event driven template is for applications where inputs are analyzed and sent on for further processing.
+
+Perhaps you remember the analyzed service we built in the Foundations class where we took in pump data, analyzed it and sent it on to the next service.
+
+That is a classic example of an event driven application.
+
+Here the template comes equipped with a transformation task and an analytics task which are commonly employed in event driven applications.
+
+There is no client because this type of application doesn't require a user interface, even though in our case we did build 1.
+
+The IoT system template is almost a hybrid of the closed loop and event driven template systems in that the inputs are checked against expectations and also analyzed before going to the client for users to see.
+
+After performing analytics and accumulating them, Get statistics is a procedure task that the developer can use to collect the stored analytics.
+
+Notice that the filter this time isn't checking against individual inputs, but against the statistical aggregation.
+
+This is useful for applications where a few outlying events shouldn't raise alarms, but only if the trends continue in the right direction.
+
+The React task is a publish to service task for the service outbound event.
+
+Finally we come to the object recognition system set up to send something recognized in a video or AI system located spatially, add database information to it, then check for an anomaly after a condition is met for a period of time.
+
+A good example might be if a person is detected to be sitting and remain sitting for a period of time, an alert could be issued to remind the person to stand more often.
+
+The design modeler both designs and builds application infrastructure.
+
+This shortens development time since the developer only has to modify app flows, not start them from scratch.
+
+For more experience using the Design modeler, I highly recommend the introductory tutorial which takes users from design to a practical, finished application.
+
+The filename: class/DesignModel/141_Design_L1_1.2_DMTemplates.txt

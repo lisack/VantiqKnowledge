@@ -1,0 +1,74 @@
+**Summary:**
+This video provides an introduction to rules in the Vantiq platform, explaining their role as event handlers written in Vantiq's proprietary language. Unlike procedures, rules are triggered by specific event conditions and do not return values. The video demonstrates how to create basic rules, including visual and VAIL event handlers, and how to set up rules to respond to specific operations, such as inserts into a data type. The key takeaway is that rules act as event listeners that execute code when triggered.
+
+**Original Content:**
+
+Fail Rules.
+
+This short video will just cover the very basics about rules, and we'll build on that knowledge in subsequent videos.
+
+In this elective, rules are event handlers that developers write in Vantiq proprietary platform language.
+
+Rules are not called like procedures.
+
+They are triggered when an event condition is met that the rule specified, and then their code is run.
+
+Since nothing explicitly calls them, the code cannot return any value back to the caller.
+
+Here's what basic rules look like.
+
+In the rule declaration, we start with the rule name and the intended event destination.
+
+As you can see from these examples, these can be service events.
+
+Write operations on data types and incoming events from sources and topics.
+
+Let's see some of these in action.
+
+We arrive on a typical day in a typical namespace with a typical service with an inbound event and an outbound event.
+
+And most of the time when you look at an inbound event, it has a form that looks something like this.
+
+This is a visual event handler.
+
+You can also make it a VAIL event handler.
+
+Starting your interface, create your event type.
+
+Once you save, it'll set up as an unbound event type.
+
+You go to implement and you have an option.
+
+You can add a public visual event handler or a public VAIL event handler.
+
+When you do that is a rule, and it is a rule for the inbound service event.
+
+Within this, we're going to go ahead and insert into a standard type called timings that has a single property for timestamps and save.
+
+There is another way to create rules and we do that by doing add advanced rule.
+
+And I'm going to create a rule that will trigger when an insert operation is done on the timings table.
+
+And when I type when and just hit space, it autofill event occurs on and then I space again.
+
+It'll ask me what kind do I want to do it on types, topics, sources or services.
+
+I'm going to do it on types and then it gives me a listing of all the standard types that I could conceivably be doing an insert on and I'm do timings which operation I'm going to do insert.
+
+So this is already handled for me and now I can write the code that I want to take place when the rule is triggered.
+
+So what I have here is a service that has a rule for the inbound event into joke 2.
+
+Within that processing, we're doing an insert into the timings, which will then in turn trigger the rule we created that specifically listens for inserts into the timings type.
+
+Here's my procedure that will send a service event to Joke 2.
+
+And as you know, that service event handler is a VAIL event handler, which is really a rule, which will in turn do an insert into the timings type, which triggers our other rule that logs that the insert occurred.
+
+And there we go.
+
+The take away from this introduction to rules is that they are event listeners that execute code when triggered.
+
+The filename: class/Rules/140_RULES_L1_1.1_WhatRules.txt
+
+https://www.youtube.com/watch?v=ZhdscapGT5U

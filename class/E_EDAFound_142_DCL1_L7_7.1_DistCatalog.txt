@@ -1,0 +1,151 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This video provides an in-depth explanation of the Vantiq Catalog and its role in brokering connections between nodes across different servers. It begins with an overview of the Vantiq development platform's structure, emphasizing the use of namespaces as isolated work environments. The video explains how applications can be distributed across multiple namespaces and organizations, highlighting the trade-offs between processing power and network reliability. It details the process of setting up a Catalog, converting a namespace into a Catalog, and connecting namespaces to Catalogs for resource sharing. The video also covers publishing and subscribing to services within the Catalog, ensuring secure and efficient communication between namespaces.
+
+**Original Content:**
+
+filename: 142_DCL1_L7_7.1_DistCatalog  
+video url: https://youtu.be/cj_5yxsXZE4
+
+Application System Catalog Architecture.
+
+In this video, we'll mostly be discussing how the Vantiq Catalog brokers connections between nodes, even across different servers.
+
+We'll start with a quick primer on the structure of the development platform itself.
+
+Let's say this is the project you've been working on, containing all the resources you've created.
+
+You've been building this project within your Sense.
+
+Analyze namespace.
+
+Namespaces are isolated work environments for developers to securely work on their projects.
+
+Vantiq recommends 1 project per namespace to avoid problems like naming collisions, but multiple projects per namespace are possible.
+
+A namespace is part of an organization or org.
+
+There can be any number of namespaces within an org.
+
+Any number of orgs, in turn, are tenants within the whole Vantiq server installation.
+
+Notice I called the piece you're working on a project, not an application.
+
+That's because applications don't have to live just inside one namespace.
+
+They can be distributed across multiple namespaces in the same org or other orgs, or even across Vantage server installations.
+
+Not every application needs to be distributed, of course.
+
+This slide serves as a reminder that to spread processing across multiple nodes or not is a trade off between more processing power and network fallibility.
+
+Namespaces established connections through nodes for secure federation.
+
+These connections are one way.
+
+If namespace A creates a node to namespace, BB will not know about A unless B creates a node to A.
+
+They can be accessed by name or set properties.
+
+This is the node pane when connecting another namespace to your namespace.
+
+Although there's a way to create a node connection when creating a namespace from your current one, which we'll see later in Vantiq's Federated system, outside entities gain access to namespaces by the namespace access token.
+
+All of this brings us to the Vantiq Catalog, which is what we'll be using to distribute our lab application system.
+
+A Catalog makes resources available between namespaces by serving as a broker between publishers and subscribers.
+
+It's important to mention that at runtime, the two namespaces share their own mesh connection for publisher subscriber communications, and the Catalog is not involved, so it cannot be a single point of failure.
+
+By publishing a Service to the Catalog, A subscriber then has access to the Service's public events and procedures.
+
+Catalogs start off as regular namespaces an are converted to Catalogs from there.
+
+It's important that no projects be developed in Catalog namespaces as they should be dedicated to the Catalog function.
+
+So this is the namespace where we've been doing our labs since Analyze and we're about to make a new namespace, but you can see which namespace you're in by looking at the top right.
+
+Always to create a new namespace which will be our Catalog, we need to go to the administer menu this time and choose Namespaces, then New Namespace.
+
+The only thing we need to provide for now is a name and then press save.
+
+Our new Catalog doesn't know it's a Catalog yet, so we need to switch to the Catalog namespace and set it up as such.
+
+The project wizard will come up and we'll choose empty because Catalogs should not have any projects on them.
+
+To turn this into a Catalog, go to Administer Advanced Catalog, click the Create Catalog button and confirm.
+
+You can add an optional name to the Catalog or not.
+
+Immediately you're taken to the Catalog's access token window because the system knows that you will be needing to connect this Catalog to other namespaces.
+
+You can ignore the other options for now and just give it a name and you can push out the expiration if you want to.
+
+The access token to our new Catalog has been copied to the clipboard, so now we need to change back to our original namespace and connect the Catalog.
+
+Once we get back to where we left off in our Sync Analyze namespace, we go to Show and Catalogs to see the list of Catalogs available to us.
+
+Click on Connect to connect to a new Catalog.
+
+Here's where you can paste in the access token that's still in the clipboard and type in the URL where the Catalog is located.
+
+Click Connect when done, Developer namespaces can have connections to any number of Catalogs, and here we now have two.
+
+While I'm here, I want to publish my Analyze namespace so that I can make it available through the Catalog to any other namespace that wishes to subscribe to it.
+
+So I press the little cloud icon for that Catalog and confirm.
+
+So the Analyze Service in the sense Analyze namespace has been published to the Catalog.
+
+Let's make a new namespace to subscribe to the Service.
+
+After I give my new namespace a name, I have a couple of options at the bottom that make connections very easy.
+
+I don't actually need to know directly to the namespace.
+
+I can just connect the namespace to a Catalog and let that namespace subscribe to my Service.
+
+Upon saving, the namespace now exists, so let's switch over to our subscriber namespace.
+
+This time we'll start with the Design Model, and I'll use an empty template because I want to start from scratch.
+
+The Analyze Service already exists, so I'll drag in Service, and sure enough, it's even in the listings of Services.
+
+It's there because I'm connected to the Catalog, but I have not subscribed to this Service yet, so I'll take care of that by clicking Subscribe.
+
+Alternatively, I can see the Catalog listings from the Show Catalogs menu by selecting first the Catalog I want and then Services I can right Click to subscribe here.
+
+Going back to the Design Model, I'll draw in the Analyze Service properly and then I'll create my own Service to receive events from the Analyze Service.
+
+Doing this in the Design Model is nice because you can see visually what you're connecting.
+
+I'll double click on the Service to give my new Service a name and choose it as a new Service.
+
+Once I save, my new Service exists and I can right click in order to edit it.
+
+An inbound event has already been created for me with a visual event handler and we see that the Catalog delivers the events from the analyzed Service.
+
+Even though subscribers can see and execute public procedures from within Services published to the Catalog, in reality the execution is still taking place in the originating namespace and affecting resources there.
+
+Here's a recap of the two ways we just saw for connecting to a Catalog.
+
+Use this slide as a reference.
+
+If your namespace is not connected to any Catalog, this option will not appear, but otherwise you'll find the list of all Catalogs connected with the namespace in the Interface tab in the General section.
+
+Click on the cloud and confirm.
+
+The cloud will change to an X to show that it's published.
+
+Namespaces can be connected to any number of Catalogs, so the Show Catalogs menu brings up a pane with a list.
+
+Choose one and all the offerings associated with that Catalog appear.
+
+Select the desired Service and choose Subscribe from the context menu or right click on it.
+
+Find out more about Catalogs by taking the class.
+
+The filename: class/E_EDAFound_142_DCL1_L7_7.1_DistCatalog.txt

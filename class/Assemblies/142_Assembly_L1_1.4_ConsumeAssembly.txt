@@ -1,0 +1,76 @@
+**Summary:**  
+This video tutorial, titled "Consuming Assemblies," guides users on how to modify rules to view assemblies from a consumer's perspective rather than the author's. It covers updating an assembly to the catalog, configuring settings in the subscribing namespace, and making changes to the assembly's properties. The video also demonstrates how to create and use a custom app component, update assemblies, and run them in the consumer's namespace. It emphasizes the usefulness of assemblies for projects that need to be shared without exposing all implementation details.
+
+**Original Content:**  
+filename: 142_Assembly_L1_1.4_ConsumeAssembly  
+video url: https://youtu.be/GoN5Q47a6aE
+
+Consuming assemblies.
+
+In this video, we'll change our rules to see the assemblies not from the author's perspective, but from the consumers.
+
+We begin where we left off in the last video, having set up the assembly with these five configuration properties.
+
+Now let's update our assembly to the catalog.
+
+Let me just provide a description so I'll perfectly remember what changes were made and then click OK.
+
+After a few seconds, the update on the publishing side is complete.
+
+In the subscribing namespace.
+
+Refresh the browser to see the notification icon and once we Click to update, we will see all the configurable settings.
+
+We're going to make some changes.
+
+Notice that I'm changing the material that will be quizzed on to Intro to AI.
+
+Those are document files that I have uploaded already.
+
+One interesting thing to point out is that I don't have the ink and cornflower blue available to me anymore because I don't have those assemblies installed locally on this namespace.
+
+So I'll just change the value to light.
+
+I've even created my own app component called my dot N dot myget content that will swap in for the back dot N dot get content without my having to do anything other than specify it here.
+
+And finally, obviously I can't rely on the old training API secret, but I've made one called Training API myself and it's local.
+
+Once the update is complete, I really quickly want to show you my homegrown app component before we try running this instead of a task that calls a procedure.
+
+I went ahead and just inserted a VAIL block and notice it says I'm a different app component.
+
+Honest.
+
+That will log.
+
+So we know that this is being run instead of our default.
+
+For some reason the client isn't showing up in the project content, so I need to retrieve it from the add menu.
+
+It's fine, it's there, and now we can run this and see if indeed our assembly is as flexible as we hoped it would be.
+
+The color setting is light.
+
+The material is from the Intro to AI class and the questions are based on the correct content.
+
+We have a working assembly and once I answered all three questions it gave the analysis just like it's supposed to.
+
+Just in case you don't remember from earlier, to subscribe to the catalog where the assembly is published, we simply see the listing as the assembly and choose to subscribe to it.
+
+Select it, install it configured as the author intended before running it in the Consumers namespace from within the Subscriber namespace.
+
+If you want to configure your assembly differently for another run, you'll find it in the Assembly category of the project contents.
+
+Click on it to bring up the pane.
+
+If the assembly can be updated, the circular icon at the bottom will turn blue.
+
+Click on it to update.
+
+Other ways to update include seeing the update icon at the top right of the subscribing namespace NAV bar, which will appear with a badge once the browser display has been refreshed.
+
+Click on it to bring up the catalog window.
+
+You now have a thorough knowledge of what assemblies are and why they're useful and how they work.
+
+If you build a project that others need to use but don't need all the implementation details, assemblies are extremely useful.

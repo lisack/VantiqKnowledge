@@ -1,0 +1,88 @@
+**Summary:**
+This video provides an overview of the necessary steps and considerations for provisioning resources before deploying a Vantiq installation. It emphasizes the importance of having a pre-constructed infrastructure, typically managed by a separate infrastructure team, before proceeding with Vantiq deployment. The video discusses the choice of cloud providers that support Kubernetes managed clusters, such as AWS, Azure, and Oracle, and the decision-making process regarding infrastructure management. It also covers the architecture of a production Vantiq Cloud installation, including node pools and software requirements. The video concludes with instructions on configuring access to the cloud cluster, particularly for AWS users.
+
+**Original Content:**
+
+Provisioning resources Before deploying of antique installation, the infrastructure to home it will need to be constructed.
+
+Most of this video encompasses tasks that should already have been completed before we delve into what the class actually covers.
+
+Technically, the Kubernetes cluster provisioning has nothing to do with the Vantique installation process.
+
+In many companies there is a separate infrastructure staff who does this, and then the students in this class carry on with deploying and administering the Vantique installation.
+
+In this video, we'll only discuss enough about the cloud infrastructure for students to be able to deploy of antique installation to IT.
+
+There were certain choices to be made starting with which cloud provider would host the infrastructure.
+
+That provider must supply Kubernetes managed clusters, and currently AWS, Azure, and Oracle are the three providers supported by Vantique.
+
+If your company wants to deploy to another cloud provider of Kate's managed clusters, contact Vantique support.
+
+Another choice to be made is about who will manage the infrastructure.
+
+Vantique has the in house expertise to provide 99% plus uptime for customers who prefer that Vantique manage their installation.
+
+Alternatively, customers can deploy and maintain their own Vantique cloud server on a temporary basis.
+
+A Kubernetes cluster installation can be deployed on a single machine, but this is not ideal as it is not robust, maintenance isn't automated, etcetera.
+
+This class covers the deployment and system administration tasks for students who will be maintaining their own installations.
+
+We're not quite finished discussing critical decisions that had to be made before building the cloud infrastructure for the Vantique installation.
+
+There also needed to be a determination whether or not to build a less robust development node pool architecture or a production cluster.
+
+See the documentation for the development cluster specs.
+
+Here's a simple visualization of the three cluster node pools that make up a production of Antique Cloud installation.
+
+The dotted lines represent the nodes themselves, showing pods within them.
+
+Notice that there are replica sets of a minimum of three in each for the Bantique server, Mongo databases, key cloak, and nginx containers with their respective compute database and shared pools.
+
+I should note that this architecture changes with changing needs.
+
+If more database capacity is required, then you'll need to provision more nodes to meet the demand.
+
+If the installation will include Tensorflow models, then add a GPU node pool.
+
+The Kate's Deploy Tools repo documentation includes descriptions of these alternatives.
+
+These are the software packages that need to be installed locally in order to access and work with your cloud cluster in any search engine.
+
+You should be able to type the software name plus install to get you to where you can download these.
+
+They are all open source and free to use.
+
+Anyone familiar with Kubernetes is already aware of this file, but make sure your home directory dot kube slash config file contains the information relevant to the new cluster.
+
+We'll be using this file as a template for another config file later.
+
+On the left I have my terminal window.
+
+On the right I have the documentation for Kate's Deploy Tools.
+
+My cloud provider in this case is AWS, so I'll go to the EKS service and take a look at my cluster there.
+
+If you were manually updating your Kubernetes config file, these are the two key pieces of information you need, the API server endpoint and the certificate authority.
+
+You can further drill down to the various tabs and see different aspects of this cluster as you like.
+
+In our case, we won't manually update our home directory dot cube config file because there is an AWS command to do that for us.
+
+This command will either update an existing configuration or create a whole brand new one.
+
+Here's an important list of resources you should have at the ready for when you need them during the installation.
+
+In some cases, you'll need to get them from those parties in your company responsible for obtaining them.
+
+Let's assume our cluster is up and we have the critical information we need.
+
+In the next video, we'll get started with configuring access to our cluster.
+
+Pay particular attention to the background reference stock, which was the main basis for this video.
+
+The filename: class/InstallAdmin/142_InstallAdmin_L1_1.1_ProvRes.txt
+
+https://www.youtube.com/watch?v=LkvQumt57-Y

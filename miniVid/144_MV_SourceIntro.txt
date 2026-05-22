@@ -1,0 +1,39 @@
+**Summary:**
+
+This guide provides a step-by-step process for creating a built-in source in Vantiq to integrate popular message protocols and web-based APIs. It covers how to add a new source, configure it with the appropriate settings, test data receipt, and handle source events within the Vantiq platform.
+
+**Original Content:**
+
+video url: https://youtu.be/cGVCnBtXK5Y
+
+Creating a built in source to integrate most popular message protocols and web-based APIs.
+
+Just go to the Add menu in the IDE NAV bar and choose Source.
+
+Choose New source at the top right to make a new one.
+
+After giving your source a name and putting it into a package, selecting the source type will automatically add tabs for configuration specific to that type of source.
+
+Here we'll choose remote because we're going to work with a web-based API.
+
+In the properties, we'll put the endpoint in the server Uri.
+
+API keys go in the authentication properties for one of our default properties.
+
+This particular API has a max_length parameter so, we're going to set that to 140 polling.
+
+Properties will retrieve the information from the API AT whatever interval you set once.
+
+The source is saved choose, test Data Receipt To see the messages flowing into the vantage Platform we.
+
+Can click on an individual message in the subscription Pane to see the JSON Structure of the message, and from here we can also create a data type to define the message structure.
+
+You may have to close and reopen your source in order for it to see the new type that's been made, but be sure in your properties to choose that message type.
+
+To define the structure of the message in a service Implement tab, choose a Source event handler to bring source events into the service.
+
+Once the Initiate event stream task is configured for that source and the change is saved, the events will start appearing.
+
+Notice the schema type automatically populates in the configuration because the source message type was set.
+
+If we add a log stream to this event stream, we will be able to see our cat fax in the log messages at the bottom of the IDE.

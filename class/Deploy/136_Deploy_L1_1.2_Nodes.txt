@@ -1,0 +1,89 @@
+**Summary:**
+
+This content provides a detailed guide on creating and managing nodes in Vantiq, which are connections between namespaces. It explains the process of setting up nodes to access resources across different namespaces, including the use of access tokens for authorization. The guide also covers the hierarchical distribution of applications across multiple namespaces and the creation of nodes for deployment purposes. Additionally, it touches on the use of properties and client options for configuring nodes, as well as the use of the "processed BY" clause for executing commands across node connections. The content emphasizes the unidirectional nature of nodes and suggests further resources for more in-depth learning.
+
+**Original Content:**
+
+Nodes.
+
+Nodes are one way connections between namespaces.
+
+Once the connections are made, they can be used to access resources on the connected namespace.
+
+For namespace A to be able to create a node to B, generally B's access token will be required for authorization.
+
+After that, A will be able to access B resources, but B will still have no access to A.
+
+The steps you see below are for connecting to already existing namespaces, but as we'll see, the process is much streamlined.
+
+If we're creating the target namespace from the originating namespace.
+
+We currently have a full application running in a single namespace, and we're going to distribute it across 4 namespaces in a hierarchical topography.
+
+From a node perspective, the original namespace will need to make a node to the headquarters namespace, then the headquarters namespace will need to make 2 nodes to the factory namespaces.
+
+And finally, the eastern factory namespace will make one to the widget store.
+
+To create a node from one namespace to another namespace that already exists, we first need an access token from the destination namespace.
+
+In this case, we're making a node from our whole project namespace to what is going to be our headquarters namespace.
+
+In the distribution, we'll create a new access token and then give it a name and good expiration time frame.
+
+Clicking on the token in the listing automatically saves it to the clipboard, and now we can go back to our whole project namespace in order to create the node to the Headquarters namespace that we will need for deployment.
+
+Once we've supplied a name, URA, and access token, we'll give this node a property that we can use for later reference region set to HQ.
+
+Once we've saved, we can select the node from the node listing and actually check the connection to make sure it works.
+
+If you recall, the Headquarters namespace needs 2 nodes, 1 for each regional factory, and those namespaces don't already exist.
+
+So there is an easier way to make these nodes as we're creating the Eastern Region namespace from within the Headquarters namespace.
+
+Toggle on the Create Node option and now we have a connection from HQ to Eastern Region Factory.
+
+The Network Graph feature helps to ensure that the node hierarchy is correct.
+
+Follow the directions of the arrows to see the connections.
+
+Let's take a closer look at how to create nodes for deployments to other namespaces, even across other servers and installations.
+
+The node will be a peer.
+
+The node type template is for bootstrapping edge devices.
+
+Check out our Edge Elective class for all the details on installing and using Vantiq on the edge.
+
+Decide how reliable event deliveries will be across nodes, then add the Uri and credentials.
+
+Properties are stored in the system as ARS properties for the node, and they can be literally anything, but they will be very useful later so we can access multiple namespaces at once and other advantages.
+
+Client options are JSON objects used to configure the client when connecting to the node, like setting keep alive timeouts, the maximum number of connections, and so on.
+
+The documentation has a link to the list of all the client options.
+
+Here's a quick refresher on creating tokens.
+
+Choose Access Tokens from the Advanced section of the administer menu.
+
+Once it has a name at least, just click on the token entry in the list to copy the code into the clipboard so you can paste it wherever you need it.
+
+Now that the connection exists, here's how.
+
+The originating namespace accesses resources across the node using the processed BY clause.
+
+Now that we have a node connection to our other namespace, we can run any regular VAIL command and using this clause it will execute in all node namespaces with the stated properties, returning an array of results, one element per node connection.
+
+There is quite a bit more to the processed by clause not covered in this elective.
+
+Check out the Vail procedures elective for more details on how this clause handles errors, set status through context, etcetera.
+
+Remember that nodes only work in One Direction.
+
+Developers can create a second node from the child to the parent if needed.
+
+Try the deployment tutorial for more practice with creating nodes.
+
+The filename: class/Deploy/136_Deploy_L1_1.2_Nodes.txt
+
+https://www.youtube.com/watch?v=sKURYgYtX8E

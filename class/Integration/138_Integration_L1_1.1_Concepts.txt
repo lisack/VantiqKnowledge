@@ -1,0 +1,85 @@
+**Summary:**
+This video, titled "Vantiq Integration," provides an overview of the various features and tools available in Vantiq for seamless integration with a wide range of internet systems. It emphasizes the importance of real-time event processing and how Vantiq can integrate results from other systems without hindrance. The video covers integration with large language models, generative AI, and various external sources through the Vantiq IDE. It also highlights the use of Apache Camel, the Vantiq command line interface, and REST API for accessing Vantiq resources. Additionally, it discusses the integration of non-platform databases, Kubernetes management, and analytic sources for sentiment analysis. The video is part of a broader educational offering from Vantiq Academy, which includes classes on generative AI applications and the command line interface.
+
+**Original Content:**
+Vantiq Integration In this video, we'll go through a list of features available on Vantiq for integrating with anything and everything on the Internet.
+
+The whole point of real time event processing is that those events should be able to come from anywhere into the Vantiq system without hindrances that could slow processing.
+
+Likewise, if the Vantiq platform interacts with other systems doing their own processing, Vantiq should be able to integrate those results into the platform seamlessly.
+
+This is the essence of what we mean when we discuss integration.
+
+There are multiple Vantiq features and tools to facilitate integration with the platform.
+
+We'll look at each of them briefly in this video, and some of them in more detail in later videos.
+
+For this class, Vantiq works closely with multiple types of large language models to seamlessly integrate generative AI into applications.
+
+The Vantiq Academy offers a whole generative AI applications development class where students get much knowledge and hands on experience in how to integrate AI into their real time applications.
+
+Consider taking this class if your future applications will make use of artificial intelligence.
+
+You've already worked with external sources from the Vantiq IDE in the Foundations class.
+
+Once a source type is selected, the pane form changes so the developer can supply the information needed for the connection.
+
+In this way, the Vantiq platform integrates easily with most major message protocols, web services, text messaging services, etcetera.
+
+Vantiq has a GitHub repository called Vantiq Dash Extension.
+
+Dash Sources for connecting to JDBC sources like Postgres, JMS sources, etcetera.
+
+The documentation with instructions for how to use a particular extension source are all there in the readme dot MD file.
+
+Vantiq also supports Apache Camel, which is an integration framework with hundreds of components for accessing other systems on the Internet.
+
+From the Help Developer Resources menu, developers can download the zip file for the Vantiq command line interface.
+
+It is highly recommended that you keep your version of the CLI in line with the Vantiq platform version.
+
+The CLI is mostly for bulk maintenance tasks that developers may want to write into shell scripts from the terminal window.
+
+The Vantiq Academy has a class covering all the major features of the command line interface.
+
+I highly recommend it.
+
+Developers can gain access to Vantiq resources largely through REST over secure HTTPS method calls.
+
+We will be covering the API extensively in this class.
+
+Developers can also work with Vantiq resources from inside another software language application using one of the software development kits under the covers.
+
+They work very much like the API.
+
+We'll talk more about these later in the class as well.
+
+You're already familiar with the Vantiq app, having worked with it in your Foundations class labs, so you already know how useful it is for seamlessly integrating Vantiq applications and resources with humans via their mobile devices.
+
+Storage managers via service connectors allow developers to build applications around non platform databases by making calls to them work in the same way regular Vantiq database interactions do.
+
+Consult the Storage Manager Reference Guide For more information.
+
+Alternate databases can also be integrated through Enterprise Extensions or Camel connectors.
+
+If there are Kubernetes clusters known and available to Vantiq, they can be managed from within the IDE.
+
+Deployment will either create a new Kate's installation or update an existing one.
+
+Analytic sources are most likely used for creating a REST interface for sentiment analysis.
+
+A tutorial for teaching developers how to create an analytic source for integrating with the Microsoft Azure Machine Learning Studio is available.
+
+We just plowed our way through a veritable laundry list of ANTIC integration tools.
+
+Some of them are so extensive they have their own Vantiq Academy classes devoted to them.
+
+We'll spend more time on another few of them in this class.
+
+Regardless, it should be abundantly clear by now that Vantiq integrates with literally everything on the Internet.
+
+In fact, Vantiq integrates so well, seamlessly and in real time that our platform is often used as the coordinator and orchestrator in multifaceted, large scale systems.
+
+Vantiq also provides extensive documentation detailing how to best utilize all of these tools.
+
+https://www.youtube.com/watch?v=qlS0aXeKSps

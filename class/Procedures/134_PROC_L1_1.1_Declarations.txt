@@ -1,0 +1,197 @@
+**Summary:**
+This content provides an overview of procedure declarations in Vantiq, focusing on how procedures are defined, their parameters, and return types. It explains the process of making procedures part of packages, creating procedure signatures, and implementing them within services. The content also highlights the importance of naming conventions, parameter descriptions, and the implicit return behavior of procedures. Additionally, it touches on the types used in Vantiq, including scalar types and developer-defined types.
+
+**Original Content:**
+
+filename: 134_PROC_L1_1.1_Declarations
+video url: https://youtu.be/jKXsquiKFDE
+
+Procedure declarations.
+
+Let's look at procedures and their parameters.
+
+First we'll review what procedures are, how they become part of packages, and how developers define their parameters and return types.
+
+Procedures are developer written invocable logic within the application which return a value back to that which called it.
+
+In the example we see a procedure at pretty much its most basic.
+
+The sales report procedure accepts no parameters and only creates and populates a single variable while not explicitly returning anything.
+
+What will the procedure that calls sales report return if sales report doesn't have a return statement?
+
+If you said that the string I have nothing to report would be returned, give yourself a Gold Star VAIL.
+
+Procedures always return something.
+
+If it isn't stated explicitly, then whatever is returned is whatever value was last evaluated.
+
+Making a procedure part of a package is quite straightforward.
+
+Before the procedure declaration, use the keyword package followed by the package name VAIL.
+
+Keywords like package and procedure are case insensitive, so in my examples you'll see them both ways, but names of entities and their types are case sensitive.
+
+It is suggested convention that packages always be in lowercase as shown.
+
+Ordinarily you would create a procedure from a service, but we're going to create one without just so that you can see the whole process.
+
+And that is done by going to add hovering over advanced, then down to procedure.
+
+And what I want to create is a procedure in a package that does not yet exist.
+
+So I'm going to choose new procedure and I'm going to call it sales report.
+
+And in order to make it part of a package, all I have to do is declare that before the procedure declaration, I've declared a package com.acme.us.ca.
+
+It does not yet exist.
+
+Let's see what happens when I save this.
+
+It shows up, and not only that, it neatly puts my procedure in the category Procedures within the package I've declared.
+
+Most of the time developers build procedures is through services.
+
+Developers create what is known as a procedure signature in the Interface tab.
+
+This is the procedures name, parameters, and return type along with an optional description of the procedure.
+
+The coding happens in the Implement tab portion of the service window.
+
+I want to create another procedure, but this time I'm going to do it through a service.
+
+So let's go ahead and make the service.
+
+First, we're going to add and service, and I will just call it the sales service and put it in New York.
+
+OK, so here we are.
+
+We're going to this time create a procedure this way.
+
+So let me add one in interface.
+
+I'm going to call it report sales.
+
+And here's where I can specify what parameters it's expecting and really handy.
+
+You can choose not only just from the scalar types, but also all the types.
+
+In this case, I'm just going to do a string and this one I'll just make as an object.
+
+If you're expecting it to be an array of something, that's where multi comes in.
+
+And then you can also specify the return type.
+
+This is what is called the procedure signature.
+
+And now to flesh it out, you go into the implement phase and choose it and notice it's already created a bunch of things for me.
+
+So notice it's servicename dot procedure name and then the expected parameters and the expected return type.
+
+Let me add some logic here.
+
+I'm going to return a return object that has three properties, name, address, and time.
+
+Address itself is an object, so I have an object nested within an object and that's not a problem at all.
+
+I do want to mention one thing that procedures can do within services, and that is that they can be.
+
+If you want, you can set them U so they're only accessed by other procedures within the service, and that's by designating them private.
+
+When I save this watch, what happens?
+
+The rocedure recognizes that it was made private and then asks if I want to delete it from the interface entry as well.
+
+OK, I'm going to be calling this with the expected parameters name, which is a string, and then an object that is called address.
+
+Notice the naming convention I used in order to call this com dot Acme dot USDOT New York dot sales service dot report sales.
+
+I have to use the full name because this procedure is not part of the same package, is not part of the same service, and therefore the only way to reach it is through all of the naming convention.
+
+So let me run this execute.
+
+It returned everything and the timestamp.
+
+Something you probably just noticed in the demo was that when the service generated the service procedure, the parameters were there with their types next to them.
+
+This is very useful for a couple of reasons.
+
+First, when the procedure is executed from the IDE, the IDE will complain if the type is incorrect.
+
+Also, it's easier for develoers to read and therefore know how to structure calls to that procedure.
+
+Speaking of making it easier for readability, look at the example in this slide.
+
+Do you see the descripcion keyword followed by a quoted phrase?
+
+The description is not a parameter, it's just there to add a comment about the parameter again for the sake of making it clear to future developers why those parameters are there.
+
+On the other side of the colon it says object.
+
+That will be the type of data the procedure will return.
+
+Let's do a couple of fun experiments so you can see how VAIL procedures behave.
+
+I have here my service procedure from before, and all I've done here is add a description to this name string, and I've also added the keyword required to this name.
+
+Let's see what happens if I run this.
+
+There it is.
+
+So it shows you this is the required parameter and the description is right there.
+
+All right, I'm only gonna put two things in my address parameter for now.
+
+And what happens when I execute?
+
+There we go, we get our object reported.
+
+So what happens if I don't explicitly set up the return statement?
+
+Will this fail on me?
+
+Let's find out.
+
+So I'm going to save it.
+
+It compiles OK What happens when I call it from here?
+
+I still get the object, and that is because failed procedures implicitly return the last thing that they evaluated, and in this case it was an object.
+
+But what if I have it evaluate something else?
+
+O now it's going to evaluate this string.
+
+Will it compile?
+
+Yes, it'll compile.
+
+Well, I can run it first from here.
+
+It will complain.
+
+Types in Vantiq are well documented, but we should still mention something about them.
+
+They're of course the scalar types familiar to developers already.
+
+Currency displays the international currency code along with the amount and math in the same currency can still be performed on it.
+
+Date time represents a millisecond in time.
+
+Vail includes built in date time functions as well as functions for strings, arrays, numbers and objects.
+
+GeoJSON types and objects are all expressed in JavaScript Object notation or JSON.
+
+But Geo JSON is configured for points or regions.
+
+In geographical terms objects can be anything and types are based on developer defined types.
+
+So here in our example you see the first parameter is an array of strings and the third is based on a developer defined type sales.
+
+Of course, types and objects can be composed of both scalar types and other object types.
+
+Congratulations, you now know two ways to create a procedure along with how to set their parameters for maximum readability.
+
+The filename: class/Procedures/134_PROC_L1_1.1_Declarations.txt
+
+https://www.youtube.com/watch?v=jKXsquiKFDE

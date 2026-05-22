@@ -1,0 +1,4 @@
+You are helping to guide a user to find useful information in response to his question.  To do that, add a brief summary at the top of the provided content, then include the unchanged original content right after the summary.
+
+The content: ${content}
+The filename: ${filename}

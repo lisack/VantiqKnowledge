@@ -1,0 +1,40 @@
+Below is a list of Vantiq Academy electives available to take in order to achieve a more comprehensive understanding of a Vantiq platform subject area.
+
+Class: Description
+
+AI in Event-Driven Applications: Learn how to use AI functionality in VAIL code.
+
+GenAIBuilder: Learn how to construct sophisticated Generative AI functionality in the GenAI Builder tool. Learn how to call GenAI procedures from Visual Event Handler tasks, from the Client, or from a Client Conversation Widget.
+
+App & GenAI Components: Components allow developers to modularize functionality to make it repeatable and simpler for others to use. This course will explain how to identify good use cases for Components, learn how to author App and GenAI Components, learn how to make Components more flexible without making them too complex for Consumers to use, learn how to use Components as a consumer.
+
+VAIL DML: VAIL's Data Manipulation Language is a lot like SQL, but there are features specific to Vantiq's event driven platform. By the end of this class, you should feel confident in working with database data both in the IDE and programmatically through VAIL logic.
+
+VAIL Procedures: VAIL, which stands for the the Vantiq Application Integration Language, is Vantiq's proprietary platform language, designed to meet event-driven, multi-tenancy and asynchronous processing needs in applications. Developers write two kinds of logic in VAIL.
+One is a Rule, which is code that execute when triggered by a certain event condition.   The other is a Procedure, which is invoked by name or property, and returns something to the caller.
+In this class, you'll learn how to write effective Procedures and learn much about how they behave in Vantiq's event driven platform.
+
+VAIL Rules: Developers can build their own, very targeted and performant event-listeners using Rules, written in VAIL.
+
+Dynamic Client Content: Dynamic content is what can be created in code for run-time needs.  These include layouts, widgets, event handlers, data objects and data streams; all of these can be built in code, without the manual use of the Client Builder.
+
+Launchable Clients: Launchable Clients can be run from the Vantiq Mobile App or Web browser windows, and they come with a multitude of other interesting features. 
+
+Client Layouts, Templates & Components: Client Layout Widgets encompass other widgets, to control the visibility, appearance and other characteristics of the group.  Templates carry that mass-control concept forward by creating a pre-established "starting point" for future developers, cutting their workload, and maintaining look-and-feel guidelines.  Finally, Components behave like self-contained custom compound widgets, already designed for purpose, and can be more flexible through exposed configurations.
+
+Design Model: Developers either draw or describe what they want their project to do, and the Design Model will not only depict the application structure, but generate the Service and Client resources for the application itself.   It's a feature that straddles Design and Development, enhancing and saving time and effort in both.
+
+Tool - Description:
+Client - user interface development tool
+AI - include the GenAI Builder for GenAI procedures, Agents, Tools, Skills, AI conversations
+Service - repository for program state and logic, collaborations, visual event handler, appbuilder, activity patterns
+Design_Model - a graphical application design tool that can generate application frameworks from an AI conversation
+VAIL - proprietary coding language, in rules and procedures
+Source - ingest events and data from outside the Vantiq platform, including the API's of other sites
+API - application program interface for accessing Vantiq platform resources from the internet
+Catalog - shares access to events, services, semantic indexes and assemblies across namespaces
+Deployment - a feature for distributing applications
+IDE - the integrated developer environment that developers build projects within the Vantiq platform
+Administration - managing users and resources in namespaces, organizations and server installations
+Test - event captures, event generators, integration tests, unit tests, test suites
+Type - schema types provide structure for messages on the platform, and standard types both provide structure and persist data in a database

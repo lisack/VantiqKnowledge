@@ -1,0 +1,103 @@
+**Summary:**  
+This video provides a comprehensive guide on deploying the Vantiq platform into a Kubernetes infrastructure. It covers the necessary steps to transform a Kubernetes cluster into a Vantiq Server installation, starting with the deployment of the Nginx ingress controller to set up the load balancer. The process involves executing a series of Gradle commands, updating DNS entries, and ensuring all pods are running correctly. The video also explains setting up Influx DB for monitoring system activity and obtaining the admin key for initial login. Additionally, it includes instructions for setting up Let's Encrypt SSL certificates for secure access.
+
+**Original Content:**  
+Vantiq Server Deployment In this video, we'll actually be performing the deployment of the Vantiq platform into the Kubernetes infrastructure.
+
+Here's the full list again of what steps are involved in turning a Kate's cluster into a Vantiq Server installation.
+
+We're going to deploy the software and here's that diagram again.
+
+That makes up a full Vantage server installation.
+
+We'll be deploying these starting with the Nginx ingress controller.
+
+This will create the load balancer needed to provide the routing for the ingress resources created when deploying the other Vantage components.
+
+This is the sub list of tasks to accomplish the full deployment.
+
+It's mostly a series of Gradle commands.
+
+We'll start with deploying the nginx web server software.
+
+So whoever in your company updates the DNS for your domain can do so with the new ingress host.
+
+Once you run the deploy nginx command, at any point after that you can run the show ingress host command and save the result.
+
+Somewhere we will need that for new host entries in the DNS service.
+
+I've run my getpod command to make sure everything is running so far.
+
+So let's run deploy nginx in order to install the load balancer.
+
+The progress report will keep you informed of what's happening.
+
+We can speed this up just a little bit.
+
+Don't be concerned if your deployment of nginx takes a little bit longer.
+
+What you want to see at the end of it is build successful.
+
+If you look just a few lines up, you can already see the ingress load balancer host information.
+
+But if you missed that, go ahead and run Show Ingress Host again and it will show you that information again.
+
+These shared components are all installed from their standard helm charts with overrides defined in Kate's deploy and deploy dot yaml.
+
+Once the pods are all up and running again, run this command to set up your Influx DB admin information.
+
+Influx DB is a time series database that Vantiq uses to store system activity that administrators can then access to monitor load and activity on the installation.
+
+There's a reason why we're putting some time between the deploy commands.
+
+You should watch the pods to make sure that they initialize and run without errors before running the next deploy command.
+
+Once you run the deploy Vantiq command, look in the logs concurrently to find a code surrounded by asterisks.
+
+We'll need this key to login as the first global system admin to the installation.
+
+Let's deploy into our shared node pool.
+
+Now With Deploy Shared, you'll see instructions for accessing your key cloak Postgres database, but in my case, for security reasons, it's only accessible inside the cluster.
+
+But all the Kubernetes commands are still helpful.
+
+Now that we've successfully installed Influx DB, we'll run Create Influx DB Admin in order to create an admin account to get to the Grafana dashboards later.
+
+There's a reason why we're putting some time between the deploy commands.
+
+You should watch the pods to make sure that they initialize and run without errors before running the next deploy command.
+
+Once you run the Deploy Vantage command, look in the logs concurrently to find a code surrounded by asterisks.
+
+We'll need this code to log in as the first global system admin to the installation.
+
+For security reasons I can't show you the whole code, but it looks like this surrounded by asterisks on all sides.
+
+Don't forget to check during and after each deploy command that all is well with the pods.
+
+In my case, I had an old database from a previous install that had to be deleted and recreated before I could run deploy Vantiq.
+
+Deploy Vantiq is the last deploy command that needs to be run.
+
+While it's running or shortly thereafter, you need to check the log files for the Vantiq 0 pod and towards the bottom you'll find it the admin key we need for logging into our installation.
+
+Copy it and keep it handy.
+
+Let's Encrypt SSL certificates have become very popular in recent years, so if your Vantiq installation will be using one, here's how to set it up.
+
+Assuming your DNS is updated and you're using Let's Encrypt for SSL certification, here is how to install the certificate.
+
+Do a careful reading of the installation dot MD file to get YAML file samples that you can tweak to your purposes like I did here.
+
+Also the web link to the first cube CDL apply command for the Cert Manager release manifest.
+
+After that, we apply the two YAML files.
+
+Once the pods take in the information, you'll know it all worked because you'll be able to bring the Vantage installation up on a browser window.
+
+We've successfully deployed our Vantage installation.
+
+In the next video, we switch hats and become system administrators.
+
+https://www.youtube.com/watch?v=4oiMq33Y4wg

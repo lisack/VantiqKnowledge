@@ -1,0 +1,229 @@
+### Summary
+
+The Dynamic Map Viewer widget in Vantiq Client allows developers to integrate Google Maps into their applications, leveraging Google Maps API features. This widget can display location data from data streams and is customizable through both simple properties and programmatic methods. The guide provides code examples for setting map properties, adding markers, drawing paths and regions, and using Google Maps services like Directions. It also highlights the potential need for a Google Cloud account for some services in the future.
+
+### Original Content
+
+Filename: 143_DynMapViewer  
+Video URL: https://youtu.be/NSzN-QFnSO8
+
+The Dynamic Map Viewer widget The map widget in Vantiq Client is a Google Map.
+
+Developers can therefore take advantage of Google Maps API features in their own user interfaces.
+
+You'll find the dynamic map viewer widget in the Data Display section in the client's Ad tab.
+
+The dynamic map view can take in location data from a data stream.
+
+There are a couple of simple properties that can be set for the dynamic map viewer from the configuration pane, but most work with the map takes place programmatically.
+
+Here we're accessing the map with two lines of code 1 calling the widget a map widget and then declaring A variable set to the dot map property of that map widget.
+
+The code: 
+```javascript
+var mapWidget = client.getWidget("ParisMap");
+var map = mapWidget.map;
+```
+
+After this, we can refer to map in the code and set further properties for it.
+
+Let's start with the properties that determine the map display location and how closely to zoom in.
+
+In this example, we're focused on the latitude and longitude for a point in the center of Paris and to the level where we can see the streets pretty easily.
+
+The code:
+```javascript
+map.setCenter({lat: 41.85, lng: -87.65});
+mapWidget.maptype = DynamicMapViewer.MAPTYPE_HYBRID;
+map.setZoom(15);
+```
+
+Zoom settings range from 1 to 20, with 20 being the closest where individual buildings become visible.
+
+Also, the type of map is easy to change by setting the map type property for the map widget.
+
+The code:
+```javascript
+mapWidget.maptype = DynamicMapViewer.MAPTYPE_SATELLITE;
+```
+
+Adding points of interest to your map is a straightforward process.
+
+Default markers look like this, and here's the code that produced the screenshot shown.
+
+```javascript
+var m1 = new google.maps.Marker({position: {lat: client.data.waypoints[0].waypoint.coordinates[1], lng: client.data.waypoints[0].waypoint.coordinates[0], label : "H" , map: map}});
+```
+
+First, we set up the icon with its location as a project document, image size, and so on.
+
+Then create a marker using that icon.
+
+Finally, setting the map with the marker causes it to appear.
+
+While we're still talking about setting markers, I wanted to mention that in Vantiq, it's possible to track someone on their mobile device through the Vantiq mobile app, assuming they allow this in their location settings.
+
+When this happens, the JSON structure of what is sent looks like the Gray box shown.
+
+We can mimic some of these points to lay down several location markers as shown in this code.
+
+```javascript
+var icon = {
+   url: client.getDocumentUrl("docs/public/blackboy.png"), // URL of the icon image
+   scaledSize: new google.maps.Size(30, 30), // Size of the icon
+   origin: new google.maps.Point(0, 0), // Origin of the image
+   anchor: new google.maps.Point(25, 50) // Anchor point of the icon
+};
+
+var marker = new google.maps.Marker({
+    position: {lat: 48.855555, lng: 2.30333}, // Set the latitude and longitude
+    //label: "H", // Set the label for the marker
+    icon: icon,
+    map: map // Specify the map where the marker should be placed
+});
+
+// Add the marker to the map
+marker.setMap(map); */
+
+//client.getWidget("Location").text = client.data.waypoints[0].name;
+
+var walkingPath = [];
+for (let i=0; i<client.data.waypoints.length; i++) {
+    var pointUse = {lat: client.data.waypoints[i].waypoint.coordinates[1], lng: client.data.waypoints[i].waypoint.coordinates[0]};
+    var a = new google.maps.Marker({position: pointUse, label : "i" , map: map});
+    a.setMap(map);
+    walkingPath.push(pointUse);
+} 
+```
+
+Notice The Walking path references.
+
+We aren't seeing what those are going to do yet, but we're building an array of the latitude and longitude points for use when we draw lines between the points.
+
+So let's move on to lines and regions.
+
+The pathways and region bounds are just more latitude and longitude points.
+
+Fun tip, if you need to get the latitude and longitude of a place, you can go to maps.google.com and right click on the spot to get the coordinates.
+
+In our code examples coming up, we're just setting everything at once, but if you were to send coordinates through a data stream, the map would show the points and lines dynamically at runtime using the array of latitude and longitude points that we built earlier.
+
+We'll now create a new polyline and set the map to display the thin red semi transparent line we created to connect the points, taking advantage of the stroke color, stroke opacity, and stroke weight properties.
+
+```javascript
+const wanderings = new google.maps.Polyline({
+    path: walkingPath,
+    geodesic: true,
+    strokeColor: "#FF0000",
+    strokeOpacity: 0.5,
+    strokeWeight: 2,
+}); 
+
+wanderings.setMap(map);
+```
+
+In this project, I've got a simple map and a button.
+
+The dynamic map viewers are also set up so that they can receive streams of data through a data stream.
+
+Let's take a look at how that looks.
+
+I have a simple button here called Take a walk.
+
+When you click on this, the code is simply once every second or so sending to the data stream, loc stream and the coordinates as you can see here.
+
+Also drawing a polyline to it.
+
+LOC stream on data arrived is interpreting that information to set the map with the new data points.
+
+So let's run it.
+
+OK, I click take a walk and once every second it's showing the movements of say, somebody taking a walk.
+
+So you can absolutely perfectly track as the events come into the data stream.
+
+Polygons being in closed regions work best if the first and last defined points are the same.
+
+Along with the properties that we saw for the lines, we also have fill color and fill opacity.
+
+The code:
+```javascript
+const Jardin = [
+    { lat: 48.866364, lng: 2.323694 },
+    { lat: 48.862773, lng: 2.335120 },
+    { lat: 48.860301, lng: 2.333112 },
+    { lat: 48.863825, lng: 2.321583 },
+    { lat: 48.866364, lng: 2.323694 }
+];
+
+// Construct the polygon.
+const meetingPlace = new google.maps.Polygon({
+    paths: Jardin,
+    strokeColor: "#FFFF00",
+    strokeOpacity: 0.9,
+    strokeWeight: 2,
+    fillColor: "#FFFF00",
+    fillOpacity: 0.35,
+});
+
+meetingPlace.setMap(map);
+```
+
+In this example, I set the color to yellow and 35% opaque.
+
+Putting spots and lines and regions on the dynamic map viewer is all well and good, but can we also take full advantage of some of the services that Google offers?
+
+Well, that's a somewhat complicated answer.
+
+There are services that still work, but they've been deprecated in favor of services that now require Google Cloud accounts with projects that can be billed for resource usage and so on.
+
+That said, here's a free example with a dynamic Mac viewer using the legacy Directions service.
+
+The code:
+```javascript
+const directionsService = new google.maps.DirectionsService();
+const directionsRenderer = new google.maps.DirectionsRenderer();
+var mapWidget = client.getWidget("ConUS");
+var map = mapWidget.map;
+map.setCenter({lat: 41.85, lng: -87.65});
+mapWidget.maptype = DynamicMapViewer.MAPTYPE_HYBRID;
+map.setZoom(15);
+
+directionsRenderer.setMap(map);
+
+const onChangeHandler = function () {
+    calculateAndDisplayRoute(directionsService, directionsRenderer);
+};
+
+var dl1 = client.getWidget("start2");
+dl1.addEventHandler("onChange",onChangeHandler);
+var dl2 = client.getWidget("end2");
+dl2.addEventHandler("onChange",onChangeHandler);
+
+function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+  directionsService
+    .route({
+      origin: {
+        query: client.getWidget("start2").boundValue
+      },
+      destination: {
+        query: client.getWidget("end2").boundValue
+      },
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    .then((response) => {
+      directionsRenderer.setDirections(response);
+    })
+    .catch((e) => window.alert("Directions request failed due to " + e));
+}
+```
+
+Here the start code is not only setting up the map, but also coding event handlers for any change done to the two drop down widgets also on the client page.
+
+Each of these drop downs provides a list of string values of place names, and when one is changed, the function Calculate and Display route is invoking the Directions service to calculate the best route to connect the two places.
+
+As mentioned earlier, this works for now without requiring a Google Cloud account, but there is no telling when Google will decide to retire this functionality for applications with basic map needs.
+
+The Dynamic Map Viewer is an easy way to integrate a Google Map without having to supply a Google API key.
+
+The filename: miniVid/143_DynMapViewer.txt

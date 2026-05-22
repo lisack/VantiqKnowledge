@@ -1,0 +1,13 @@
+To convert the embedded video HTML to the video's URL, you need to extract the `src` attribute from the iframe and convert it to the standard YouTube URL format. Here's how you can do it:
+
+Given the HTML:
+```html
+<iframe width="355" height="200" src="https://www.youtube.com/embed/JC-mrUjnfOs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+```
+
+The converted video URL would be:
+```
+https://www.youtube.com/watch?v=JC-mrUjnfOs
+```
+
+This URL can be used to directly access the video on YouTube.

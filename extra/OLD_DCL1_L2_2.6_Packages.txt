@@ -1,0 +1,68 @@
+**Summary:**
+This video titled "Packages" explains the importance and functionality of packages within the Vantiq platform. Packages act as a protective feature, preventing name collisions by organizing resources similarly to folders or subdirectories. They are essential for utilizing all features of services, which are crucial for application development in Vantiq. Additionally, packages facilitate the sharing and reuse of components and assemblies across different projects, preventing conflicts when importing resources. The video also covers naming conventions and scoping rules for packages, emphasizing their ease of use and significance in development.
+
+**Original Content:**
+
+Packages Packages are an important protective feature on the Vantiq platform, so we want to encourage their use.
+
+By the end of this video, we hope you agree and make regular use of them.
+
+After we cover what packages are and make the case for using them, we'll move on to how to use them so they aren't an impediment to your development experience.
+
+Let's say that an instructor hands out a coding assignment called Myproc.
+
+Each of her students completes the assignment, but none of them change the name of the procedure before handing it in.
+
+This could be a disaster as each new submission would overwrite the previous one, but fortunately our instructor is smart enough to maintain a directory for each family, with sub directories in the case of multiple family members in the class.
+
+Thus, none of the Myproc procedures is overwritten, even though they all have the same name.
+
+There was a point to that story in that packages behave very much like folders or subdirectories, making the obvious first advantage packages that they protect against name collisions for same named, same typed resources.
+
+You're probably wondering why you need packages if you don't plan to give two resources of the same kind the same name.
+
+In fact, if you try, the Vantiq platform won't allow it anyway.
+
+One of the chief reasons to use packages is that services, which are the main gateway to creating applications in Vantiq, need to be in packages in order to use all of their features.
+
+We'll be talking a lot more about services in this class over several videos.
+
+There is another reason which won't be as obvious in a level one class, but will be vital later on.
+
+Vanta gives developers the ability to create large pieces of application functionality called components or even whole projects called assemblies, and share them in other namespaces in other projects.
+
+Some developers are building whole libraries of components and assemblies for reuse in other projects.
+
+If a project imports resources that share the kind and name of something that already exists in a namespace, the import overrides what was already there.
+
+Packages forestall that problem.
+
+Package names are at minimum 2 words separated by a single dot within that structure.
+
+You can call them almost anything except IO dot Vantiq, which is reserved for Vantiq's use.
+
+I do say almost, because words that are keywords in Java won't work.
+
+So for instance, if you worked for int.com and wanted to make a package name out of the reverse of your Internet domain names, as Vantiq's suggests you do, the package name will generate an error because int is a reserved Java word.
+
+No problem, just use an_The other naming conventions aren't strictly enforced they're, just suggestions packages.
+
+Follow scoping rules just as if they were folders in a file system I.
+
+REFER to the programmatic way to reach resources outside of the package because that's the easiest way to see it but, our low code tools allow developers to select resources to import as well let's.
+
+Make sure you understand package scoping take.
+
+A look at the list from a Namespaces Project contents pane on the left, then see if you can answer the questions on the right.
+
+Once I'm done talking, I will give you 3 seconds to pause this video.
+
+When you're ready, play the answers one at a time, pausing at each one to fully read the slide.
+
+If you've got it wrong ready, pause now 321.
+
+Packages aren't hard to use or understand, but it is important that you do on both counts.
+
+The filename: temp/OLD_DCL1_L2_2.6_Packages.txt
+
+<iframe width="355" height="200" src="https://www.youtube.com/embed/brwBA4HhBPY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

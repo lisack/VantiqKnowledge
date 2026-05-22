@@ -1,0 +1,113 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides a detailed explanation of how to create and manage public clients in Vantiq. Public clients are applications accessible to users without Vantiq logins, and they can be launched from browsers or the Vantiq mobile app. The process involves designating a client as public in the Client Properties Advanced tab, which makes it launchable and accessible through the Launch menu. The content also addresses common issues, such as ensuring resources like images and procedures are public, to prevent loading failures. It emphasizes the importance of testing public clients in a private browser to ensure all resources are accessible. The video linked provides a practical demonstration of these concepts.
+
+**Original Content:**
+
+filename: 142_LaunchClients_L1_1.1_CreatingPublic
+video url: https://youtu.be/D1Ww2dDUK1s
+
+Public Clients Public clients let developers make their applications available to anyone who can access the Internet, if desired.
+
+We'll quickly explain what makes public clients public, then how to designate them so in the Client Builder, Public clients are Vantiq applications made available to users who do not have Vantiq logins.
+
+They are also by definition launchable, which means they'll be accessible from browser windows and the Vantiq mobile app.
+
+The lab instructions for the Vantiq Academy Developer Foundations class is an example of a public client.
+
+A client becomes public in the Client Properties Advanced tab.
+
+Once a developer designates the client as public, it will also immediately become launchable if it wasn't before, and all the public related options become available from the Launch menu tab in the client's NAV bar.
+
+Some of you might recognize this client from another class where we were using it to display certain information.
+
+It has all the basic features that you expect from a website, a contact sheet, product and career listings, and even a truly silly About Us page.
+
+More importantly though, this client is a perfect candidate to become a public client.
+
+To accomplish this, we go to the context menu for the client properties and choose the Advanced tab and choose Mark as Client.
+
+Notice it automatically becomes launchable as well.
+
+Now the Launch menu tab has appeared and when we click on that, we can see several public client options as part of it.
+
+If I run the client from here, you can see that it starts right up and runs as expected.
+
+Also, running this from a regular browser window also completes as expected.
+
+But when I run as an unknown user, something else happens entirely.
+
+It fails to load within the time out time.
+
+It just hangs there until it times out.
+
+This is because while the client may be public, the resources it's using are not, and we're going to see how to solve this in the next video.
+
+So why is the client in the private browser window hanging?
+
+The short answer is that while the client is now public, some of its resources are not, therefore they won't load.
+
+The take away from the demonstration you saw is that you won't know if your public clients are truly public unless you test them in a window where the browser conceals your identity.
+
+Just because your client is public doesn't mean that we can ignore the security of the application.
+
+That security happens in two ways.
+
+First, images in the client must be designated as public images.
+
+Second, the only point of connection between the client and Vantiq server takes place through public procedures.
+
+Let's look at each of these important restrictions in turn.
+
+Any kind of image in a public client will only show up in the browser window if it's in the document public subdirectory.
+
+This includes image widgets, background URL's, etcetera.
+
+Also, clients can only execute public procedures.
+
+These are procedures flagged ARS_Public equals true.
+
+Clients can't work directly with anything else.
+
+Not service events and data streams, not sources, not standard types.
+
+The good news is that public procedures can access all of these back end resources.
+
+So while security is maintained by having the procedures specify the conditions, clients can get second hand access to what they need.
+
+Let's see this in action.
+
+It turns out we're trying to load 2 resources that are not public.
+
+One is the background image for this layout widget.
+
+Downloading it from scratch, I'll show you how you can make it public.
+
+First I'm reselecting it from my file system and to make it public I just need to toggle is public to true.
+
+This adds a public slash in front of the image name to designate it as public while I check for any other non public images on this client.
+
+I still need to solve another issue and that is that I have multiple widgets displaying from a service event data stream and we can't use that anymore to get data the public client way.
+
+I'll execute a public procedure to get the data, then send it to a client event stream and re bind the widget displays to that.
+
+So client dot execute is calling ZZ dot big boss dot getdata which is a public procedure in the big boss service.
+
+What returns is an array of records.
+
+So do stuff is sending to the client event client big boss once every second a record of this return.
+
+Here is our service procedure with ARS_public equal true.
+
+All we're doing here is selecting from a data type and returning it.
+
+So here's my new client stream, which is using the same schema and grouping as the now disabled service event stream.
+
+Back in our private browser window, you can see that the new client event stream is working perfectly to display the widget data, and now we're checking the rest of the functionality and all seems well.
+
+Of course, the events didn't have to come from a standard type.
+
+Public clients can retrieve events from anywhere by calling a public procedure to do the work.

@@ -1,0 +1,89 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides an overview of using the CREATE, ALTER, and DROP commands in Vantiq, which are similar to SQL commands but primarily use JSON syntax. The focus is on creating, altering, and dropping types within the Vantiq platform. The CREATE command can also be used to create various resources, but this guide focuses on types. The process involves defining a type with properties such as unique indexes and required fields. ALTER is used to modify existing types, and DROP is used to delete types and their data. The content includes a practical example of creating, altering, and dropping a type programmatically, demonstrating how these commands work in real life.
+
+**Original Content:**
+
+filename: 134_DML_L1_1.4_CAD  
+video url: https://youtu.be/BQyzlNYXUcU
+
+CREATE, ALTER, and DROP.
+
+Now that you know how to work with data within standard types, we're going to cover how to work with the standard types themselves.
+
+CREATE, ALTER, and DROP are like the SQL keywords that do the same thing, but the syntax is mostly JSON as you'll see.
+
+I would be most remiss if I didn't mention that the CREATE command in VAIL isn't just used for types.
+
+CREATE can also create several kinds of resources, but in this class we're going to focus on how to create types.
+
+The command is CREATE TYPE followed by a JSON structure of all the things that make up a type.
+
+That JSON structure is found in the Resource Reference Guide which provides the JSON structures of every resource on the Vantiq platform.
+
+Also, your procedure or rule could create a type on a remote namespace connected via a node with the processed by clause.
+
+This is fully explained in the VAIL Procedures Electives class.
+
+Here is a busy example of creating a type with two properties, a string type called Name and an integer called Age.
+
+I want a unique index on Name with the natural key also set to Name, so the Name property is also set to Required.
+
+Everything in blue is part of the syntax to create this type.
+
+The black is what the developer supplies.
+
+There are many many more type properties that can be set, such as foreign keys, maximum storage size, permission levels, and so on, but these are well documented.
+
+If you can create a type with the property shown in this slide, you will have no difficulty creating any kind of type you want.
+
+I basically just copied the create slide to make this alter slide because ALTER has exactly the same syntax as create, but it's used to make changes to types that already exist.
+
+You'll see what I mean in the demo soon.
+
+There's nothing too difficult about the DROP statement either.
+
+This deletes the type plus any data that was in it.
+
+Now let's see how create, ALTER and drop work in real life.
+
+Hi, let's have some fun with the create, alter and drop statements.
+
+I've already got a procedure here and it's got a create statement that's going to create a type called My type and it's got 2 properties, one of which is going to be required.
+
+Let me run it and everything looks good.
+
+It's giving you all kinds of system information, but no errors.
+
+However, if I go over here to the project contents, my type did not show up.
+
+That's because I created it programmatically and therefore the IDE does not know about it.
+
+However, all I have to do is go to add type and look, there's my type right there.
+
+I choose it, and let's take a look at our properties.
+
+I've got age and name, and name is indeed required.
+
+The other thing I want to show you is at this moment there are no indexes and no natural keys.
+
+Well, oopsies, I really wanted an index and a natural key.
+
+So I'm going to go ahead and alter my type now to add that index and natural key.
+
+So let's run this again, no errors, and look at this in the index tab, this magically appeared, the name and the natural key also name.
+
+Well, I've changed my mind, I don't want this type after all, so let's just drop it.
+
+All I have to do is a short and simple drop type and the type name.
+
+Run it and boom, that disappearing act was not me.
+
+The system automatically disappeared the type.
+
+The filename: class/DML/134_DML_L1_1.4_CAD.txt
+
+---

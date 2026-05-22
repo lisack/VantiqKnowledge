@@ -1,0 +1,1 @@
+To convert the embedded video HTML to the video's URL address, you need to extract the `src` attribute from the `<iframe>` tag and convert it to the standard YouTube URL format. However, the document you provided does not contain any embedded video HTML. If you have specific HTML code you need to convert, please provide it, and I can assist you with that.

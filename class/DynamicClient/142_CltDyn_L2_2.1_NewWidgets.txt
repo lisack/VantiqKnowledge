@@ -1,0 +1,102 @@
+**Summary:**  
+This content provides a detailed explanation of creating and managing dynamic data widgets in Vantiq. It covers the process of dynamically creating widgets, assigning them unique names, and ensuring they are properly nested within layout widgets to appear on the page. The text also discusses the importance of re-parenting widgets to maintain their existence and how to dynamically build forms based on user selections. Additionally, it introduces the concept of cloning widgets to efficiently create similar widgets with unique properties.
+
+**Original Content:**  
+filename: 142_CltDyn_L2_2.1_NewWidgets  
+video url: https://youtu.be/BJVC1_yR3g8
+
+Dynamic Data Widgets Now that we've covered changing widget properties and placements dynamically, we're moving on to creating widgets themselves dynamically and how to make them appear on the page.
+
+To create a new widget, you're creating a new instance of that widgets class.
+
+To know what widget Class A widget is, select one and look at what it's called at the top of the properties pane.
+
+This is not the same as the CSS class name that you see in the style section.
+
+If you set no other properties for the widget, at least give it a unique name.
+
+Once the function is finished where it was instantiated, there will be no way to reference it again if it doesn't have a name.
+
+Layouts are widgets too, and can be nested with other layouts even as they collect widgets within them.
+
+Which brings us to an important concept when creating dynamic widgets.
+
+A widget needs to be a child of a layout widget somewhere on the page or the page itself in order to appear.
+
+Even when you were physically dragging A widget onto the campus, you were adding it as a child to the page in code.
+
+This is tricky because we can't reference the page container directly.
+
+So now recall in a previous demonstration when I clicked on the move me button and nothing happened because that button was already within a horizontal layout, which in turn was within another layout called vertical layout 67.
+
+The unparent move me button click code is shown here.
+
+In the first line I'm just getting the button instance directly so I don't have to write to client dot getwidget to use the mover button instance in the next two lines.
+
+In the next line, I didn't have to know the name of the layout widget the button is in because I can just reference its parent directly to remove the button from it.
+
+If I stop there and leave this function, not only will the button not appear, but it will cease to exist entirely.
+
+So the final line is re parenting the button at no particular place on the page.
+
+But wait, I just said I can't reference the page container directly and that is still true.
+
+So instead I have to reference the parent of the outermost layout widget, which happens to be the page container and make it the parent of the button.
+
+Finally, when I clicked the Move Me button again, it was free to place itself by its X&Y values on the page.
+
+If you remember this application, when we chose interdepartmental employee, the employee could provide his ID and get the rest of the record to show up.
+
+Now we're choosing the new visitor option, and when we do that, we get a form.
+
+The difference being this form is completely dynamic, every single piece of it.
+
+So we'll take a closer look at how that was accomplished.
+
+This is all happening in the on change code for the drop down.
+
+So we Click to edit that and we can see what all is happening.
+
+The first bound value is one that's for the interdepartmental employee.
+
+And notice all we do is make the whole form visible.
+
+If you choose bound value #2 that's for new visitor.
+
+First thing we do is remove the form that was for the employee.
+
+And now we're going to create a form of our own.
+
+As you can see, it starts with a call to a select type props service procedure.
+
+This service procedure takes in a standard type name, and for that standard type queries to find out what its property names are and what the types are for those properties.
+
+The type we'll be supplying is visitor records, so you can see it will return e-mail of type string, first name of type string, and so forth.
+
+We're doing this so that we can dynamically decide what we want to build even when we don't yet know what the type name will be.
+
+The callback function for this just works down the code.
+
+A title text followed by a button that will be at the bottom, followed by a grid layout that will be in the middle that will have the property title name and the input string for somebody to be able to fill in that information.
+
+And this of course loops through every property of the standard type that will be returned once each piece is added to our grid.
+
+Then the grid is added to the page.
+
+Suppose you create a widget and write multiple lines of code to get its properties just right.
+
+And then you realize you want a widget just like that one.
+
+That's where clone comes in handy.
+
+The clone still requires a unique name.
+
+It doesn't have to remain a clone.
+
+You can change its properties to differentiate it from the original anytime.
+
+This is just an easy way to save some time and effort creating multiple widgets that are much alike.
+
+You'll gain some of your own experience with dynamic widgets and properties when you do the first Lab, which is coming up now.
+
+The filename: class/DynamicClient/142_CltDyn_L2_2.1_NewWidgets.txt

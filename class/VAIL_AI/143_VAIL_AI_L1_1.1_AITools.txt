@@ -1,0 +1,131 @@
+**Summary:**
+
+This content provides an overview of how AI tools can enhance the capabilities of large language models (LLMs) by allowing them to perform beyond their regular abilities, especially in real-time situations. It explains how developers can create tools using VAIL procedures in Vantiq, which the LLM can evaluate and invoke as needed. The document also discusses the importance of providing descriptions for parameters and conditions for tool invocation, and how to programmatically inform the LLM about available tools. Additionally, it covers the concept of function authorizers, which are procedures that determine whether a tool should be executed, ensuring that tools are used appropriately. The content includes an example of a price check tool and demonstrates how tools can be integrated into AI applications to provide timely and relevant information.
+
+**Original Content:**
+
+video url: https://youtu.be/qSrfFylar8Q
+
+AI tools Tools allow large language models to perform beyond their regular abilities and for changing situations.
+
+Not all large language models support tools, but more and more are adopting them.
+
+The examples you'll see in this video use ChatGPT, where tools originated.
+
+A generative large language model has already been trained on a vast amount of data, and semantic indexes give them even more context to improve their responses.
+
+But there are still limitations, especially in real time circumstances.
+
+Tools enhance AI's real time effectiveness by activating when certain circumstances warrant them, adding yet more information for the AI to interpret in its response.
+
+This will become clear soon.
+
+In Vantiq.
+
+Developers write their tools as VAIL procedures for the LLM to be able to evaluate whether or not they should be called.
+
+Developers include descriptions for the parameters and also provide a description of the conditions by which the procedure should be invoked.
+
+In this example, notice that the location parameter is a string that will denote the city and state in the US.
+
+Then for the procedure description, we added one in both acceptable locations.
+
+This is not a full procedure, we're only including the parts the LLM will need in order to evaluate the tool for use.
+
+Once you've created any number of tools, let the LLM know where they are.
+
+There are three ways to do this programmatically.
+
+Use the Submit Prompt Procedure Tools parameter in the built in LLM service.
+
+That's the code you see at the top.
+
+There's also a Submit prompt activity pattern in the visual event handler and the tool component in the Gen
+
+AI builder.
+
+Each can be configured to let the LLM know what tools to evaluate for execution as conditions warrant.
+
+Behind the scenes, the LLM and Vantiq are coordinating in order to use the tool.
+
+Vantiq automatically creates A schema for the model to be able to evaluate the tool for use.
+
+Upon deciding to use the tool, the LLM returns a message with a tool called description on how to invoke it and Vantiq executes the procedure on the models behalf.
+
+One more thing, while tools are written in VAIL, it's perfectly fine to call a Gen
+
+AI procedure from within one.
+
+Even as you already saw that VAIL tools can be called from a Gen
+
+AI procedure, here's a use case to make tool usage clear.
+
+We have here the full text of the price check tool, which is just a service procedure like any other.
+
+Do remember that the extra descriptions for the parameters and comments before the first line of code are needed, or the LLM won't know enough about the tool in order to recommend it be called.
+
+This procedure that will be used as a tool for a large language model doesn't have any AI in it in and of itself.
+
+The LLM will decide to execute it when the circumstances are right, then use the results to inform its response.
+
+You see, here we have an array of car parts and their corresponding prices.
+
+When the generative LLM used in Submit prompt interprets that someone is inquiring about the price of a car part, this function will be called.
+
+If there's a match to what we have in the price list, the AI will report the corresponding price.
+
+Here are three separate prompts submitted to the Submit prompt and the three responses.
+
+In the first, the LLM correctly interpreted that the query is about the sheer necessity of an oil filter, and answers that question without invoking the function.
+
+In the second prompt, the LLM understands that the prompt is appropriate for the price check function and uses it to get the price of an oil filter from the price list.
+
+Notice though that the procedure return was set up to say it'll run you around followed by the price.
+
+But the LLM responds in its own way.
+
+This grease monkey application allows me to enter the make model in year of my car and then have a conversation with the AI about it.
+
+It's been instructed to give humorous responses.
+
+So when I enter something about I haven't changed my oil in 100,000 miles is that bad?
+
+The AI does respond with accurate information.
+
+If I ask if oil filters are expensive, our tool is engaged and gives the quote of $15.
+
+Now let's go to our project namespace and talk a little bit about function authorizers.
+
+Here's my price check tool again, and I'm going to uncomment this.
+
+Width properties equals AI execute equals authorized line.
+
+And this time when I run the application again and ask about the oil filter being expensive, which should set off the price check tool.
+
+Notice I get an error this time because it's been blocked due to the lack of a function authorizing procedure.
+
+Function authorizers are procedures as well.
+
+They take in exactly 2 parameters, name and arguments, and they return either true or false.
+
+And here's where we set our function authorizer to be used with our tools.
+
+This LLM service submit prompt is not only setting up the tools that are going to be evaluated, but by adding function authorizer, it will use the function authorizer.
+
+The tool ran fine because the function authorizer returned true, but a return of false will result in another error.
+
+So here's more information about that tool authorizer that you just saw in the demo.
+
+Developers can write a procedure to overwrite what the LLM would choose in invoking a tool.
+
+This is known as a tool authorizer, and it's another VAIL procedure that returns either true to allow the tool to be invoked, or false to issue an error that indicates it was denied execution.
+
+This tool authorizer procedure can be added as a parameter for the Submit Prompt procedure in the LLM service, as well as the Submit prompt activity pattern and the Tool Gen
+
+AI component.
+
+A tool can also enforce that authorization always takes place.
+
+In the example that you see here, the Run Me procedure will not execute if the submit prompt does not have a function authorizer set.
+
+Tools are a way of providing timely information to large language models to help them craft the best responses at runtime.

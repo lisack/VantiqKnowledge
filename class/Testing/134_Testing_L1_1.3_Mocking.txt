@@ -1,0 +1,101 @@
+**Summary:**
+This video tutorial, titled "Imitating Source Events and Migrating Data," covers two essential setup tasks for integration tests in Vantiq: source mocking and data migration. It explains the process of creating a test environment by setting up source inputs and ignoring other inputs, using Vantiq's built-in service test procedures like "Start source mocking" and "Stop source mocking." The video also demonstrates how to simulate source events and migrate necessary database data for integration tests. The tutorial provides a practical example of these concepts, focusing on testing an application with known inputs and simulating MQTT sources. The video concludes with a demonstration of cleaning up the test environment to resume normal application functions.
+
+**Original Content:**
+
+filename: 134_Testing_L1_1.3_Mocking  
+video url: https://youtu.be/bsZrXKTFKg4
+
+Imitating Source Events and Migrating Data In this video, we're looking at 2 common setup tasks for integration tests.
+
+We'll review the steps for creating a test just to remember where the setup step is.
+
+After we cover the syntax for source mocking, creating source events, and migrating data to a test environment, we'll look again at our use case and see where these actions might apply.
+
+Setting up source inputs for a test while simultaneously getting the application to ignore any other input is part of the setup step here.
+
+During the cleanup phase after the test run, we restore the applications ability to ingest real source events.
+
+The way to temporarily disconnect a source from the outside world is called source mocking.
+
+After that, another procedure can insert the test inputs as if they were source events so that the test can run and produce the expected results.
+
+Finally, we turn off the source mocking and the application resumes its regular function.
+
+The Vantiq built in service test provides 2 procedures, Start source mocking and stop source mocking.
+
+Start source mocking takes up to three parameters.
+
+The first is the name of the source to mock the query.
+
+Procedure name parameter is the name of a procedure which will return an object.
+
+That object should mimic the results of querying the source.
+
+The published procedure NAME parameter is the name of a procedure which will simulate a source event by calling a built in procedure called CREATE SOURCE EVENT which sends a message just like the source would.
+
+The test dot STOP source mocking procedure reenables the source so the application can receive real messages from it again.
+
+So here's the basic syntax of the built in procedures.
+
+Create source event.
+
+This is called by the published procedure to send a message as if it came from the source.
+
+If you run this procedure while the source is enabled, all it does is add another event as if it came from the source.
+
+It doesn't otherwise interfere with the source.
+
+Don't be concerned if this is all a little confusing.
+
+We will see a practical example in a minute, but first, there are times when an application being tested requires database data to run.
+
+This isn't a problem for unit tests, but integration tests run in a new namespace that copies over all the resources, including the standard types, but not the data in them.
+
+If the test needs that data, include this syntax in the setup procedure.
+
+OK, let's see source mocking and data migration in more concrete examples.
+
+If we want to test our use case app, we'll need known inputs simulating our two MQTT sources.
+
+Also, our two enriched tasks take the raw sensor data and combine it with data in the sensors standard type to match the sensor ID to its corresponding pump ID.
+
+So the two types of sensors can be joined by their common pump ID.
+
+In summary, we're going to need both source mocking and data migration in order to make an integration test in this service app.
+
+Here's a screenshot of what our setup procedure would look like.
+
+I first want to point out that since this procedure is a service procedure in the package dot sensors package, that line appears first.
+
+However, we need access to Vantiq's test service and our sensors type, neither of which are in the same package, so we'll need to import them before the actual procedure declaration.
+
+In the procedure logic, we'll start by clearing out our state so it starts off clean in the test.
+
+Next, we're disconnecting our MQTT sources with start source mocking.
+
+Notice we need the full source name here, including the package name.
+
+The next parameter is the procedure, which is in the sense and rich service that we'll use to send simulated source inputs for the test.
+
+Finally, here's our data migration to select each record from the original type and insert it into the type that exists in the test environment.
+
+It's not enough to disconnect the source, we still need simulated source events in order for our tests to run.
+
+So here are our fake sources RPMS and fake sources temp procedures.
+
+They each consist of one line using the Vantage built in Create source event procedure to simulate a message from the RPMSMQTT source and the temp MQTT source, that message being the event.
+
+And what is the event?
+
+That is, each input we'll supply in the Test Inputs pane.
+
+Now's as good a time as any to look at how the integration test will clean up after itself after it is run.
+
+As you can see, this procedure just returns the application to its listening state for the real MQTT sources.
+
+Now that we've seen how to set up and clean up our use case integration, we'll put the whole process together in the next video.
+
+The filename: class/Testing/134_Testing_L1_1.3_Mocking.txt
+
+https://www.youtube.com/watch?v=bsZrXKTFKg4

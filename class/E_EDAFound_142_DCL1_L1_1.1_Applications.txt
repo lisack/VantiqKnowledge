@@ -1,0 +1,68 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides an overview of Vantiq applications, highlighting their ability to react to real-time events and maintain situational awareness through advanced event handlers and AI. It uses the example of Formula One racing to illustrate how Vantiq can manage data-driven environments by processing sensor data in real-time, automating tasks, and providing actionable insights. The content emphasizes the importance of distributed processing to minimize latency and the role of Vantiq's Edge native server in handling events directly at the source. The goal is to demonstrate the potential of Vantiq applications in creating automated systems that respond swiftly to business needs.
+
+**Original Content:**
+
+video url: https://youtu.be/pLI02D1qCI4
+
+Vantiq Applications In this video, we're going to look at the kinds of applications where Vantiq excels, and we'll move quickly from abstract theory to a more concrete example.
+
+Vantiq applications react to events in real time while maintaining awareness of current conditions and their context through the platforms highly performant event handlers and agentic AI developers built in logic that reliably detects potential issues, determines the best ways to solve them automatically, or collaborates with stakeholders to jointly deal with them.
+
+Of course, many industries could benefit from situationally aware, contextually relevant and automated systems, but now let's focus on one example.
+
+Formula One racing is certainly fast-paced, and it is also a very data-driven industry.
+
+Each vehicle in a race comes equipped with upwards of 200 sensors, over 1000 channels total, which send between  to  gigabytes of data in a live stream from each car each lap.
+
+I said the F1 industry is data-driven, but I didn't say it was event driven.
+
+This is because currently, almost all of that data is saved to a database and then it is analyzed by the race teams after the competition.
+
+But this is a sport where literally milliseconds count.
+
+For instance, the difference between the 1st and 2nd place finishers at the Monte Carlo Grand Prix is routinely a mere 110th of a second per lap or less.
+
+Let's take a closer look at how an F1 race could be managed in real time.
+
+In a Vantiq application, it's important to fulfill what the customer requires of the application.
+
+In the case of our mock F1 racing management application, we want a dashboard that keeps users apprised of what's happening in the race.
+
+Using AI informed by a proprietary documentation, we should be able to ask questions and get accurate, well explained answers.
+
+Due to the fast-paced environment, we should also create AI agents to autonomously perform a number of tasks for us.
+
+For instance, our agents can analyze anomalous conditions and compare them to mechanical thresholds as well as historical actions to recommend current actions.
+
+So here's a mock up of our dashboard for the 2024 Monte Carlo Grand Prix.
+
+We're currently in lap 73, and here are the positions of the top three racers.
+
+By clicking on their names, we can get some final information about the speed, the RPMS, and the engine temperature.
+
+Our fully informed AI comes back with excellent responses about any subject having to do with the race, and by clicking on a row in the standings table, we can learn something specific about that driver.
+
+But this application isn't built just to inform, it's built to manage.
+
+So behind the scenes it's continuously taking in sensor readings and flagging anomalies for analysis and actions by the program's agentic AI.
+
+We also make sure that automation happens only when we want it, and stakeholders have a say when we don't.
+
+An application where speed is so important should also be distributed to allow for as much parallel processing as possible and reduce network latency.
+
+Vantiq has an Edge native server that can process events right where they happen, such as a device on the car itself.
+
+This way simple checks for problems like the engine reaching critical temperatures can alert the driver immediately.
+
+For more complex data correlation, like maybe a comparison of how the driver has been taking turns in the Raceway, a larger multi access edge system close enough to reduce network latency can do more of that heavy lifting.
+
+Finally, the system can occasionally interact with more fault tolerant and high capacity Vantiq Cloud installations, which are perfect for keeping important persistent storage and doing deep processing in parallel with the other installation.
+
+Now that you've seen something of what Vantiq applications are capable of doing, you understand the type of applications that are ideal for the platform.
+
+In this class you will learn an experience for yourself how to build your own situationally aware, contextually relevant and automated applications to rapidly respond to real time business needs.

@@ -1,0 +1,162 @@
+**Summary:**
+
+This content provides an overview of how embedding large language models (LLMs) function within Vantiq, particularly in relation to semantic searches. It explains the process of converting input into vectors, storing them in vector databases, and using these embeddings to enhance the contextual understanding of prompts given to generative LLMs. The document details the creation and configuration of semantic indexes in Vantiq, including the use of embedding and generative LLMs, and how these indexes can be populated and shared. It also touches on the use of external index providers and the integration of semantic indexes with Vantiq's Gen AI Builder components.
+
+**Original Content:**
+
+filename: 143_AIFoundation_L2_2.4_EmbLLM_SI
+video url: https://youtu.be/_XuZkp1HRZ0
+
+Semantic searches.
+
+We've seen one type of large language model.
+
+Now we'll see how the other type functions and how it interacts with semantic indexes to bring about contextualized prompts to generative large language models.
+
+Embedding large language models take in input and convert them to arrays of floating point numbers of a fixed size, called vectors.
+
+Converted vectors are also called embeddings, and these are stored in vector databases.
+
+Vantiqh automatically ensures that documents to be embedded are divided into pieces small enough for the embedding models to intake without data loss.
+
+Vector lengths vary by model distance.
+
+Functions are math functions that compare the values between two embeddings to determine their closeness in meaning and relevance to each other.
+
+Just as you created a generative LLM from the Add LLMS menu, you do this for the embedding large language model as well.
+
+Once again, you have a selection of prebuilt configurations from which to choose, this time for embedded LLMS.
+
+You'll also see vector size and distance function input fields.
+
+These are only necessary to fill in, among other values, if you write in a model that's not a preconfigured choice.
+
+The semantic index works in conjunction with both generative and embedding large language models and Vantiq's vector database in order to add context to prompts.
+
+The embedding large language model takes the documentation that the developer enters into the semantic index, converts it into vectors, which are then stored in Vantiq's vector database.
+
+When the generative large language model is given a prompt, the semantic index runs a search of the documentation in that database to add context for producing a more informed response.
+
+By way of example, here's a screenshot of an AI documentation search in Vantiq to the question What is an activity pattern on the Vantiq platform?
+
+Activity patterns don't just mean someone's personal habits.
+
+Vantiq's documentation is embedded and searchable in the vector database, so when the AI does a semantic search, it finds material most related to the prompt, contextualizes it, and thus enables it to provide a Vantiq specific response.
+
+Like so many tools in Vantiqh, creating a semantic index begins with a visit to the Add menu in the IDE NAV bar.
+
+Click the New button in the Semantic Indexes pane, and this pane appears.
+
+After the name and package name, you'll see the IS remote toggle.
+
+Remember that for the next slide, the semantic index requires LLM's for vectorizing the information and for delivering response.
+
+These are the embedding and Q&A LLMS respectively.
+
+The toggle below the LLM fill in sequesters entries to just the Vantiq user IDs that entered them.
+
+If this is toggled on, Vantiq users will only see their own entries, not anyone else's.
+
+This is set when the semantic index is first created, and can't be unset or set after that.
+
+Don't confuse the similarity setting with the generative AI temperature setting.
+
+The higher this setting is, the more relevant the returned documents will be.
+
+The configuration currently has three properties.
+
+Rephrase question, which allows the AI to use conversation history and other context to rephrase the prompt, which defaults to true.
+
+Return generated question defaults to false, so it won't return the original or rephrased question along with the response unless you set it to true and return source documents.
+
+Defaulted to true will return the metadata on the documents included as context for the question.
+
+How the semantic index should be populated depends on your project needs.
+
+Developers can write custom Gen
+
+AI procedures that the semantic index will use when documents are uploaded to it.
+
+Learn more in the Advanced Gen
+
+AI class.
+
+Developers may also have a semantic index that isn't on the Vantiq platform, but will want to use it as if it were.
+
+You can do this through the external index provider settings.
+
+Database config is reserved for future use, no need to add anything there.
+
+If you toggle on is remote then you are making a semantic index on another namespace accessible for queries in your current namespace.
+
+This will only work if there is a peer node connection from the current namespace to the one with the semantic index.
+
+Bear in mind that the semantic index in question will be read only.
+
+This is 1 convenient way to create a semantic index in one place and make it available to others.
+
+Another way semantic indexes can be shared is through catalogs, also in read only mode.
+
+Here is how to add documents to a vector database via the semantic index.
+
+Click the + in order to bring up the pane to add a new semantic index entry.
+
+The context type is optional unless you embedded a document.
+
+Metadata is optional too.
+
+For any additional data for the article in JSON format, supply a unique ID for the document or Vantiq will create one for you.
+
+Upon clicking OK, you'll see the article status in the list, Uploading or loading at 1st and then most likely loaded.
+
+Let's first go to the Add menu and create an embedded LLM.
+
+This is very much like creating a generative LLM, only this time embedding is toggled.
+
+We'll pick the model from our predefined list and then supply the API secret key which we had already created, but we could create one here if we needed to.
+
+No need to supply vector size or distance function because this is a built in configuration.
+
+Now let's create a semantic index so that embedding LLM can do some embedding again the Add menu semantic index.
+
+Choose a new semantic index after filling in the name and package.
+
+It's going to want one each of the embedding and generative LLMS.
+
+The rest is not mandatory, so let's save for now.
+
+Upon doing so, we can now enter some documents into our semantic index.
+
+Click the + next to index and a pop up will come up for you to enter the details.
+
+Choosing upload, I'll get a text file from my local file system.
+
+I can either add a unique ID or let the system do it for me and click Create to upload the file.
+
+With the remote choice, you choose a website that you want to get the text from, choose Resource and then Resource Reference in order to see your uploaded documents.
+
+In this case, I'm going to choose a format that isn't going to work so you can see what it looks like when it's failed.
+
+But first I'll show you what embedded looks like.
+
+In this case, you're given a field in which you can actually copy and paste in text or type it in yourself.
+
+Give it a file name and a unique ID.
+
+So coming back to our failed entry, if you hover over the word failed, you can see a specific error message to tell you what happened.
+
+In the Gen
+
+AI Builder, there are two components that use semantic indexes.
+
+One of them is called Semantic Index and it returns all the pertinent results it finds from a semantic search in response to a prompt.
+
+RAG does this too, but then uses a generative LLM to give the best response to the prompt informed by the material found in the search.
+
+RAG, by the way, stands for Retrieval Augmented Generative AI.
+
+Generative large language models respond to prompts.
+
+Embedding LLMS and semantic indexes help add important context to those prompts.
+
+The filename: class/143_AIFoundation_L2_2.4_EmbLLM_SI.txt

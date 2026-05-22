@@ -1,0 +1,86 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+The Template Service in Vantiq is a crucial tool for developers working with AI prompts, although it is not technically an AI service itself. It helps improve the quality of AI responses by allowing developers to create detailed and contextual prompts. Developers can store prompt templates in project documents and use variables for dynamic content insertion. The service uses document references and format procedures to access and substitute variables in templates. The process involves creating a JSON structure for input, accessing the template, and formatting it with the input values. The service also supports iterative templates using the `@repeat` clause for repeated content. Understanding and mastering prompt engineering is essential for effective use of large language models.
+
+**Original Content:**  
+filename: 143_VAIL_AI_L2_2.1_TemplateSvc  
+video url: https://youtu.be/Bz0-TR-Sfzo
+
+Template Service.
+
+The template service isn't technically an AI service, but developers will be using it often for their AI prompts.
+
+The quality of AI response outputs can vastly improve with good prompting.
+
+Sometimes the model will do an adequate job with just a single noncontextual request, but more often, the more explanation, examples, and background you can provide, the better the LLM will understand the assignment.
+
+Sometimes a prompt will elicit information from an LLM that will be used to better contextualize a good prompt.
+
+Good prompt engineering is beyond the scope of this class, but it's worth researching.
+
+It's also important to elicit the type of response your project needs, be it a boolean or JSON structure, replies from a certain viewpoint, etcetera.
+
+Developers can store their prompt templates as text in the project documents.
+
+Either upload them from your file system or choose the plus button to write one in the editor screen as shown.
+
+We also just showed how variables are presented as names bracketed by curly braces with a dollar sign in front of them at runtime.
+
+This template puts those provided values for current, stock and question text together cohesively into the prompt.
+
+At the bottom is the VAIL code for how to perform that substitution.
+
+But first the template text has to be accessed in the code.
+
+Both the document reference and format procedures are from the built in template service.
+
+Let's look at these in more detail.
+
+The full name of the template service is IO dot Vantiq dot TXT dot template, All lower case except for the T in template.
+
+You saw in the previous example that the document reference accessed a document in the project documents and then format made the variable substitutions of that referenced document.
+
+This combination is used a lot.
+
+I've come back to my grease monkey application and in the client code I'm no longer sending a full query, but instead values for variables that I'm going to use in a more sophisticated prompt.
+
+That prompt template is stored in my documents and I get to them by doing show documents and then I've got a file name prompt mechanic prompt dot TXT and here's what it says.
+
+I'm telling the AI some background about its profession and demeanor, and then at runtime supplying variables about the car, the person's question about the car, and the conversation ID.
+
+The final piece of the puzzle is the procedure I have called Build Prompt.
+
+First, take note of that import statement that allows me to just call it template instead of having to use the full service name.
+
+Input is a JSON structure that provides all of the variable names and their values, which are then formatted into our prompt template by using first document reference to access the prompt template.
+
+And then of course, format is using input to finish the process of inserting the values.
+
+Finally, we're logging what the resulting prompt is.
+
+So let's save this and take I'll select a make modeling car and say that it leaks oil.
+
+And here's the resulting prompt.
+
+Did all the values get inserted?
+
+Hyundai Palisade 2021 leaks oil and our conversation ID.
+
+All there parts of templates can be made iterable by putting the text between AT repeat and at END repeat.
+
+In the above example, the AT repeat clause is enlarged for easy reading.
+
+Notice that after the AT repeat and with no spaces, there's the property to be repeated in parentheses.
+
+After that, the text begins including the four blank spaces before the value substitution and carriage return, and finally at and repeat.
+
+Our code just supplies the items in an array, then references the template document to be formatted into the results shown.
+
+You will be using the at repeat clause in your next lab.
+
+As we mentioned before, it's worth making a study on how to best prompt large language models.
+
+Different queries could have vastly different results.

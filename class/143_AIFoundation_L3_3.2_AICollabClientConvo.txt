@@ -1,0 +1,141 @@
+**Summary:**
+
+This content provides an overview of how to manage AI conversations within a client application using Vantiq. It explains the setup and management of human-AI interactions through collaborations, detailing the use of conversation widgets, service settings, and procedures. The document outlines the process of creating and managing multiple conversations, activating collaborations, and configuring conversation widgets. It also highlights the importance of setting up conversation IDs and using prompt templates for effective AI communication. Additionally, it touches on the procedures for real-time AI reactions and the importance of closing services properly. A tutorial is recommended for further learning.
+
+**Original Content:**
+
+Conversations in the Client In this video, we'll see how the client facilitates human AI conversations that are also managed by collaborations.
+
+This is Bob's application to manage his life, and he relies heavily on AI conversations to do it.
+
+In the therapist conversation, he talks about his feelings and the AI is there for him to help sort things out.
+
+In the middle, he asks for help with tasks he'd like to do, and in the third conversation he asks for a lot of jokes because he likes to see humor in every situation.
+
+Each of these is a separate conversation maintained with separate state in a single collaboration.
+
+Let's see how this is done in the client.
+
+The conversation widget shortcuts the process of setting up the human side of a human AI conversation.
+
+It looks and behaves just like any common chat window.
+
+In the settings, developers specify the service where the other side of the conversation will be taking place.
+
+The inbound event setting is for service visual event handlers.
+
+The procedure setting is for a Gen AI procedure.
+
+You must set one or the other of these and also specify the conversation name.
+
+Be sure to use the name you set up as a conversation in the collaboration settings.
+
+And yes, if you didn't set up a conversation, you can still use one by the name of default.
+
+The conversation widget automatically sends the data that Gen AI procedures expect.
+
+A variable called input is the string value of what the human said.
+
+Config is a JSON structure with one property, conversation ID, set to the conversation ID.
+
+No doubt you're wondering where the conversation ID comes from.
+
+That would be what the collaboration is for.
+
+The easiest way to manage AI conversations is to set up a collaboration to keep all the details in state for you, and these are the steps to accomplish this.
+
+You already saw most of the collaboration setup steps in the last video.
+
+Hang on to this slide for reference.
+
+We will look at all of these steps in our next demonstration, but first let's see more details on how to set up conversations in collaborations.
+
+If you don't Click to edit named conversations in the collaboration settings, then you can have the single default conversation.
+
+You can have any number of conversations in collaborations.
+
+Here we're setting up three just by giving them names.
+
+There is one more step to being able to use even your default conversation.
+
+It will need to be activated at the same time.
+
+The collaboration is at the bottom of the activate procedure that was generated when you created your entity.
+
+Look for the code you see here.
+
+In the case of a simple default conversation, just uncomment the execute line and you're done.
+
+In our case, since we have three conversations, we'll need to execute active collab, start conversation procedure three times, and keep the conversation ID that is returned for each execution.
+
+More on this in the demo later.
+
+Now let's talk about how the client connects to the collaboration.
+
+If one is already set up by the time the client is running, then run get collaboration context.
+
+In our case, we're running the client to run the application, so we'll execute the Activate procedure for the entity from the client, then set the collaboration context to what returns.
+
+So here's where we left our application.
+
+Let's stop running it and see how it was put together.
+
+In the first step, we need to create a type that has an ID property so we can use it to set it to the entity role for the collaboration.
+
+And in our case that is me type with an ID and name property.
+
+Then we went to the service state settings and set up our entity role, which I simply called myself of me type.
+
+We set up three named conversations, entertainer, organizer, and therapist, and generated the collaboration management procedures by toggling them on on the client side.
+
+At the very start of the client, we need to activate our collaboration by calling one of those procedures myself.
+
+Activate.
+
+Notice that what I'm going to get back is a separate ID for the collaboration and for each of the conversations.
+
+Let's take a look at that activate procedure and where I made a couple of changes to just use the default conversation.
+
+The conversation ID would be the same as the collaboration ID and that's all that would be returned.
+
+But we have three separate conversations.
+
+So I'm getting a separate ID for each of the conversations and returning it back as a JSON structure.
+
+Here's then how our therapist conversation widget is configured.
+
+Notice I've set the service where theGenny I Procedure therapist is located and give it the conversation name Therapist, which if you recall has its own conversation ID because it was set up that way.
+
+In the Activate procedure.
+
+I'm overwriting the input part of what the conversation widget will send by default because I want to use a prompt template where the input is called request.
+
+My prompt template is text in the documents and it's expecting the human's input and also keeping track of the conversation history.
+
+And here is the therapist Gen AI procedure.
+
+All processing that takes place inside a conversation branch will be part of the response.
+
+And in the conversation configuration I'm setting up the request to be the input and history to be the conversation.
+
+In my prompt from template task, I selected the template.
+
+Make string just converts the prompt output to a string which the Therapy notes semantic index requires.
+
+Finally, the results are compiled from the semantic search and sent to the LLM to be evaluated and a response crafted and it is automatically sent back to the conversation widget for display.
+
+Developers can set up for AI to react in real time to human input if the circumstances call For more information.
+
+The register and send response procedures are for service to service AI communications, but most of the time the human will be conversing with AI via the conversation widget in a client, so invoke what will be most often used for such a scenario.
+
+Let's say the AI is tasked with calling this procedure if it perceives in real time that the conversation should be saved.
+
+Here we're invoking an AI message that will display in the conversation widget, asking to record the conversation and waiting a minute for the reply.
+
+If the user responds with a yes, the procedure calls another procedure that performs the recording.
+
+And finally, just a reminder that if the client created the conversation context, then on ending the client, be sure to call the close Service procedure to end the collaboration.
+
+There's a conversation tutorial available from the help menu in the IDE.
+
+I highly recommend it for deepening your experience with client service AI conversations.

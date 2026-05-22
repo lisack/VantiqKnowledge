@@ -1,0 +1,6 @@
+Is the Named WebSocket only available through a node connection? If I create a wss connection to the backend using something outside of the node feature, let's say through a python app, could I include a vqs name in the connection string to dev.vantiq.com and use then on the dev cluster setup a node definition using the vqs name to talk back to the python source application over the named websocket?
+
+The VQS protocol is explicitly for Vantiq Node connections. If you want to have a custom solution that Vantiq can send events back to, you'll want to use one of the following:
+
+The SDK subscribe() function. This lets your application listen to the various event sources that exist in Vantiq. You'll probably want service events, but also available are topic, source, and type events.
+Vantiq Extension Sources. This lets your application be represented as a Vantiq Source. Your Vantiq procedures, event handlers, etc can listen for events on it, publish events to it, or perform queries (request-response). This link is to the python sdk, but a java sdk is also available.

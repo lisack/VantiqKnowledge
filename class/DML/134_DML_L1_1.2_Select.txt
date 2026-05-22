@@ -1,0 +1,160 @@
+**Summary:**  
+This video tutorial provides a comprehensive guide on using the SELECT query in Vantiq's VAIL language to perform programmatic queries against a database. It starts with basic SELECT syntax and progresses to more complex queries, demonstrating how to retrieve data from persistent storage. The tutorial covers selecting specific properties, using functions on properties, and employing clauses like WHERE, GROUP BY, and ORDER BY. It also explains the differences between arrays and sequences in handling query results, emphasizing the use of sequences for efficient data processing. The video is designed to make viewers comfortable with crafting SELECT statements to extract precise data from databases.
+
+**Original Content:**  
+filename: 134_DML_L1_1.2_Select  
+video url: https://youtu.be/b8OyCPdIbgU
+
+The VAIL SELECT query.
+
+After this video, you should feel very comfortable making programmatic queries against a database with the SELECT statement.
+
+We'll start with basics and move through more complicated SELECT syntax for reading data from persistent storage.
+
+The very minimum SELECT statement requires a property and the name of the standard type where the data is stored.
+
+The property can be just a property of the standard type, or it can be some function performed on one or more properties.
+
+Use this slide for reference while I show you what I mean.
+
+I have a simple standard type in the package com dot Acme dot HR and a procedure also in the same package.
+
+So when I select from employees it's going to look within the same package.
+
+If I did not have it in the same package, I would have to use the full package name with employees in order to get the select to work.
+
+So I'm selecting a single property from employees, but look what happens.
+
+It comes with this_ID.
+
+That's something that the system does in order to keep a unique identifier for each and every record of the standard type.
+
+However, it only gets worse if I do select star.
+
+This is saying select all of the properties.
+
+Well, you would think that those properties would be full name, salary, and years employed.
+
+But when I run this, it comes with a whole lot more than that.
+
+Not only do we have the unique identifier, but we also have all of these ARS properties, namespace version created, and so forth.
+
+There's some other really nice ways that we can select.
+
+We can be much more picky in what we want to select.
+
+For instance, I want to know who's making the most money.
+
+And suppose this is a very, very big data or standard type.
+
+I wouldn't be able to figure it out otherwise.
+
+So I can do this.
+
+M equals Max salary from employees with.
+
+This will return the one record that has the maximum salary.
+
+You can even get more creative than that.
+
+Suppose I want to find out the most amount of money that an employee has earned in their employee with our company.
+
+I can do this as salary times years employed.
+
+This gives me for each of the rows.
+
+Notice that at the bottom here we have $378,000.
+
+So that is the the person with the salary of $63,000 has earned the most here.
+
+One other really, really nice feature that you will be using a lot is just to find out the number of rows in the data type that meet a certain criteria.
+
+So in this case, I'm just going to do a simple count M equals count full name.
+
+So this is going to give me the total number of rows and there we go 4.
+
+So I have 4 records in this.
+
+I hope you noticed from the demo that results always return in JSON format.
+
+We're going to be spending the next several slides breaking down the select statement so you understand everything that it does.
+
+There are two pieces of this statement that we're not going to cover, though.
+
+The first is the selection from a source.
+
+VAIL selects are used to pull data from sources, but we're going to stick with database data for now.
+
+Also, the processed BY clause is covered thoroughly in the VAIL procedure elective class, so if you haven't taken that yet I highly recommend it.
+
+Before I talk about arrays and sequences, I should briefly mention that there are two ways to load what is retrieved into variables.
+
+1 is to declare the whole SELECT statement as the variable with the var keyword.
+
+The other is to use the AS keyword with an alias.
+
+In my demos, I'll use var for the most part, but as is covered in the VAIL Procedures class, by default a simple select will return an array of up to 1000 records.
+
+Fail provides another option called sequence, which can handle unlimited records because it only draws each record into memory as that record is being evaluated by the program.
+
+For this reason, Vantiq recommends using sequence as much as possible, and in several cases Vantiq actually returns sequences over arrays implicitly.
+
+But there is one drawback to sequences, and that is that the program can only go forward through the sequence.
+
+Programmers can skip through arrays in any order just by specifying their positions in the array.
+
+Realistically though, the vast majority of programs want to evaluate records returned sequentially.
+
+Here are some examples of using arrays versus sequences.
+
+Take some time to study them so you understand what they are doing.
+
+Looking here at the first example, whether you specify array or not, the result returned will by default be an array.
+
+The next specifies a sequence return, so the for loop will process each record in turn.
+
+In the third example, by making the select part of the for loop itself, Vantiq implicitly returns a sequence.
+
+And finally, the last statement is probably the least obvious, but because the selection returns to a variable and then some action is done on that variable, not only is a sequence implicitly returned, but this is also an implicit for loop for array selects.
+
+The with clause can limit the number of elements retrieved at a time.
+
+So here we have the first example, and it's only returning the 1st 100 records of the line item data type.
+
+In the second, those first 100 will be skipped and you'll collect the next 100.
+
+Let's move on to the WHERE clause of the SELECT query.
+
+Here's how to even further refine criteria for the data to be retrieved in.
+
+Looks for commonality between property references.
+
+In the example above, we're trying to track down names of people who ordered merchandise that came to three specific amounts.
+
+Regular expression patterns are good for string comparisons.
+
+In the third example from the top, we're matching any name that ends with A and NA without actually being the name.
+
+Anna Vantiq also supports geographical comparisons.
+
+Here's an example from the documentation making a comparison between each record retrieved and the specified allowable distance to a point on the globe.
+
+Select one and select exactly 1 are almost the same In both cases, if more than one record matches the criteria and exception will be thrown by adding the keyword exactly.
+
+The system will also throw an error if less than one record meets the criteria.
+
+If you're already familiar with SQL, GROUP BY and ORDER BY work the same way.
+
+GROUP BY will list output with all the members of the same property batched together.
+
+In the second example, the records will still be grouped by region, but within each region they'll also be sorted alphabetically by name.
+
+And finally, just a quick note, developers don't have to know the query target at the time they write the code.
+
+By using a variable reference, the program can determine that dynamically.
+
+In summary, the SELECT query allows developers to pinpoint exactly what they want to read from database storage.
+
+The filename: class/DML/134_DML_L1_1.2_Select.txt
+
+https://www.youtube.com/watch?v=b8OyCPdIbgU

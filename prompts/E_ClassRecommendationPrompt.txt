@@ -1,0 +1,69 @@
+You are tasked with recommending training classes to enhance student knowledge of the current subject matter.  Give a specific recommendation of at least one from the list below, which best fits what the student wants to know.
+
+The area of interest: ${prompt}
+
+Recommend the class by name based on its description in this list:
+
+Class - Estimated Time to Complete - Description
+Vantiq Version Control System - (1 Hour) – The VCS is a tool in the IDE that copies project files to a local filesystem, so the files and their changes can be managed by versioning software.  It’s also useful for integrating the work of multiple developers into a single project.
+
+Introduction to Generative AI Applications - (4 Hours) - The Vantiq platform comes equipped with support for all industry-leading Large Language Models.  Students in this class will gain real-world skills and knowledge to employ low- and no-code methods for building automated generative AI into their projects.
+
+GenAI Builder – (4 Hours) – As the industry has evolved in creating ever more complex and sophisticated AI products, Vantiq continues to incorporate the latest, cutting-edge generative AI capabilities right into the platform.  In this class, students build their own advanced systems using the GenAI Builder tool.
+
+App & GenAI Components – (2 Hours) – Developers who find themselves building the same functionality in Visual Event Handlers (Apps) or GenAI procedures can save time and effort by turning that functionality into Components.  This elective demonstrates how to build complex, yet flexible Components that are easy for consumers to seamlessly plug into their own projects.
+
+VAIL Procedures – (1 Hour) – The Vantiq Application Integration Language is the platform’s easy-to-learn and very versatile proprietary language.  Developers use procedures to invoke program logic, manage state and augment event processing.
+
+VAIL AI – (6 Hours) – Make the AI in your projects more flexible, autonomous, and informed by using the built-in Service features in Vantiq’s proprietary language.
+
+AI in Event-Driven Applications – (2 Hours) – Here’s the full story on how to add powerful AI capabilities and Collaboration conversation management into your Service Visual Event Handlers.
+
+Vantiq Server Deployment – (1 Hour) – This course demonstrates all the steps to creating a new Vantiq installation from Cloud infrastructure.
+
+System Administration– (2 Hours) – Administrators need to keep their installations healthy and resources balanced well among tenants in the system. This elective is a comprehensive look at the duties and responsibilities for administrators at the system level.
+
+Administering Namespaces & Organizations – (2 Hours) – Administration takes place at the Organization and Namespace levels too.  Take this class to learn how to best manage resources in these areas.
+
+The Vantiq Command Line Interface – (1 Hour) – is a Vantiq tool for managing resources from a terminal window and even automating certain tasks in shell scripts.
+
+The Vantiq Software Development Life Cycle – (1 Hour) – Vantiq application development, and beyond, follows a process particular to the platform’s characteristics.  Architects of successful projects work through every phase of the life cycle to avoid all-too-common, but preventable, issues in their application systems.
+
+System Modeler – (1 Hour) – This tool cleanly captures project business requirements by mapping the application based on how it will process events.  Once the business stakeholders finish building the Model, the System Modeler can generate the foundational application structure, thereby ensuring that the application framework adheres tightly to the desired project focus.
+
+Design Model – (1 Hour) – Share your vision with Vantiq’s AI Assistant, which will design a full application based on your conversation.  Once you’re satisfied with the blueprint, the system will generate a project framework that already incorporates good practices for performance and scalability.
+
+Developer Best Practices – (.5 Hours) – How performance and scalability in a project can best be achieved is not a “one size fits all” approach in all cases.  In this course, students learn that of the different methods of achieving the same result, there are usually trade-offs in other areas.  Students learn to weigh these different outcomes and choose those that best meet their business needs.
+
+Vantiq’s Testing Tools – (2 Hours) – Building regression tests for highly asynchronous processing can be daunting, but Vantiq has tools in place to facilitate creating automated unit and integration suites to ensure the project is on track for its functional and performance goals.
+
+AI in Event-Driven Applications –  (2 Hours) – Here’s the full story on how to add powerful AI capabilities and Collaboration conversation management into your Visual Event Handlers.
+
+VAIL Procedures – (1 Hour) – The Vantiq Application Integration Language is the platform’s easy-to-learn and very versatile proprietary language.  Developers use procedures to invoke program logic, manage state and augment event processing.
+
+Vantiq Integration – (3 Hours) – This elective first introduces many of Vantiq’s integration tools and features, before delving deeply into how developers access Vantiq’s Application Programming Interface.
+
+VAIL DML – (1 Hour) – The VAIL Data Manipulation Language is very SQL-like, and concerns interactions with persistent data in a database.
+
+VAIL Rules – (1 Hour) – Rules are VAIL code that is triggered by specific conditions within the system.  Rules allow for great precision in event processing.
+
+Server Developer Best Practices – (.5 Hours) – How performance and scalability in a project can best be achieved is not a “one size fits all” approach in all cases.  In this course, students learn that of the different methods of achieving the same result, there are usually trade-offs in other areas.  Students learn to weigh these different outcomes and choose those that best meet their business needs.
+
+App & GenAI Components – (2 Hours) – Developers who find themselves building the same functionality in Visual Event Handlers (Apps) or GenAI procedures can save time and effort by turning that functionality into Components.  This elective demonstrates how to build complex, yet flexible Components that are easy for consumers to seamlessly plug into their own projects.
+
+Vantiq Catalog – (1 Hour) – The Vantiq Catalog creates connections to share events and resources across namespaces.  This elective reviews the Catalog Event Broker from the Vantiq Developer Level 1 class, then covers more advanced topics such as Public Catalogs, Service Catalogs and how to share Assemblies via a Catalog.
+
+Assemblies – (2 Hours) – Assemblies are ways that developers can create shareable custom projects, in a modular format that keeps future Assembly users free from the programming details inside them.  With Vantiq Assemblies, it is possible to create whole reusable application libraries and make them available through Catalogs to all authorized users.
+
+Distributed Deployment  – (2 Hours) – Partition your project resources and use the Deployment Tools to  distribute them across multiple nodes; achieving a fully load-balanced and distributed application system.
+
+Vantiq on the Edge – (2.5 Hours) – By installing Vantiq servers on Edge devices, Vantiq goes where the events are, reducing network latency in processing.  Installing Vantiq on laptops, micro controllers, and multi-access edge (MEC) systems maximizes the advantages of fully-distributed systems and parallel processing capability.
+
+Client Developer Best Practices – (1 Hour) – No project is complete even after it’s successfully running.  By following good developer practices, Clients will manage peak performance while also being easy to maintain over time.
+
+Client Layouts, Templates & Components – (4 Hours) – Build custom, reusable and flexible widgets and pages that plug easily into other Clients.  Authors can create very sophisticated and powerful Components, while making programming details invisible to the Consumer.
+
+Launchable Clients – (2 Hours) – Learn how to build browser-based applications that users can access without a Vantiq login.
+
+Dynamic Client Content– (4 Hours) – Dragging and dropping isn’t the only way to use the Client; sometimes the display needs to change entirely in order to meet run-time needs.
+

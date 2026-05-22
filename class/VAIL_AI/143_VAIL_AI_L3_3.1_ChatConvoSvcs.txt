@@ -1,0 +1,105 @@
+**Summary:**
+
+This document provides an overview of Vantiq's Chat Message and Conversation Memory services, which are designed to manage AI conversations effectively. It explains how these services help maintain context in AI interactions by using chat message schemas and conversation memory procedures. The Chat Message service allows developers to create conversation pieces using chat message objects, while the Conversation Memory service enables the management of multiple conversations simultaneously. The document includes examples of how to build chat messages, start conversations, and manage conversation properties using Vantiq's tools.
+
+**Original Content:**
+
+video url: https://youtu.be/gnSw9oBY0j4
+
+Chat Message and Conversation Memory services Large language model interactions with humans and related entities usually take place in the form of conversations.
+
+If these aren't managed properly, the AI can lose vital context for making informed responses.
+
+Vantiq supplies 2 services with the tools necessary for creating and managing AI conversations.
+
+Chat Message is one of those Vantiq services.
+
+Within this service is the Chat message schema type.
+
+A chat message is a piece of a conversation.
+
+The type of property is the speaking role, and the content is what is said.
+
+Notice that the chat message type includes optional places for developers to add properties to parts of the conversation, called ARS properties.
+
+These can be anything, usually specific to the application.
+
+There are also tool support parameters.
+
+Both the name and tool call ID parameters are used as tool identifiers to correlate the tool invocation request with the result message.
+
+Whole conversations are created by stringing together an array of chat message objects.
+
+Chat message instances are used in the IO dot Vantiqh dot AI services.
+
+Here's an example of one such array to begin a conversation.
+
+The system role sets the stage, informing the AI model how it will respond.
+
+After that, input from the user provides the first prompt, the AI responds, and the conversation ensues to its conclusion.
+
+Notice when the user declares that he doesn't have eggs, that the AI is not confused because it knows the whole conversation and can therefore internally change the prompt to something like Tell me how to bake a cake that doesn't use eggs.
+
+The chat message service builders are all manner of procedures for creating chat messages.
+
+These can then be added to the conversation as a whole.
+
+Here are examples of the two most popular ones that create the 1st 2 message components from the previous slide pushed into an array of chat messages.
+
+These create a whole conversation.
+
+You can use a chat message build procedure to ask a multi modal large language model to describe an image.
+
+This is done by pointing the LLM to the image location from within the procedure itself.
+
+Add this segment to the conversation and send it to a multi modal large language model to get the description.
+
+Your results will vary of course, but here's the response.
+
+When ChatGPT 4 point O was asked about this image as an example, we've now seen much of what the chat message service can do to create conversation pieces.
+
+But there's another Vantiq service that's specifically for managing AI conversations.
+
+Developers can manage and maintain any number of conversations simultaneously using the built in procedures from the IO dot Vantiq dot AI dot conversation memory service.
+
+In this code example you see an array of objects, each having the two properties that a chat message needs, type and content.
+
+Just as we saw before, we could have also used the build procedures to create to these chat messages.
+
+Both methods work within the Conversationmemories dot Startconversationprocedure.
+
+The array gets passed in along with a unique chat identifier.
+
+The conversation can now be recalled using that chat ID.
+
+More input can be added and even ended, all with procedures from this service you saw start conversation in the previous slide.
+
+The Conversation service supplies all the procedures needed to have full control over and access to AI conversations.
+
+So here I am having a conversation with the Grease Monkey application and my first input was too vague, so the AI is asking for clarification.
+
+Notice that when I provide more information, I don't have to go over what was said before and the AI still understands the context of the conversation.
+
+On the left you can see that this was handled through a visual event handler, but it's almost exclusively Vail code, so let's look at it now.
+
+In the Create Convo Activity task you see where I first create a unique identifier for the conversation and then I build a system message and a human message to create 2 entities of type chat message using the conversation memory service.
+
+I then run start conversation with both of those chat messages in the array to start the conversation.
+
+Also notice that I'm importing the service dot IO dot Vantiq AI Conversationmemory and the full chat message service too so that I don't have to use their full names in the code.
+
+Next I'll have to add the LLM response from Ask the Monkey to the conversation, so that's what add to convo does.
+
+All I need is the new chat message and the conversation ID.
+
+I'm also running get conversation because I'm going to send the entire thing back to the client.
+
+I want to show one last piece and that is when I ran the LLM service submit prompt procedure.
+
+When I provided that conversation ID, I then did not have to add that piece to the conversation because it became so automatically.
+
+I don't have code that ends the conversation because after half an hour of inactivity it automatically ends, but it is good code practice to do so.
+
+These listed properties are automatically maintained with each conversation.
+
+You can access their values and even replace them with the Get Conversation properties and Update Conversation Properties procedures in the Conversation memory service.

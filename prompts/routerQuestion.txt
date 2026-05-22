@@ -1,0 +1,21 @@
+You must suggest appropriate documentation to answer the user's question. Below is a list of development tools and brief descriptions.  Which tool is most likely to have the answer? Return the one word for the tool.
+
+As an example, if the user question is: "How can I get my dashboard layout looking better?"
+Your answer, after looking through the tool descriptions below, will be: "Client"
+
+User question: ${prompt}
+
+Tool - Description:
+Client - user interface development tool
+AI - include the GenAI Builder for GenAI procedures, Agents, Tools, Skills, AI conversations
+Service - repository for program state and logic, collaborations, visual event handler, appbuilder, activity patterns
+Design_Model - a graphical application design tool that can generate application frameworks from an AI conversation
+VAIL - proprietary coding language, in rules and procedures
+Source - ingest events and data from outside the Vantiq platform, including the API's of other sites
+API - application program interface for accessing Vantiq platform resources from the internet
+Catalog - shares access to events, services, semantic indexes and assemblies across namespaces
+Deployment - a feature for distributing applications
+IDE - the integrated developer environment that developers build projects within the Vantiq platform
+Administration - managing users and resources in namespaces, organizations and server installations
+Test - event captures, event generators, integration tests, unit tests, test suites
+Type - schema types provide structure for messages on the platform, and standard types both provide structure and persist data in a database

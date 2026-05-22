@@ -1,0 +1,68 @@
+**Summary:**  
+This video provides an overview of how to work with prompt templates in Vantiq, particularly in the context of generative AI procedures. It explains where prompt templates are stored, how they are referenced, and how they are used with runtime configurations. The video also covers the creation and management of documents in Vantiq, including the use of variables in prompts and how these are substituted at runtime. Additionally, it discusses the integration of prompt templates within Gen AI Builder procedures and the importance of correctly managing documents within projects to ensure they are included in exports.
+
+**Original Content:**  
+filename: 143_AIFoundation_L2_2.3_PromptTemplates  
+video url: https://youtu.be/w3U_Z-750WM
+
+Prompt Templates Anyone working with AI knows that good outcomes require good prompt engineering.
+
+In this video, we'll see where prompt templates are stored, referenced, and used with runtime configurations in generative AI procedures.
+
+In Vantiq, developers store AI prompts as documents that are then referenced from Gen AI procedures later.
+
+To create a document, just click the + to type a new one or upload one from your file system.
+
+Documents are also not just text, but a wide variety of textual, image, and even video formats.
+
+Make sure the type reflects what kind of format it is.
+
+Creating most resources in the IDE automatically makes them part of the current project, but this is not true of documents.
+
+Should you later decide to export your project and use it elsewhere, the documents that haven't been specifically added to the project will not be in the export file.
+
+Here's the prompt we're using for our Quiz Maker application.
+
+Developers won't always know what the full prompt will be depending on user input or other conditions.
+
+In such cases, create variables that can be substituted in at runtime.
+
+These are delineated as names bracketed by curly braces starting with a dollar sign.
+
+Prompt Templates can be used in multiple places in the platform.
+
+In Gen AI Builder procedures, use the prompt from Template Component to reference them as template documents.
+
+You won't have to type in the name of your template, just select it from the drop down.
+
+You're probably remembering that the Quiz template TXT prompt had no less than 3 runtime variables, yet we're setting none of them here.
+
+Where are they being set from the Show menu?
+
+I went to Documents in order to get this list of all of my documents.
+
+I'll add this JPEG to the project by toggling the selector and then choosing Add to Project and now it displays in bold.
+
+If I want to see a text file, I right click on it and choose Edit, and now I can take a look at this prompt.
+
+This is where I'm giving the AI instructions for how I want to quiz the human, and at runtime I'm providing it with three key pieces of information, lesson history and the request, and looking at the Gen AI procedure where our template is being referenced and used.
+
+You already saw from the slides that our prompt template in and of itself is not supplying any of these values.
+
+So again, where are they coming from?
+
+We can solve part of this mystery by taking a look at the conversation branch of which this prompt from template is a part.
+
+Notice we're setting up the input messages key to be request and the history of the entire conversation to be called history.
+
+So now let's take a closer look at our conversation widget and specifically the on send request event handler.
+
+By default, conversation widgets will send a string called input and a configuration structure with a single property called conversation ID.
+
+But in our case we need to set the string input to request and also supply lesson content.
+
+So we have request and lesson in the modified input and that is how it runtime.
+
+When we select something from our drop down, we send the request quiz me on this and also the lesson content which the AI ingests along with our instructions and supplies us with the quiz questions and evaluations as it was prompted to do.
+
+It's very convenient to store and retrieve prompts as templates in the project documents.

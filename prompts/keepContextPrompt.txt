@@ -1,0 +1,5 @@
+Take the content provided below.  Replace all pronouns like "it, they, she, he, this" and with the full expressed subject from the previous sentence.
+
+Example:  "Mary had a little lamb.  Its fleece was white as snow." should be rephrased to: "Mary had a little lamb.  Mary's little lamb's fleece was white as snow."
+
+The content: ${content}

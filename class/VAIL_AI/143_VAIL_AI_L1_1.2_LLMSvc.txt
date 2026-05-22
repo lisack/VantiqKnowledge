@@ -1,0 +1,62 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+The content provides an overview of the LLM (Large Language Model) service in Vantiq's VAIL platform, which is designed to facilitate AI features. It explains how to access built-in VAIL service procedures through the developer guides and highlights the importance of using the full service name or an alias when utilizing these services. The document also describes various AI-related services and their functions, such as A to A, open inference, chat message, and conversation memory. It focuses on the LLM service, detailing its procedures for engaging a generative LLM, including the "submit prompt" and "submit prompt as sequence" procedures, and explains the parameters involved in these processes.
+
+**Original Content:**  
+
+video url: https://youtu.be/lQyfQTQH9aM
+
+The LLM Service The LLM service is the first of several built in services that are designed to facilitate using AI features in Vantiq's proprietary language.
+
+Fail.
+
+Since we'll be talking a lot about built in VAIL service procedures, I should show you where those are.
+
+From the help menu, go to the developer Guides, then choose Reference.
+
+VAIL is part of the core platform, so the VAIL reference guide is in the core platform section.
+
+Of course, this is a guide for all things in VAIL, but if you Scroll down to the bottom to the built in services section, you will see dozens of built in services that all have types and procedures for performing various functions in the platform.
+
+For instance, here's our LLM service with first a brief description of what it's for.
+
+Notice its full name is IO dot Vantiqh dot AI dot LLM.
+
+So if you want to use the submit prompt procedure, you're going to need to use that full name.
+
+Or alternatively, import the full service name and set it equal to an alias so you don't have to keep typing IO dot Vantiqh dot AI dot LLM when you use it in a procedure.
+
+When building AI applications, these are the services developers are likely to use the most.
+
+A to A and open Inference, for instance, provide types and procedures related to the Agent to agent and Open inference AI protocols, respectively.
+
+Chat message and conversation memory are used to build and manage AI conversations.
+
+The callback service isn't technically AI related, but it is used a lot to facilitate client service conversations which often use fail.
+
+The template service is also not technically AI related, but developers use it to build complex prompt templates for large language models.
+
+The Semantic Index service provides procedures for finding vectorized entries in a semantic index.
+
+For now, let's take a closer look at the LLM service.
+
+The two service procedures provided are for engaging A generative LLM to get a response from it.
+
+In this example, we've written a very short procedure to use the Submit Prompt service procedure.
+
+When run, we'll prompt the LLM with how much wood could a woodchuck Chuck if a woodchuck could Chuck wood and the LLM response returned is a woodchuck could Chuck as much wood as a woodchuck would Chuck if a woodchuck could Chuck wood.
+
+Only two parameters are required in the submit prompt procedure, but we used the tools and function authorizer parameters in the last video when we created a tool to be called.
+
+If the prompt mentioned the price of a car part in your upcoming lab, you'll be doing the same in a later lab.
+
+You'll also be supplying a conversation ID to make the LLM response part of an AI conversation.
+
+The runtime config parameter is for a change to the LLM's configuration, such as a higher temperature or token limit, and only affects the current response.
+
+LLM's other procedure, submit prompt as sequence, is handy if the response will be long.
+
+Sequenced output arrives in chunks instead of all at once.

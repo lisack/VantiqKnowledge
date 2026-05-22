@@ -1,0 +1,102 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+
+This content provides an overview of using Websockets with the Vantiq API, highlighting the benefits of maintaining continuous bidirectional communication through a single TCP connection. It explains the process of authenticating and validating connections using JSON messages, and provides examples of Websocket API calls, such as SELECT and INSERT operations. The content also touches on subscribing to events and accessing the Vantiq API from within the platform using the Resource API service. Additionally, it emphasizes the importance of using neutral quotes in API requests to avoid failures.
+
+**Original Content:**
+
+filename: 138_Integration_L1_1.3_WSS  
+video url: https://youtu.be/Z6hSlD8Y-Qs
+
+Websockets fail in the Vantiq API.
+
+Let's look at this slide again.
+
+As mentioned earlier, most interactions with Vantiq resources from outside of the platform take place in HTTP calls, but not all of them.
+
+There are times when having full duplex Websocket connections that stay open for continuous bidirectional communication with the platform are necessary.
+
+This is where Websocket use comes in.
+
+Websocket connections stay open over a single TCP connection for continuous communication.
+
+Vantig uses this communication most often with high flow rate information sources like subscriptions to events and enterprise connections.
+
+Here's the Uri for interacting in Websockets.
+
+Notice that these are always secure websockets.
+
+Since this connection will stay open, we only need to authorize once and then so long as the connection is open we can work with any number of resources in separate requests.
+
+Every message through the websocket to the Vantiq API will be in JSON format and start with the keyword OP here.
+
+To do a basic login the op needs to be set to authenticate.
+
+Fill out the rest of the JSON structure as shown.
+
+For using an access token, the OP is validate and the rest of the JSON structure is as shown.
+
+Just a heads up, if you cut and paste your API requests from text editor files, make sure that these are not smart quotes.
+
+They need to be neutral or the request fails.
+
+Here are some values that can be set to the op property when making calls through a secure websocket.
+
+Many of the op values somewhat resemble SQL.
+
+To make them easier to remember there are a lot of tools for websockets.
+
+I'm using one called Websocat.
+
+So now I send a validate op with my system credentials.
+
+200 is the status number for success.
+
+So I'm in.
+
+In my last video when I was demonstrating REST calls, I created a type.
+
+So in this one I'm going to go ahead and make an INSERT into that type.
+
+Again, I get a status of 200.
+
+So let's see if I actually added Count Dracula to my list of customer contacts.
+
+Let's see some more Websocket API call examples.
+
+The first example happens to be exactly the same query as the REST GET method we saw in the http://examples.
+
+Only now for websockets the OP is SELECT the properties are pump ID and RPMS and the selection criteria is for RPMS greater than 4000.
+
+What is returned is an array of records IE JSON objects that meet that criteria and once again the yellow box is just showing the first record of that array.
+
+Do take note that the props and where parts are enclosed in a parameters section.
+
+The next example is an insert into the temp by zip type using the unique key request ID and inserting the values provided in the object property.
+
+The request ID parameter is optional and this last example has no REST equivalent.
+
+Here the websocket is subscribing all the events flowing through a topic.
+
+Also notice that instead of naming the topic directly, the resource name is first denoting the resource class and the resource ID is naming the instance of that class.
+
+Since Websocket connections remain open until they are closed, they can subscribe to sources, services and topics to see event traffic there.
+
+Stepping aside from Websockets, developers can access the Vantiq API from within the platform as well.
+
+The Resource API service has a procedure called execute op that takes in a JSON object to execute the API request.
+
+1 handy example for using Vail to make an API call is to access resources that usually developers would run manually from the IDE, like event generators.
+
+But these can also be started and stopped programmatically in Vail from the Resource API service.
+
+These are the same 4 reference slides that I included in the last video.
+
+The Jon structures are the same for REST and web socket calls.
+
+The filename: class/Integration/138_Integration_L1_3_WSS.txt
+
+---

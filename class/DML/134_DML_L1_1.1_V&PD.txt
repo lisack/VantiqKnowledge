@@ -1,0 +1,140 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+
+This content provides an introductory overview of using persistent data within the Vantiq platform, focusing on the differences between schema and standard types, and the implications of database interactions in event-driven systems. It highlights the ease of manually working with persisted data in the Vantiq IDE, including viewing, editing, and querying records. The content also introduces the VAIL data manipulation language, which is similar to SQL, and discusses its unique features such as the absence of a join statement and the inclusion of an upsert command. The takeaway emphasizes the performance considerations of using persistent data in Vantiq, a review of accessing database data in the IDE, and the similarity of VAIL to SQL for those familiar with it.
+
+**Original Content:**
+
+filename: 134_DML_L1_1.1_V&PD  
+video url: https://youtu.be/vhu3TwfJiS8
+
+Vantiq and Persistent data.
+
+This will only be a brief introduction to using persistent data in the Vantiq platform.
+
+Recall from level 1 training that Vale supports two different kinds of types.
+
+One is schema, which defines structures but holds no data.
+
+The other is the standard type which can hold database data.
+
+At the risk of sounding redundant, I will remind everyone taking this class that database interactions in event driven systems significantly slows down event processing power.
+
+Event driven systems are not information systems.
+
+They are made to be reactive in real time to business conditions.
+
+Database reads and writes are slow by comparison.
+
+In most cases, using in memory state is much faster.
+
+When you do the labs for this class, you're going to download this project, so it'll have a bunch of types in it.
+
+I'm not sure if this is the final list of types, but this is enough for me to be able to show you how easy it is to manually work with persisted data in the IDE.
+
+So let's just go ahead and pick one of these and notice all I have to do is click on it to bring it up.
+
+You can see all of the different properties, what indexes natural, you know indexes natural keys.
+
+You did all this in level 1, but the other thing that's really, really nice is show all records.
+
+You can see them in this format or even in JSON format.
+
+You can delete everything or delete individual rows just like so select the context menu of any of these rows and choose edit and you can change any of the properties here.
+
+So I can delete, I can update.
+
+So can I also add new records?
+
+Why?
+
+I sure can put in any of this information and when you click add new record, that puts the record in.
+
+If you want to see the record again, I can sort by the year.
+
+There we go.
+
+There's my new record, it's already in.
+
+I can download this into a CSV or JSON file if I want to just as easily as I can upload a CSV or JSON file.
+
+After you've taken a look at all the results, if you go back a step, you can also do something called find records.
+
+I want to do something a little more interesting.
+
+I'm going to do find records for salaries, and I want to know who had the highest salary in 1955.
+
+So I'll go to show all records.
+
+I'll go back one and here's my salaries.
+
+It's 1985 and the salary is there We go.
+
+So only a few pages over 1,000,000.
+
+Still the four pages though.
+
+My goodness.
+
+Oh, here's some that are 2 million.
+
+My goodness.
+
+All right, we got to find them over 2 million.
+
+There we go.
+
+We have the two highest paid people.
+
+In 1985, this guy Shimmy, his salary was 2.1 million.
+
+My goodness.
+
+The other thing I can do is go to the master.
+
+Let's find his name.
+
+There he is.
+
+So Mike Schmidt in 1985 had the highest salary.
+
+One more thing I want to show you quickly is if you go to show and records, you see how you have find records and add records.
+
+Here's another way to do queries on any type you want, including system types.
+
+Most of the time this is just read only.
+
+You can't change it, but at least you can look at the different types there are and notice the types that I have here.
+
+Come at the top.
+
+You just saw how to manually work with database data in the IDE, but we're going to be working with it programmatically from now on.
+
+The first surprise is that the VAILed data manipulation language is very much like SQL as you see on this slide.
+
+You're wondering how this can be since the database we're using right now is document based, not relational.
+
+Doesn't matter.
+
+Whatever kind of database that is being used now or in the future will always use this SQL like language structure to work with the data already.
+
+I can point out a couple of departures from standard SQL though, starting with the ALTER, DROP and CREATE commands.
+
+These do work against standard types, which are what Vantiq uses instead of tables, but they also act on other Vantiq resources too, including topics, nodes, procedures, and so on.
+
+Then there is the curious case of upsert.
+
+This is a programming shortcut.
+
+Rather than having to check if data exists for a certain unique key already before updating or inserting, upserting the data will perform that check and response for you.
+
+Also, there is no join statement because the document based database just can't perform that function.
+
+Here's the three pronged take away from this brief introduction to the VAIL language DML One last morning about the performance ramifications of over relying on persistent data in an event driven system like Vantiq, 2 what was mostly a review of how to get to database data in the IDE.
+
+And three, an assurance that if you already know SQL, you're 80% of the way to understanding VAIL's data manipulation language already.
+
+The filename: class/DML/134_DML_L1_1.1_V&PD.txt

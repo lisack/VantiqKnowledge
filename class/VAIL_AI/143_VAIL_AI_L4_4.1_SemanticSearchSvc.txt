@@ -1,0 +1,59 @@
+**Summary:**
+
+The Semantic Search Service in Vantiq enhances AI capabilities by allowing it to understand specific business practices, policies, and expertise through semantic indexes. This service provides VAIL procedures to perform searches against a vector database, adding context for generative LLMs to craft responses. Key procedures include "answer question" and "answer question as sequence," which perform semantic searches to find relevant material before generating a response. Developers can adjust search configurations using parameters like min similarity and runtime config. The service also includes a similarity search procedure that returns relevant content rather than answers, and a Retrieve Chunks procedure for retrieving embeddings by ID. These tools make AI more informed and facilitate data access.
+
+**Original Content:**
+
+video url: https://youtu.be/ck5SERljc7U
+
+The Semantic Search Service Semantic indexes are what make your AI fully versed in your specific business practices, policies, and expertise.
+
+The Semantic Search service provides VAIL procedures to access them.
+
+The semantic service takes in a prompt or part of a conversation and performs searches against the vector database to add context for the generative LLM to use in its response.
+
+The answer question and answer question as sequence are two of these procedures.
+
+Given the name of the semantic index to search and the question to answer these procedures, perform a semantic search against the entries in the index to find material that best answers the question before having a generative LLM model, craft a full response based on those entries.
+
+The min similarity and runtime config parameters allow the developer to change the default semantic index search configurations just for this procedure call as desired.
+
+The QALLM parameter establishes which generative LLM the developer wants to craft the response or it will use the default.
+
+Add a conversation ID if the answer should join a conversation.
+
+Answer properties is a catch all for any other information the developer might want associated with the response.
+
+The procedures return an object containing a string answer, its own metadata, and what the actual prompt was once the AI rephrased it to account for the search results.
+
+The similarity search procedure doesn't return the answer, but rather the relevant content that the search found.
+
+The required parameters are the same as the answer question procedure.
+
+We still need the name of the index in the question to be answered, but the rest of the parameters have to do with how tightly the search will be controlled and how many text snippets will be returned.
+
+Let's see this procedure in action.
+
+At the top is the entirety of the procedure that uses the similarity search procedure.
+
+Notice we've set all of the parameters.
+
+We're only going to see results that score more than .5 for similarity, and we're also only looking for entries that have the ID of CB user dot MD.
+
+And since I DS are unique, this means only one document will be searched.
+
+The result on the right is a much shortened version of what came back, but we can at least ascertain that the search yielded useful results.
+
+The Retrieve Chunks procedure in the Semantic Search service isn't trying to answer a question, but it is still searching a semantic index, this time to retrieve embeddings by their ID name.
+
+Here's an example of its usage.
+
+Notice that the search returned the first embedding it encountered from the Client Builder Users Guide, which isn't necessarily the beginning of the document itself.
+
+This procedure does a lot.
+
+Consult the documentation to learn more.
+
+Having searchable semantic indexes makes the AI in your projects so much more informed about information vital to your business.
+
+These VAIL procedures greatly facilitate access to that data.

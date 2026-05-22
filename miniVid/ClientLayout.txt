@@ -1,0 +1,19 @@
+Certainly! Based on your instructions, here is the conversion of the embedded video HTML to the video's URL:
+
+**Original HTML:**
+
+```html
+<iframe width="355" height="200" src="https://www.youtube.com/embed/GErOKERPEzg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+```
+
+**Converted Video URL:**
+
+https://www.youtube.com/watch?v=GErOKERPEzg
+
+**Document:**
+
+filename: ClientLayout.txt
+
+video url: https://youtu.be/GErOKERPEzg
+
+This video gives a brief demonstration of how to arrange widgets in the Client Builder for the best layouts.

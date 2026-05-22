@@ -1,0 +1,74 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+This video tutorial explores the features of directional layout widgets in Vantiq, focusing on how to arrange contents in a single column or row using accordion, horizontal, and vertical layouts. The accordion layout is highlighted for its ability to create tidy menus that can be opened and closed programmatically. The video also demonstrates how to use horizontal and vertical layouts to organize widgets effectively, including nesting layouts within each other for complex designs. The tutorial provides practical tips on managing widget spacing, margins, and borders to achieve the desired appearance in client dashboards.
+
+**Original Content:**  
+filename: 142_CliCom_L1_1.2_DirectionalLayout  
+video url: https://youtu.be/zYGKbbRQUZs
+
+Directional Layout Widgets In this video, we'll look at the unique features of three layout widgets meant to arrange their contents in a single column or row.
+
+This directional classification isn't found in the documentation, it's simply for the sake of the lecture length.
+
+The accordion layout is designed for creating tidy menus that slide away when not in use, but nothing stops us from using it for a variety of needs.
+
+Like all client widgets, you create an accordion by dragging it on to the canvas and adding whatever you want underneath it.
+
+On the left I created an accordion menu that has three other accordion menus instead of just simple buttons.
+
+When the client is live, by default the accordions are closed, but you can click on them to open them.
+
+Just as you see here.
+
+You can also do this programmatically.
+
+So we're seeing how each of these opens up, but we can also use this click button to open them and close them as we see fit.
+
+And finally, we don't have to use menu buttons at all.
+
+We can use anything like this image.
+
+Let's see how we put all these together to open or close an accordion programmatically.
+
+Take advantage of the accordion layouts is expanded property in the accordion layout with the image.
+
+Notice that I changed the open and close icons.
+
+That's set right here in the configuration pane.
+
+You can choose from this built in selection or even upload your own icons.
+
+The horizontal and vertical layouts are nearly identical, but for the direction in which their children line up.
+
+Any layout, including these two, can encompass children that are themselves layouts.
+
+As we'll see.
+
+At their most basic, you simply choose the directional icons you want and add children to them.
+
+Horizontal layouts have no more properties than what they inherit from container widgets, but vertical layouts have a single property that helps determine how accordion menus within them will behave.
+
+Notice how very easily we can pull widgets in and out of the layout containers as we like.
+
+By toggling on Allow Multiple Accordions Open, it means that the accordion menus within the vertical layout can all be open at the same time.
+
+When it's toggled off, it means only one menu can be open at the same time and this helps a lot with widget sizing issues.
+
+Live I'm dragging in nine number widgets to_the point that layout widgets are often used nested within each other to create the desired widget organization.
+
+I'm going to create a hopscotch pattern by first putting sets of some widgets into one type of layout like horizontal, and then setting that compound within other layouts like vertical.
+
+Once the basic structure is in place, I can alter the margins between the widgets to get the exact look and spacing that I want, and also remove borders.
+
+The inner margin for the outermost layout is now 0, but for the vertical layout within, I'll give a little more spacing with an inner margin of five, and I'll repeat that margin for the horizontal layouts as well.
+
+That's looking better, but we don't need all these borders, so if we go to the style menu, we can set the border thickness to 0.
+
+Finally, if you find it difficult to select the layout widget, go to the Edit menu listings of all the widgets on the canvas and select it there.
+
+Using a combination of layouts within layouts, developers can ensure that their displays take on the intended alignments and appearance.
+
+The Layout Manager Guide gives meticulous instructions with many examples on how to use layout widgets for building well ordered client dashboards.

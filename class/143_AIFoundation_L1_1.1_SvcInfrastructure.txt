@@ -1,0 +1,49 @@
+**Summary:**
+This content provides an overview of AI service infrastructure within the Vantiq platform, emphasizing the role of services as the backbone of AI applications. It explains the best practices for creating specialized services, the use of the Design Model and Service Builder tools, and the process of setting up services in the Vantiq Integrated Development Environment (IDE). The content also highlights the steps to create a new service, including naming conventions and accessing the Service Builder.
+
+**Original Content:**
+
+filename: 143_AIFoundation_L1_1.1_SvcInfrastructure  
+video url: https://youtu.be/-aSdctHIkB0
+
+AI service infrastructure services provide the necessary framework for building AI applications.
+
+We can think services as comprising the backbone of an application.
+
+There can be multiple services in a single application.
+
+It's best practice, in fact, to create services to specialize in discrete functionality, taking in work, holding program values in memory as state, doing some processing, and then sending the results outbound, which can even be picked up by another service.
+
+On the left is how the Design Model tool represents a service, with blue dots for inbound and outbound messages and pink for procedures.
+
+On the right is the main part of the Service Builder tool, again showing where developers would set up those inbounds and outbounds along with procedures.
+
+Developers build their applications in services, including AI applications.
+
+Here's a full picture of the Service Builder in the area marked #1.
+
+Developers write procedures in Vantage proprietary language, which includes AI functions.
+
+In Area 2.
+
+We can build full complex AI procedural tools in the Gen AI Builder tool and in the visual event handler tool shown here.
+
+Developers drag in AI activity patterns from Area three.
+
+More about this in the next video.
+
+In Vantiq Integrated Development environment, most developer resources can be accessed from the AD menu, and services are no exception.
+
+A OU will appear for you to select your service Oregon.
+
+Choose Plus New Service to create a new one.
+
+After giving your service a name, you need to give it a package name too.
+
+This is at least 2 letters separated by a dot, and it's used for organizing and scoping application resources.
+
+We won't worry about the agent toggle for now.
+
+Pressing Create opens the service builder for the new service.
+
+If you ever close the service builder at the top right of the window, you can access again by finding it under the package name and by type in the project contents.

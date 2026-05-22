@@ -1,0 +1,104 @@
+### Summary
+
+This content provides an overview of the GenAI Builder's Resources components, focusing on how developers can utilize these components to create complex AI interactions. It introduces key components such as Conversation, Prompt from Template, LLM, and Semantic Index, explaining their functionalities and how they can be integrated into AI workflows. The document also includes a practical example of setting up a GenAI Flow activity task within a conversation component, demonstrating how to manage conversation updates and integrate large language models. Additionally, it highlights the importance of configuring runtime variables and the use of semantic indexing for enhancing AI responses. For further learning, it suggests taking the GenAI Builder tutorial available in the Help menu.
+
+---
+
+Filename: 143_AdvAI_L2_2.2_GenAIResource
+Video URL: https://youtu.be/VaSk66buohc
+
+Gen.
+
+AI Resources Components Starting with this video, we'll be looking at the various Gen
+
+AI Builder components, one category at a time.
+
+Here we'll discuss the resources components.
+
+And by resources components, we're talking about the components in the Resources category of the Gen
+
+AI Builder.
+
+The first component in the Resources category is Conversation, which encloses a logic subflow within itself.
+
+A conversation enters the subflow and gets updated as output at the end of the subflow.
+
+This allows developers to create complex AI interactions without cluttering conversation context with every intermediate step along the way.
+
+Prompt from Template is another listed resource and true to its name, is for creating a prompt from a template.
+
+Runtime variables are delineated by a dollar sign and enclosed within curly braces.
+
+LLM returns a large language model response to a prompt.
+
+Developers configure the model and the output format.
+
+Prompt for Messages allows the developer to give the prompt more context through a conversation.
+
+Every part of the conversation can be set up from its own template string, a reference document template, or text from a URL.
+
+Perhaps you remember this application we saw earlier where the user ends up in a back and forth with AI over automotive mechanical questions.
+
+In this application, we've been keeping track of the conversation with code in many VAIL blocks, but now I'm going to create my own Gen
+
+AI Flow activity task within a conversation component so that the conversation updates automatically.
+
+I'll drag a Gen
+
+AI Flow pattern to my Create Convo task, and I'm immediately taken to the Gen
+
+AI Builder from the Resources category.
+
+We'll drag in a conversation component and notice that it's got a top and a bottom.
+
+Everything that happens in between will be part of the same conversation entry.
+
+All of our parameters are optional, and we don't need any at the moment.
+
+Inside this conversation piece we want to solicit information from a large language model based on a prompt templates which is being passed into US higher up the event flow.
+
+So all we have to do is reference it with a dollar sign and curly braces.
+
+Under the prompt, we'll drag in an LLM component and configure it with an LLM we've already added.
+
+I'll choose my model from the drop down and I'm happy with the string output.
+
+Once I save this task, I will get an error from the visual event handler because I have not finished the configuration for the Gen
+
+AI flow task itself.
+
+This task will require 2 pieces of information.
+
+First, when input are we sending to be processed, which in our case is just the message and the conversation component requires a runtime configuration letting it know what the conversation ID is, which in our case is an event property called convo ID.
+
+I'm setting a log stream underneath the Gen
+
+AI Flow task so that we can see the behavior when we actually run this application.
+
+Remember that every one of these queries is making two separate LLM requests but in the same conversation.
+
+So here's part of the logged response from theGenny I Flow task and notice that it also becomes part of the conversation.
+
+Even though the other LLM becomes another part of the conversation, the LLM query I made within the conversation component became part of the conversation without any more management from me.
+
+The Semantic Index component is also in the Resources category.
+
+It returns the best document matches based on the min similarity setting provided, which can be passed to other tasks for a more informed large language model response later.
+
+More on this component in the next video.
+
+The Semantic Index store takes the document output of the previous component and stores it into the chosen semantic index.
+
+We'll see an example of this component when we cover the document related components in a later video.
+
+The tool here is exactly the same kind we encountered a couple of lectures ago.
+
+Using this component, the developer can set up a large language model with a prompt and make your tool procedures available to it, just like you did for submit prompt.
+
+In this example, we're using a tool to provide an API call which will tell us the current weather in San Francisco.
+
+This couldn't have been known from the Large language models training or through a semantic search.
+
+For more experience with theGenai Builder tool, I highly recommend that you take theGenai Builder tutorial available from the Help menu.
+
+The filename: class/GAB/143_AdvAI_L2_2.2_GenAIResource.txt

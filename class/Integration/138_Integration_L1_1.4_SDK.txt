@@ -1,0 +1,73 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides an overview of Vantiq's Software Development Kits (SDKs) for various programming languages, which facilitate interaction with the Vantiq API. It explains the installation process, the creation of a Vantiq instance, and the authorization steps required to connect to Vantiq server resources. The SDKs are designed to be familiar to developers, using common installation tools like NPM for Node.js and Maven for Java. The document also highlights the similarities between SDK methods and HTTP calls, and provides examples and documentation for further support, including mobile app development.
+
+**Original Content:**
+
+filename: 138_Integration_L1_1.4_SDK  
+video url: https://youtu.be/bUKt6pFuJ9M
+
+Vantiqs SDK Vantiq maintains software development kits for some native programming languages to interact with the Vantiq API.
+
+Each of the repositories includes a README file with instructions for installation.
+
+Vantiq uses the installation tools most familiar to the developers of that particular language.
+
+Node JS is available with NPM.
+
+The Java SDK is available with a number of build tools like Maven grade and etcetera.
+
+The SDK for each language works very much the same way.
+
+Install the kit into your file system, make the library accessible from the program.
+
+Then create an instance of the Vantiq class so the program knows where the connection is.
+
+Finally, gain authorization, just as you would if you were working in HTTP or Websockets before interacting with the Vantiq server resources.
+
+Here's a closer look at the second step, making the Vantiq instance.
+
+In doing so, we're also setting the server location.
+
+Getting authorization should look familiar too.
+
+Use Vantiq dot authenticate if you get in via username and password, like for edge installations.
+
+For Oauth installations, set your Vantiq dot access token to one that you made for a namespace.
+
+After that, the API requests are treated as methods or functions in your program and are well documented in the SDK GitHub repos.
+
+Here is the full text of a working example from Node JS in the hands on labs.
+
+For this course.
+
+You've already accessed the Vantiq API in two ways.
+
+The SDK methods are just thinly wrapped HTTP calls.
+
+This bonus slide shows answers for the lab problems in JavaScript.
+
+The Java answers are very similar.
+
+You can see that calls to the API from the SDKS are also very familiar.
+
+I know it's a bit small, but I want to call your attention to the third answer, the update call.
+
+In this case you don't supply a where clause for what should be updated, but rather the unique identifier provided in the metadata for the record.
+
+Refer to the documentation for details.
+
+You'll also find on GitHub further SDK support for writing mobile apps that access the Vantiq API.
+
+Android apps use the same SDK As for Java, but the iOS SDK has its own repo in GitHub and also a location in Coco pods.
+
+The Micro Edition is a lightweight C SDK to allow devices like sensors, set-top boxes, etcetera to interact with the Vantiq server via libcurl and open SSL.
+
+Developers don't even have to start their own Vantiq API mobile apps from scratch.
+
+With a license, developers can make changes to the code for the existing Vantiq app and make it their own for then submitting to either the Apple App Store or the Google Play Store.
+
+Vantiq provides extensive documentation detailing how to best utilize all of these tools.

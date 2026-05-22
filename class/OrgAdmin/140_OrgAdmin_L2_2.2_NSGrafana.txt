@@ -1,0 +1,114 @@
+**Summary:**  
+To monitor application performance, use Grafana dashboards. It highlights key dashboards such as the service handler, event processing, rule and procedure execution, and type storage dashboards. The video demonstrates how these dashboards can be used to track service activities, event arrivals, and database operations, offering insights into system performance and potential issues. The importance of regular monitoring with Grafana to quickly address any problems is emphasized.
+
+**Original Content:**  
+filename: **140_OrgAdmin_L2_2.2_NSGrafana**  
+video url: https://youtu.be/DNtiBtvBjoc
+
+Grafana for namespaces In this video, we'll survey some of the dashboards that are available for monitoring namespace resource usage and performance.
+
+The list of available dashboards is a long one, but some are more broadly useful than others.
+
+We'll single out these five for discussion, but you'll see more in the demonstration.
+
+A namespace administrator is likely to pull up the service handler dashboard often because it tracks what visual event handlers in services in the namespace are doing.
+
+The top set shows what either all or a chosen subset of the services are doing altogether, but the panels below break out the information by service.
+
+These services aren't just those that developers created, but any active system services too.
+
+On the right you see the execution time for the events.
+
+P50 represents the mean close to the average processing time, and the P99 shows the time for basically all of them to have processed.
+
+Of course, administrators will want to look at events in the system and where they're coming from.
+
+The event processing board is useful to see this in one place.
+
+Rule and procedure execution dashboards show when rules and procedures are invoked, and also service bail event handlers show up here, as opposed to service visual event handlers that appear in the service handler execution board.
+
+Also, it doesn't matter how long a procedure runs, only the initial invocation shows up here as a spike.
+
+We'll see this in our demo.
+
+Finally, I want to draw your attention to the Type Storage dashboard that shows the size of each of the database types and their disk usage updated by the settable refresh rate.
+
+Let's see these dashboards and more impractical use in this namespace.
+
+I created a project with three services.
+
+Service 1 writes a number into the database.
+
+Service 2 ingests source events and service 3 sends numbers to an outbound event which triggers a rule 3.
+
+Copies of this procedure send to both the 1st and 3rd service, and I also have event generators as well.
+
+All of these activities should show up in our Grafana monitoring dashboards.
+
+I go to the Administer tab, then Grafana, and when the window comes up, go to the main menu on the left and choose Dashboards.
+
+The available dashboards are in this general folder.
+
+More and more namespaces do not have standalone apps, so you can ignore the first three options.
+
+So we'll look at the Event processing dashboard.
+
+By hovering over the Arrivals panel itself, we can see the exact numbers for that moment in time.
+
+Click on the legends to see that type of data arrival.
+
+Notice that while events from Topics are about 250 OPS per second, sources are only about four.
+
+We can get more specifics in the panels below.
+
+Doesn't look like there are any arrivals coming from rules while they are triggered, they aren't producing their own events.
+
+But here you can see exactly which services are producing events in Topics.
+
+I told you that service one is saving numbers to a type, and you can certainly see that in the Load 1-2 numbers type, but you can also see database operations happening on internal system data types too.
+
+Going to administer Grafana when you already have a dashboard open will open up a second dashboard.
+
+This time we'll look at service event handlers.
+
+This dashboard is just for visual event handlers, not for Vail event handlers or Vail procedures or anything else associated with services.
+
+Those are elsewhere.
+
+This is service 2 handling those MQTT source inputs.
+
+And now that we've concentrated on service two, we can see the maximum values for everything associated with service two.
+
+And at the bottom, a very, very detailed breakout of all of the things that collectively make up the activity in Service 2.
+
+Just a reminder that panel titles are also drop downs that offer more options for visualizing the data.
+
+All right, let's move on to another dashboard.
+
+This time we'll Scroll down to procedure executions.
+
+Even though our procedures are running for 400 seconds, sending an event every second, they are only invoked once.
+
+Hence, that's why you're seeing the spikes when they are invoked.
+
+Our rule execution dashboard is going to look a little different because we're going to see a rule being sent out every single time Service 3 gets information in it then puts it out, which then triggers the rule to home in on this little piece of information.
+
+All I have to do is select it, and now it's frozen and expanded for me to peruse at my leisure.
+
+One last dashboard, we'll scroll all the way to the bottom and look at type storage.
+
+Our service one is doing a straight up insert, not an upsert, so it's continuously expanding.
+
+So I need to keep track of exactly how big that database type is getting.
+
+In this dashboard, we have a big problem.
+
+Event arrivals from our sources are much higher than the system can process, and drops are the terrible result.
+
+From this aggregate panel, we can Scroll down to a panel just for sources to get more detail, like exactly which sources are sending the most events.
+
+This is the pattern for Grafana displays aggregate information at the top for quick view of the health of what's running in the namespace overall, followed by panels that can be expanded to drill down to the details.
+
+Developers should regularly monitor their running applications with Grafana so they can react quickly when they see issues like this.
+
+Check your Grafana dashboards early and often.

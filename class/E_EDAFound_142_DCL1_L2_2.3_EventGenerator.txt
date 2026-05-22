@@ -1,0 +1,72 @@
+**Summary:**  
+This video tutorial provides an overview of how to create simulated events for development and testing in Vantiq using captures and event generators. It explains how to capture real events and replay them or manually build them for testing purposes. The video demonstrates the process of setting up a message type, capturing events, and creating an event generator. It also covers how to simulate events by manually creating them and emphasizes the importance of having a schema type associated with the source. The tutorial is a brief introduction to these features, highlighting their utility in verifying program functionality and suggesting further learning through the Vantiq Academy Testing Tools class.
+
+**Original Content:**  
+filename: 142_DCL1_L2_2.3_EventGenerator  
+video url: https://youtu.be/1CrvJGxw8Tw
+
+Captures and event Generators.
+
+In this video, we'll see ways to create simulated events for development and testing.
+
+This can be accomplished by capturing real events and replaying them or building them manually.
+
+Captures and event generators, which we'll be talking about in this video, can both be found in the test menu in the IDE NAV bar.
+
+Captures record events so they can be used as input in a couple of different ways later.
+
+It's easier to just show you than talk about it, so let's go remember my cat fact source and how I made a data type based on what was actually coming into the system.
+
+By setting my message type in the source to that schema type, it now has a structure and I'll be able to use it for captures and turning into an event generator with.
+
+When I saw sending me events, I will go to test capture and make a targeted capture on just those events that are coming in from the source.
+
+I'll click the add button to add the source to the capture and that's all I want.
+
+So I'll say start capture.
+
+A little red timer appears to let you know that its capturing events will probably take about 30 seconds worth of our cat facts capture.
+
+I'll stop the capture and take a look at the result.
+
+By clicking on the capture, I can see the individual events that are now stored.
+
+I could even make changes to any of these if I wanted to, but I don't.
+
+So I'm going to create an event generator from this 32nd capture.
+
+Now I can deactivate my source and see if my generator behaves just like the source did.
+
+To deactivate a source or anything else that can be deactivated, untoggle the checkbox next to the save button and save it.
+
+My new event generator is listed in the project contents.
+
+I can choose to open the context menu and run it from there, and when I do, the events from the generator behave just like those from the source.
+
+It can also simulate events in a generator by just making them up.
+
+Because the source has an event type, the event generator will know what structure to give the events.
+
+First.
+
+I'll fill out a duration of 30 seconds and an interval of every 3 seconds for this, and then in the properties here you see this structure.
+
+For the fact string, I'm going to send a small set of facts, and for the length I'll do the same.
+
+So here are my bogus facts.
+
+Let me make some bogus integers too.
+
+Of course, these are meant to be the length of the fact string, but we're just making these up.
+
+And not surprisingly, even my simulated fake events will work just as if they were from the source.
+
+So, as you just saw in the demonstration, event generators are easy to make, either from real event captures or manually, as shown in this slide, as long as the generator knows the structure.
+
+This means that your source must have a schema type associated with it.
+
+This has been a short introduction to the capture and event generator features, but as a developer who needs to verify program functionality, you're likely to use these tools again and again.
+
+We don't have time in this class to cover regression testing, but captures can be used for test inputs as well.
+
+Take the Vantiq Academy Testing Tools class to learn more.

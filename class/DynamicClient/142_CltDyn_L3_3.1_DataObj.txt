@@ -1,0 +1,60 @@
+**Summary:**  
+This video tutorial focuses on dynamically working with data objects in Vantiq. It explains how widgets can access data through data objects and data streams, with a focus on data objects. The tutorial guides you on creating data objects at the client level, binding them to widgets, and ensuring proper data binding by using strings. It also highlights the importance of differentiating between values and labels when binding data to widgets like radio buttons or drop lists. An example is provided to demonstrate creating and binding a data object, showing how changes in the data object reflect in the widget.
+
+**Original Content:**  
+filename: 142_CltDyn_L3_3.1_DataObj  
+video url: https://youtu.be/-l1mdCaf7Bs
+
+Dynamic Data Objects Once you've added widgets and their event handlers, you'll also need to connect them to data.
+
+Widgets get access to data in two main ways, data objects and data streams.
+
+With notable exceptions, data display widgets use incoming data in streams, and data input widgets display changes to either client or page level data objects.
+
+In this video, we'll concentrate on working with data objects dynamically.
+
+To create a data object, just set client dot data anything to a value and it will display in any widget that has its data binding set to that variable.
+
+By creating it at the client level, it will also scope for the whole client, which is handy when you want to reference it again.
+
+Just don't look for it in the Data object pane in the client, since it's being created at runtime.
+
+Remember that when you're manually binding data to a widget in the client builder, you'd go to the Property Panes data section, click the blue Drop List button to choose from the data objects available, and then possibly type in one of the properties of that object.
+
+But programmatically, this is done using the data binding property for the widget as shown.
+
+Notice that the data binding value is expected to be a string.
+
+If you fail to put straight quotes around the value, you won't see an error, but the data binding simply will not work.
+
+If you are binding data to a widget like a radio button or drop list, remember that the value is not the same as the label.
+
+The binding is taking place against the value by default.
+
+These values are often just numbers.
+
+Make sure you change them to reflect what you want to match.
+
+So here's a basic bit of code that creates an input integer and then binds it to client dot data dot biff.
+
+And where did client dot data dot biff come from?
+
+I just made it up just now and I'm going to set it to the value of four.
+
+And let's take a look.
+
+What happens when I run it?
+
+It's there and it's four.
+
+If I click the button, it becomes 8.
+
+Let's take a look at the button code and see what it did.
+
+The click changes the value of client dot data dot biff, which it can reference because it's scoped to the whole client.
+
+And since our input integer is bound to that value, it will display that data objects are just variables for use of the client application.
+
+It's easy to declare them and bind widget displays to them as well.
+
+The filename: class/DynamicClient/142_CltDyn_L3_3.1_DataObj.txt

@@ -1,0 +1,94 @@
+### Summary
+
+The video titled "141_AI_L1_1.3_Playground" provides an overview of Vantiq's LLM Playground, a feature within the Vantiq IDE that allows developers to experiment with various large language models (LLMs) and their parameters. This playground is essential for developers working with generative AI, as it enables them to select and fine-tune LLMs to meet specific project requirements. The video covers how to add LLMs to a project, configure model settings, manage conversations, and adjust parameters like temperature, top P, and penalties to optimize model behavior. It also explains how to save configurations and create new models based on existing settings.
+
+### Original Content
+
+Filename: 141_AI_L1_1.3_Playground  
+Video URL: https://youtu.be/kvEIZ9x3s2o
+
+The LLM Playground Vantiq offers an area for experimenting with different large language models and their settable parameters.
+
+In this video, we'll learn how to use the various settings in the LLM Playground.
+
+Large language models vary by how and on what they were trained, their design specializations, etcetera.
+
+Developers building applications with generative AI will need to choose large language models and fine tune them to best fit project needs.
+
+Vantiq's LLM Playground is a space in the IDE where developers can experiment with any of the LLM's that the platform supports.
+
+Models can be further configured to optimize a desired behavior.
+
+To use the playground, first add your LLM's to the project.
+
+In the case above, I've added something from Open AI's ChatGPT.
+
+So when I open the model drop down, the list will include all the currently supported ChatGPT models and the panel of LLM settings that reflect those features available to it.
+
+Some of these features, like tools, are covered in the Advanced Gen AI class.
+
+Right clicking on any previously submitted prompt will let you make changes to it, remove it from the conversation, or resubmit it.
+
+RAG or retrieval.
+
+Augmented Generative AI is AI that queries the vector database associated with a semantic index.
+
+Use this to test response relevance across LLMS and settings.
+
+The higher the minimum similarity, the more relevant the response is likely to be, but setting it too high could result in some important information not being included in the response.
+
+Manage conversations under the Chats tab.
+
+The System Prompts tab is where you can enter instructions to the AI.
+
+Temperature is used in large language model algorithms to control the range of possible responses.
+
+Low temperatures restrict the range to the most predictable solutions.
+
+Higher temperatures widen that range to allow something more akin to creativity.
+
+Top P samples word choices.
+
+The higher the top P, the larger the sampling.
+
+It's a subtle difference in this example, but notice that the higher top P left has to resort to less word base reuse than the one that has a smaller word sampling on the right.
+
+Maximum length describes the token length of the response.
+
+Natural language words often require more than one token, so this is not quite the same as word length.
+
+Stop sequences are conditions by which the AI will halt its response, as shown in this example.
+
+The presence and frequency penalties both work toward avoiding repetition and increasing diversity in the models natural language responses.
+
+In both cases, the changes in these settings would likely only be noticeable over the course of multiple interactions in the same conversation.
+
+The higher the presence penalty, the more diverse the response language is likely to be.
+
+The higher the frequency penalty, the more likely words will be used repetitively above the playground settings.
+
+Developers can keep the configurations they've made to their models, copy them to have a baseline for something else, and reset the values back to their playground defaults.
+
+You're probably expecting to reach the LLM playground from the Add menu, but not this time.
+
+This time it's the Test menu.
+
+Right here at the top is where I choose which of the large language models I would like to play with, or I could even add one from here.
+
+I currently don't have a model chosen, which is why there's absolutely no setting showing up on the right.
+
+But first, I'm going to switch over to the System Prompt tab and instruct the LLM that I want it to talk like a pirate.
+
+When I do choose a model, it's going to bring up all of the different settings for exactly that model.
+
+Let's type in our first prompt at the bottom here.
+
+What is the best way to create a service in Vantage?
+
+Once I submit my prompt, it appears in blue in the Conversation campus on the right and replies appear in white on the left.
+
+In this case in Pirate speak, I can make changes to any of the configurations on the panel on the right, and as I do, I can either submit new queries or right click on the query I've already submitted and resubmitted.
+
+From there, once I'm satisfied with the configuration settings, I can choose Update LLM In order to save those settings, or even create a brand new model with duplicate LLM, I'd like to go to the.
+
+The filename: class/AIinEDA/141_AI_L1_1.3_Playground.txt

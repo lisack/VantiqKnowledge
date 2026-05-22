@@ -1,0 +1,55 @@
+**Summary:**  
+This video provides an overview of setting up a client theme in Vantiq, which is a significant time saver for developers. It explains how to access the theme settings through the client properties tab and adjust the look and feel for various widgets and the page itself. The video also covers how to override these settings for individual widgets and introduces the possibility of using custom CSS configurations. The process of modifying the client theme and individual widget styles is demonstrated, showing how changes affect the client’s appearance in real-time.
+
+**Original Content:**  
+The Client Theme A theme is a generalized look and feel set up for the whole client.
+
+This won't be a long video, but setting up a theme is a huge time saver for developers, so it's worth knowing about this important feature.
+
+Theme is reached as one of the tabs in the client properties.
+
+Here's where developers can set look and feel properties and mass for the various types of widgets on a page, and for that page itself.
+
+Sometimes developers still want to change the styling of a single widget apart from the theme.
+
+To do this, select the widget and go to the Style category in the configuration pane.
+
+By default, all the settings coincide with the client theme, but they are all alterable.
+
+More rarely, developers might look in the specific category for the chart config override.
+
+As shown on the right.
+
+This is a JSON structure of overridable configurations for the widget.
+
+Rarer still, developers might want to write their own CSS configurations for widgets, which can be uploaded into the custom assets within the client properties.
+
+CSS overrides are covered more extensively in another class and in the documentation, So we have here a client with the default theme, and as you can see, the colors and styles aren't quite right for this page.
+
+Let's make some changes, starting with our client theme and then changing individual widgets as we see fit.
+
+With the client back in editor mode, we go to Client context menu, edit client properties, and choose the Theme tab to see all of our theme colors as well as other style attributes.
+
+The data display colors are all of the colors that show up in the pie slices, then column bars and so forth.
+
+And we should probably start with that to take a look at what colors we want in our page in general.
+
+Notice at the top right we can add colors, but in my case, I'm just going to take a bunch of colors away as I play with these different client resource themes.
+
+Notice that the corresponding changes take place in the preview on the right, so I can see kind of how it's going to look when I'm done.
+
+I also made changes to individual widgets, like this chart config override on the column chart.
+
+I wasn't seeing the product names at the bottom of the chart until I changed the footer visibility to true.
+
+Notice that a lot of these properties are already being overwritten in the style sheet, like the title and the background colors.
+
+Here's what the results look like when I run the client in test mode again.
+
+We can keep making changes for all the widgets in the client through the client theme or individually by selecting that particular widget and using the style sheet to make the affected changes.
+
+The theme area holds the style settings for resources within the whole client.
+
+Make changes here, and the affected widgets in the client will take on that setting unless they've been individually overridden.
+
+https://www.youtube.com/watch?v=LntBpCzBOmc

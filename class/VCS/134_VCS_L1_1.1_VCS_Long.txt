@@ -1,0 +1,155 @@
+### Summary
+
+This lesson provides an in-depth understanding of the Vantiq VCS (Version Control System) integration tool, (which should not be mistaken for VQS) explaining its importance in the software development lifecycle. It highlights the tool's role in combining design and development phases, emphasizing the need for proper source management. The lesson covers the advantages of frequent source checkpoints, the setup process for using the VCS tool, and how to manage project resources effectively. It also discusses the limitations of the tool, such as not performing actual version control, and provides guidelines for avoiding resource collisions during project merges. The lesson concludes with practical steps for using the VCS tool with source management software like Git.
+
+### Original Content
+
+Video URL: https://youtu.be/baz5TBh9iuM
+
+This lesson should give you a good understanding of the why and how of using Vantiq VCs integration tool.
+
+It's always good to be reminded why using this tool is important within the scheme of the software development lifecycle, and then we'll go right into what the tool is and isn't before detailing how to use it.
+
+If you remember, Vantiq platform projects very often combine the design and development phases of software development.
+
+If anything, this fact makes good programming practice, including proper source management, even more important than when the phases are split.
+
+If all you have for design is maybe a few nodes jotted down to keep you on track, and the code itself, make sure there is good record of the project progression.
+
+The SDLC lecture pointed out two other advantages to having frequent source checkpoints.
+
+First, this is something that can be shown to assure the customer that real progress is being made.
+
+Second, you the developer can learn something about the future timeline of how this project is likely to progress based on what has been done before and how quickly.
+
+So in the Vantiq IDE, the new project pane has a space for inputting the location where you, the developer, would like to store and sync project resources for source management purposes.
+
+If nothing is entered there, or if the location changes in the future, there is another place where the location can be entered when the feature is actually used.
+
+And as you can see, the VCs tool is accessible from the Projects menu.
+
+Here are the three menu options for the VCs tool and a description of what they are doing behind the scenes.
+
+Think of this tool as providing a shortcut to streamline your source code management job.
+
+In reality, when syncing a project to a directory, you could manually export your project into your downloads.
+
+Clean out the directory where you want to store this, then insert and expand the music file in its place.
+
+It would just be more steps.
+
+Likewise, syncing the project from the VCs is like deleting a project then importing 1 into the same namespace.
+
+Be careful when combining a project from another directory.
+
+Just like in the case of importing a project into an already populated namespace, in the case of collisions, the originals are overwritten.
+
+This last feature works best if there are developers working on the same project but different resources of that project.
+
+Say 1 developer is creating clients and the other is building an app.
+
+After running their respective regression tests, they can combine into one project where everything can be seen.
+
+You might find it strange that the VCs integration tool doesn't perform actual version control.
+
+Well, I suppose it could if you want to create a new directory for each version to sync and to keep track of them that way.
+
+But the expectation is that developers will sync their projects to the designated directory and then use source management software to track and commit the changes between syncs.
+
+Vantiq is completely versatile as to which code management tool is best.
+
+Any of them will work with the Vantiq VCs tool.
+
+Another interesting behavior to keep in mind when syncing with Vantiq VCs tool has to do with how resources are overwritten and data is managed.
+
+Suppose you're working with your NS-1 project building an app, and you have a standard type called T1 with several properties and some records in it.
+
+Now you want to merge your project with another project, which also happens to have AT1 data type, but this one has different properties and data.
+
+What will happen?
+
+Well, all resources that conflict are overwritten locally, so you will lose your type in favor of the other projects same named type.
+
+However, that type won't have any records.
+
+The moral of the stories?
+
+Of course, that projects that merge should not have resource collisions.
+
+So now you know what the VCs integration tool is and does.
+
+Here's how to use it.
+
+Create the local directory where you will want the project files to go, and configure your source management software to recognize this as a work area.
+
+I'm using git examples just because Git is a popular source management tool, but again, any of them will work with this now.
+
+Also, within a terminal window, start up the simple server that Vantiq provides to facilitate all the migrations and file cleanups that will be taking place.
+
+The command is Vantiq VCs Server or Vantiq.bat VCs server for Windows PCs.
+
+That's all you need to do to set this up.
+
+You might be asking why this VCs server needs to be running at all.
+
+The answer is that some browsers like Google Chrome don't allow web-based applications to read and write directly to the file system.
+
+By initiating the VCS server from the local directory, Vantiq is able to get around this obstacle.
+
+Now, wherever you want as you're developing your project, sync it to the directory.
+
+By choosing that option from the Projects menu at the top of the IDE, you make sure that the directory is correct.
+
+Vantiq uses the last directory you chose, so be mindful of this.
+
+Open another terminal window and migrate to the work area.
+
+Use your software management tool to commit the file changes.
+
+Especially in the process of rapid fire agile development, it's easy to find yourself having to backtrack a bit to forge a different path, either because the project objectives shifted or you introduced A regression somewhere and have to retrace your steps.
+
+If you've been committing your changes often, this is not hard to do at all.
+
+In a terminal window, access your source management logs.
+
+Find the version of your project to which you want to return, and make that the current working version.
+
+Now choose Project Sync Project from VCs.
+
+Once confirmed, your project will travel back in time.
+
+When you're ready to unite divided work, choose Project Combine Project from VCs and select the directory and project where the other resources are.
+
+Naming of views optional, but that will provide a side tab in the Project contents pane that shows just what resources were brought in.
+
+Sort of a way to see what's new.
+
+Remember that data records do not migrate over and collisions are handled by overwriting the incoming resources.
+
+So be extra careful if this merging will be bidirectional.
+
+Say for instance Anna is developing on the client side and Ben is doing so for the server within what will be the same project.
+
+Both want to see the others changes periodically, so Anna brings in Ben's project resources with a combined project from VCs option.
+
+No problem there because the two projects did not work with the same resources.
+
+But consider what would happen if Ben has been working in his project for a while longer and then decides he wants to combine with Alice's current project.
+
+Remember that Alice already pulled in Ben's previous project.
+
+So now when Ben combines with Alice's project, he's also going to be overwriting his local namespace resources with his old project resources.
+
+All Vantiq resources are described as JSON files.
+
+Resolving merge conflicts within the same resources can therefore be tricky, in particular when merging clients, since the metadata for widget layouts can be very complex.
+
+Not only that, but the resulting merge JSON file could end up being damaged.
+
+Bottom line, follow these guidelines to avoid headaches when combining projects later.
+
+The Vantiq VCS integration tool greatly facilitates good code management, so there's no excuse for not tracking changes often.
+
+The filename: class/VCS/134_VCS_L1_1.1_VCS_Long.txt
+
+Video URL: https://www.youtube.com/watch?v=iJbL_L6BVJ4

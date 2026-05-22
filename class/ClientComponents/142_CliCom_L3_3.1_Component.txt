@@ -1,0 +1,116 @@
+**Summary:**
+This content provides an overview of client components in Vantiq, explaining their purpose and how they can be created and utilized within projects. Client components are modular functionalities that can be reused, similar to widgets in other clients. The document details the process of creating a client component, using a die roller example, and explains how to manage multiple components on a client page. It also covers creating a contact form as a client component, demonstrating how to use schemas to quickly generate forms. The content emphasizes the flexibility and reusability of client components, which can include custom code for specific events.
+
+**Original Content:**
+
+Client Components.
+
+Client components are a way to create modular functionality that can be used again and again.
+
+Once you learn what client components are, it will be immediately obvious how they can be useful, so we'll spend the rest of the time demonstrating how to create and use them in projects.
+
+So what are client components?
+
+This is client functionality that developers can create and customize that operate like widgets in other clients.
+
+Here's an example on the right of a simple client component.
+
+When the roll button is clicked, a die face appears with a random value between  and  and a corresponding die face image.
+
+Once I make all of these pieces, the button, the images, the container, and the code into a component, everything but the images becomes its own self-contained custom widget and it can be used just like any other widget in the client.
+
+Making client functionality into a component happens in one of two ways.
+
+If you know right away that you'll be making a component, then use that option from the Add Client menu.
+
+You can also create a component from within the client, even if there are other things on that canvas that you don't want as part of the component.
+
+Select the outermost container of the functionality and choose Create Component.
+
+At the top of the client window.
+
+We have our simple die roller in the client.
+
+As we click the button, it gives us a random number and matching die face between  and .
+
+To make this into a component, I need to select the outermost layout widget, click create component, give it a name and a package, and now it is a component.
+
+In the client you will see available components in the components category and you can add your components from there.
+
+Just drag them on just like you would any other widget.
+
+If I do have multiple components in the client field, what's going to happen when I press the buttons and I run it?
+
+Because all of the fields have the same name.
+
+Will they work?
+
+And you see that they do.
+
+Let's explore why.
+
+Back in my client component pane, I'm going to add some code to the button, specifically an alert message to report the name of the button.
+
+When I drag some new change components onto my canvas and run the client, something very interesting happens.
+
+Button one has a new name, and so does the one next to it, and the third one as well, all of them unique.
+
+As you saw in the demo, when multiple components are used in the same client page, the client builder automatically changes the names of the widgets to make them unique.
+
+The original code still works because the builder also handles the translation.
+
+We need a contact us page and we might as well turn it into a client component.
+
+This time when I create it, I'm going to add it as a new component from the very beginning.
+
+Just give it a name and a package name.
+
+I'll design A friendly page with names of people to e-mail and an address for letters.
+
+When the customer clicks on one of those names, they should be able to go to a form that they can fill out to send the e-mail that they want to send.
+
+That form will be a pop up page, so we're adding it.
+
+Now let me show you a handy shortcut for creating forms.
+
+Start with a schema or data type that has the fields you want and go to the data objects for the page.
+
+Add a typed object from that schema and watch the canvas when I click the little lightning bolt.
+
+Just like that we have a ready made form in a grid layout with the input types typed to the schema type.
+
+Now I can customize this form as I see fit for the needs that I have.
+
+With my pop up page almost ready, I'm going to go back to the start page and write onclick behavior for each of the names to open my pop up.
+
+We'll run the component and see how it works.
+
+Upon clicking the name, it does bring up the pop up.
+
+We can fill it out and when we submit it closes the pop up.
+
+There's no real code behind this, but that will change in the next video.
+
+Let's drag our component into a client and see how it works there.
+
+When the user clicks contact us it will go to the page that has the new component on it and upon clicking on a name the pop up that is part of the client component comes up.
+
+In the demonstration we created a whole layout with fields inside it based on our customer e-mail type.
+
+This is just a handy way to shortcut the process of creating a form for customers to fill out.
+
+As you saw, the fields in the form are typed according to the types in the schema, but adding fields in the form will not add a record to the type unless the developer programs it to do so.
+
+Also, this form creation shortcut doesn't automatically create a client component.
+
+This feature is useful in clients as well.
+
+You can think of client components as if they are custom made widgets, but they can also have code associated with them that automatically runs for component events like starting and ending like a page would.
+
+Creators can hide as much of the complexity behind a component as they like.
+
+In the next video, we'll demonstrate how to make client components more flexible for multiple uses by making properties in them configurable by the consumer.
+
+The filename: class/ClientComponents/142_CliCom_L3_3.1_Component.txt
+
+https://www.youtube.com/watch?v=gVLxH94N1hU

@@ -1,0 +1,92 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+
+This content provides an overview of integrating external systems with the Vantiq platform using Camel assemblies and the Apache Camel framework. It explains how Vantiq assemblies facilitate connections with external systems by hiding complex configurations and providing specific sync and source assemblies for different systems. The Camel connector is a crucial component that sets up the environment for running Apache Camel applications, either independently or within a Kubernetes cluster. The document outlines the steps for installing and configuring these assemblies, including setting up the Camel connector and integrating with external systems. It also touches on the security aspects and the process of running the Camel connector in a Kubernetes cluster.
+
+**Original Content:**
+
+filename: 139_Integration_L2_2.1_AssemblyCatalog  
+video url: https://youtu.be/P4Unxc83dEE
+
+Camel assemblies Enterprise Integration Patterns are a standard framework for messaging between systems.
+
+The open source Camel framework greatly facilitates the implementation of EIP in system development.
+
+Camel has been around long enough now that literally hundreds of popular web services use the EIP standard for integrating with other systems.
+
+Vantiq assemblies for connection with external systems are built for specific systems.
+
+They hide the Vantiq configuration needed to make these connections, including the route information as well as service and event definitions to work with the Vantiq platform.
+
+For most external systems there are at least two assemblies, a sync for sending things to the external system, and a source for receiving information from the external systems.
+
+Some systems have multiple syncs or sources to find, each of which tend to be built for one particular aspect of that system.
+
+Conceptually, if your Vantiq namespace on the left wants to send messages to an external system, we can use a sync assembly specific to that external system to convey the message to it.
+
+If the external system in turn sends messages to Vantiq, then connecting a source assembly from the external system to the Vantiq namespace will push that message to our platform.
+
+The Camel connector is a Vantiq process that constructs the environment necessary to run an Apache Camel application.
+
+This process can run either independently or in a Kubernetes cluster.
+
+Vantiq has made sync and source assemblies for connecting the Vantiq platform to dozens of other popular systems on the web, with more being made available incrementally.
+
+They are located in a public catalog that any Vantiq namespace can access.
+
+To integrate with an outside system from a Vantiq namespace you're going to need to install 2 assemblies.
+
+One is the Camel connector assembly that provides infrastructure on which external assemblies are based.
+
+The other is the sync or source assembly specific to the external system in question.
+
+Like any assembly, there are a few exposed properties for you to set up so the two assemblies will work in your system.
+
+This is the configuration for the Camel connector assembly which provides the infrastructure for the roots provided by the system specific assembly.
+
+The server URL is for the current namespace and so is the access token.
+
+Notice that this access token has been put into a secret and therefore referenced by the name of the secret.
+
+For greater security, we've configured the assemblies to connect to the Camel connector which will in turn use the sync or source route to connect to our outside system.
+
+At this point, developers will either choose to run the Camel connector as a standalone process or within a Kubernetes cluster.
+
+If you're not using Kubernetes, you'll need to download, build, configure, and run the Camel connector source code yourself.
+
+The full instructions are in the Vantiq extension sources GitHub repository.
+
+This is a summary of those steps.
+
+You will need one connector per active assembly, so repeat steps four and five for an assembly installed for the receiving end.
+
+Once the Camel connector process has been started, messages sent to the incoming service event in the assembly service will reach the outside system.
+
+You can send this message via a VAIL statement as shown or via a publish activity task from your own service.
+
+Notice that the message object takes on the form of a schema with headers and message properties.
+
+This matches the expected schema for the installed ASSEMBLY incoming service event based on the requirements of the underlying Camel component.
+
+Be sure to match messages to whichever assembly is installed to receive events.
+
+Running your Camel connector in a Kubernetes cluster may be as few as two steps if you're not the Kubernetes administrator.
+
+In such a case, ask the administrator to allocate resources in a cluster for your deployment and find out the name of the cluster.
+
+If you are the Kate's administrator, you can get the Vantiq Kate's Worker image credentials from supportatlantic.com.
+
+From the Administer menu tab in the IDE, go to Deploy then Clusters and choose a new cluster.
+
+Supply the name for your cluster.
+
+After setting up your cluster object, you can deploy your application specific assembly.
+
+These are the settings for connecting to an Azure Service Bus queue.
+
+Under the covers the assemblies are running Enterprise Extensions to the other Internet entities, so reading the related guides will explain a lot of what is happening.
+
+The filename: class/Integration/139_Integration_L2_2.1_AssemblyCatalog.txt

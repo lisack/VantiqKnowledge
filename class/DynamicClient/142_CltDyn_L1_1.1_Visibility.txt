@@ -1,0 +1,72 @@
+**Summary:**
+
+This video tutorial, titled "Widget visibility and appearance," demonstrates how to dynamically control the visibility and appearance of widgets on a Vantiq client page to meet runtime needs. The example used is a visitor check-in screen where widgets appear based on user interaction, such as selecting a status from a drop list. The video explains how a single line of code can make a layout widget and its children visible, and discusses how to change widget properties like background color and transparency using CSS and third-party libraries. It also covers how to dynamically set the stacking order of widgets using specific commands.
+
+**Original Content:**
+
+filename: 142_CltDyn_L1_1.1_Visibility  
+video url: https://youtu.be/KWaCm9iiZWU
+
+Widget visibility and appearance.
+
+In this class we're looking at how much we can tailor client pages and data sources to meet runtime needs.
+
+In this video will cause pre-existing widgets to appear on a client page when they're needed.
+
+I have here the simple use case of a visitor check in screen.
+
+The idea being that the user will select their status.
+
+If it's interdepartmental employee, they start to put in their ID and after that everything fills in for them.
+
+So with the simple runtime change of a drop list, we were able to get this entire functional form to appear.
+
+That's one interesting thing.
+
+But now I have these buttons to show other aspects of what could be changed at runtime.
+
+For instance, a click of the title button will change the static text at the top.
+
+The lemon chiffon button changes the background color, fade is making the entire thing 70% transparent, and finally send to back will reveal something behind the layout that includes the form.
+
+So now let me stop running the client and show you the code that made the form visible.
+
+There sure are a lot of pieces and parts in that form.
+
+I'll bet it was really, really complicated.
+
+Let's take a look at the code for the on change of the drop list.
+
+Now wait, that's all.
+
+A single line that sets the visibility of a layout widget to true?
+
+Yes, because what happens to a layout widget also happens to its children within it.
+
+Developers can only set is visible to either true or false, and the space on the client page is still taken up with the unseen widget.
+
+In the demo, when the layout form widget was invisible and transparent, I specifically had the image underneath set to invisible so it wouldn't show through, but by default it would have.
+
+This is a mini lesson on how to read the documentation about your widget of interest.
+
+Not all of the settable properties for the widget will be listed under the widget name.
+
+For example, on the left, notice that the button is descended from a control widget, which in turn is descended from a widget.
+
+This means that any settable properties up the hierarchy also apply to buttons and can therefore be used to set button properties.
+
+And there are still more attributes that can be changed for widgets.
+
+Below are two such examples from the demonstration you saw.
+
+Layout widgets can change their background colors in the property pane and even from the client theme, but there's no documented way to do it dynamically, No matter we did it in CSS using AJ query command.
+
+The same principle worked when setting widget transparency.
+
+Read up on these listed third party libraries to learn how they can enhance the appearance and behavior of resources within the client.
+
+Fixed layouts can contain other widgets in layers.
+
+The Arrange menu appears in the client when this happens, but to set the stacking order dynamically, use these commands like we did in the demo when we pushed down the layout widget called VL 11 to reveal the image underneath.
+
+Change the appearance of client widgets as needed to meet runtime needs.

@@ -1,0 +1,79 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**
+This content provides an overview of Collaborations within Vantiq, which are a subset of visual event handlers in services. Collaborations are essential for scenarios where apps require interaction with decision-makers or other systems, rather than being fully automated. The document explains the need for Collaborations, their unique activity patterns, and how they maintain state information. It also covers the roles of collaborators, the use of recommend and assign tasks, and the importance of activity patterns like Escalate and Gate. These patterns help manage real-time interactions and decision-making processes in applications. The content concludes by encouraging further learning through tutorials available on the Vantiq Platform.
+
+**Original Content:**
+
+filename: 142_DCL1_L7_7.2_Collaborations
+video url: https://youtu.be/LbsYeFCR_Sk
+
+Collaborations Collaborations are a subset of a visual event handler in a service, and they need their own video first.
+
+We'll discuss what the need is for Collaborations before drilling into why Collaborations activity patterns are different than other app activity patterns in services.
+
+There are situations where apps can't be fully automated because they need to interact with decision makers or other systems to determine the best logical pathway forward.
+
+Often the collaborators are human who can verify unusual readings, conduct repairs, decide the best course of action, grant approvals, etcetera.
+
+When certain activity patterns are used in an app, they initiate A Collaboration behind the scenes.
+
+The service maintains state information on them because it can't be known how long the Collaboration will remain open or how many Collaborations may be open at a time.
+
+Developers can set Collaboration properties from the Service Implement tab state.
+
+Not every Collaboration has collaborator roles, but they all have an entity with a defined schema.
+
+The entity and the issue around it is the reason for the Collaboration.
+
+Collaborations can also keep conversational context for any number of AI conversations in your labs.
+
+You'll be working with the recommend and assign tasks first.
+
+Recommend is calling a pre built procedure that compares what the developer wants to an array of candidates returning a subset of best matches.
+
+Recommend is often used to help determine the best candidate for assigning A Collaboration role.
+
+Assign sets either a collaborator or entity role for an incoming event.
+
+The Assign activity pattern will also start a Collaboration if one is not already in progress.
+
+An example where both of these patterns might be put to use in a Collaboration would be a patient needing special care.
+
+A recommend task might pick the best candidates from a list of specialists, and a sign would set the collaborator to the first doctor available from that subset.
+
+The patient would be the entity role in this case, as he is the reason for the Collaboration.
+
+Established Collaboration, like the Assign activity pattern, can start a new Collaboration, but it can also prevent a new Collaboration from starting when the event processing should be for one that already exists.
+
+This is very useful in cases where the app isn't explicitly waiting for the collaborator in order to continue processing.
+
+This pattern is used a lot to differentiate new AI conversations from ongoing ones.
+
+There are plenty of examples where problems need to be resolved in a timely manner.
+
+The Escalate activity pattern redirects the Collaboration to another action if the one being awaited takes too long.
+
+Consider a situation where a small child hasn't been picked up from school.
+
+The Collaboration could automatically send a notification to the child's parents, but if they don't respond within 5 minutes then the program would escalate to sending a notification to the secondary contacts.
+
+If another 20 minutes goes by, the school personnel may choose to let the escalation expire and relinquish the child to an after school care facility.
+
+Gate Collaboration retrieves everything about the current state of the Collaboration.
+
+This is very helpful when your program wants to use that information to craft a communication or display information on a client dashboard.
+
+Collaborations are a very useful way to build apps that interact in real time and change the trajectory of the program as needed.
+
+You'll be creating a Collaboration in your labs to identify a failing pump the entity and find the most appropriate technician, the collaborator, to fix it.
+
+There is a lot to Collaborations.
+
+Learn more by taking the 2 tutorials available from the Vantiq Platform Help menu.
+
+The filename: class/E_EDAFound_142_DCL1_L7_7.2_Collaborations.txt
+
+---

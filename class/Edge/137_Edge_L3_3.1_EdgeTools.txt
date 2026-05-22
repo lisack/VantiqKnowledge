@@ -1,0 +1,63 @@
+**Summary:**  
+This video explores Vantiq's tools and features designed to enhance edge computing, particularly focusing on mitigating issues related to network reliability and system failures. It discusses the importance of message reliability, offering options like "at most once" and "at least once" event delivery settings, and highlights the use of Vantiq CLI for efficient data migration. The video also covers the VQS tool for establishing connections between cloud and edge installations and provides insights into handling network fluctuations with Offline Assets. Additionally, it introduces a lab exercise for deploying a project from the cloud to the edge and creating a bi-directional distributed application.
+
+**Original Content:**  
+Vantiq Tools and Features for the Edge In this video, we're looking at some of the ways Vantiq mitigates issues with faulty networks or less reliable platform systems.
+
+These are two vulnerabilities that edge nodes have that cloud nodes generally don't, which is to have local network interruptions or local system failure.
+
+Both of these make the subject of message reliability very important.
+
+By default, events coming to Vantage systems are set to at most once.
+
+This is good for applications where missing one or two events like regular census feed data can be tolerated.
+
+Of course, events like customer orders or bank transactions are each unique and the system should not lose any of those, which is where the at least once setting is important.
+
+In this case, events are stored on the database and only erased again when the system sends back acknowledgement of receipt.
+
+If you're thinking that performance can be affected from these extra reliability tasks, you would be correct.
+
+So only use the at least once event delivery option if it is truly needed.
+
+One more caveat to this message reliability issue is that sources are third party products.
+
+Phanta can interface with them, but not all of them support reliable messaging like Kafka and MQTT sources do.
+
+Keep this in mind when building systems with the need for reliable messaging.
+
+If you're building your event processing in Vail, be sure to use event dot ack to acknowledge the receipt of your event.
+
+Network reliability concerns are baked into the Vantiq client.
+
+Developers can download static images or other resources that will still be present even if the network drops for a while.
+
+Called Offline Assets and program for when network accessibility fluctuates with the on network status changed event.
+
+I want to point out a couple of useful options in Vantiq CLI when doing large imports or exports between your edge device and a cloud system.
+
+And that is Dash Chunk which lets you choose the number of records to migrate at a time and Dash Edge which is intended for Tensorflow models being loaded into edge devices.
+
+There's also Dash Resume, which resumes an interrupted Tensorflow model load.
+
+Vantiq has a tool called VQS that allows node connections in both directions between cloud and edge installations.
+
+From the cloud side, reference the edge node connection using VQS: slash slash and then give it any name.
+
+Be sure to include an edge access token.
+
+From the edge side, reference the cloud node connection by its Uri starting with WSS instead of HTTPS.
+
+Then add a question mark at the end of the Uri and the name of the VQS name.
+
+This creates a web socket connection between the two nodes.
+
+In bootstrapping.
+
+We can also do this by a slightly different procedure which you will be learning in your lab.
+
+In the lab you'll be importing a project that works in the cloud, then deploy it to the edge where it will also work and then finally make it a bi directional distributed application in the edge and cloud using the BI directional bootstrapping process.
+
+Enjoy Vantiq on the edge.
+
+https://www.youtube.com/watch?v=VSdHZnxMdIk

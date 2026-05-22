@@ -1,0 +1,101 @@
+**Summary:**
+This content provides a detailed guide on performing database write operations in Vantiq using VAIL. It covers the syntax and usage of various database write commands such as INSERT, UPDATE, UPSERT, and DELETE. The guide explains how to insert records, perform bulk inserts, update records with conditions, handle errors during bulk updates, and use the UPSERT command to either update or insert records based on their existence. It also highlights the importance of using unique natural keys for upserts and the need for query constraints in delete operations. The content concludes with practical examples demonstrating these operations.
+
+**Original Content:**
+
+filename: 134_DML_L1_1.3_DBWrites
+video url: https://youtu.be/Rw_oSoVYn04
+
+Database writes in Vail database writes won't take much time at all to learn.
+
+We're going to go through each of the keywords and their syntax that Vail uses to conduct database writes.
+
+I should point out that if you attempt to do any of these on a schema type instead of a standard type, you will get an error and your rule or procedure will not compile.
+
+To accomplish an insert on a type, you just need the type name, the properties, and the values to go with those properties.
+
+Start off with the keyword INSERT.
+
+The word INTO is purely optional, followed by the type name.
+
+After that, there are three different variations on the syntax that will still be successful in accomplishing the insert.
+
+All the database write statements do include a processed BY clause, but as I said in the SELECT video, that's covered in the VAIL Procedures elective.
+
+Here's how the different syntax formations look in actual use.
+
+Each of these statements is doing exactly the same thing, which is adding a record of the same values of name and address to the customer data type.
+
+Note the example on the bottom.
+
+If the object is already formatted like the top, you can just insert it directly as shown.
+
+So this brings up a question, If you created an array of those objects and then inserted that into the type, would it perform a bulk insert?
+
+The answer is yes, it would.
+
+The UPDATE statement will update any and all records that meet the condition in the WHERE clause.
+
+Each of these examples is showing a differently formatted way to accomplish the same goal of updating all addresses for a particular customer name.
+
+Bulk updates come with error handling by default.
+
+A failure in one update would stop them all, but with the on error statement, just the one would fail and the rest of the valid updates would continue.
+
+Upsert is a command, probably unique to fail.
+
+The idea behind upsert is to update a record if it already exists or insert it if it doesn't.
+
+Behind the scenes 2 queries are still taking place.
+
+First the select to retrieve either a record or null, then the update or insert.
+
+Bulk upserts can be accomplished by specifying A variable bound to an array value.
+
+Upserts need unique natural keys.
+
+Also notice upserts do not have WHERE clauses.
+
+You're first specifying what the key is and then what's going to change.
+
+Last but not least, we have the DELETE statement, which works exactly like SQL to remove specified records from persistent data types.
+
+Be sure that the query constraint tightly controls what you want deleted, as the delete statement will affect any and all records that meet the WHERE clause specifications.
+
+I'm sure you remember this type from the last video.
+
+I've added a department property and I've also created a unique index on full name and made it the natural key as well because we're going to be using it for an uer later.
+
+But for now, we have this simle rocedure and right now it's going to add a new employee, Komiko Agawa.
+
+Let's run this and it looks like it ran successfully, but when I come back and notice the record is not here yet.
+
+You need to hit refresh in order for it to redraw.
+
+And here is Kumiko Agawa in the office and she's just started.
+
+So now I want to update the department of all employees where the department begins with C.
+
+So everybody in the children in custodial departments should join sales.
+
+Again, we don't see that until I refresh and notice now we've got everyone in sales time for an upsert, we are going to move Kumiko Agawa to the sales department as well.
+
+Upsert requires the full name because that is our natural key.
+
+And when I run this and then refresh, Kumiko has joined the sales department.
+
+Oh no, everyone in sales is going to be laid off here.
+
+We're deleting employees where anybody who's in sales, let's run it.
+
+4 rows were deleted.
+
+Let's see if that's true.
+
+Mario's all by himself Here once again are the database right?
+
+Keywords in VAIL and what they do.
+
+The filename: class/DML/134_DML_L1_1.3_DBWrites.txt
+
+https://www.youtube.com/watch?v=Rw_oSoVYn04

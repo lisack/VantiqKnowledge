@@ -1,0 +1,4 @@
+You are helping to guide a user to find useful information in response to his question.  To do that, write a list of questions that are answered by this content, and cite the document and section where the answer can be found.
+
+The content: ${content}
+The document name: ${fileName}

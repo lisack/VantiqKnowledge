@@ -1,0 +1,8 @@
+Certainly! Based on your example, here is the conversion of the embedded video HTML to the video's URL:
+
+```plaintext
+The document: filename: CS_Analytics.txt
+video url: https://www.youtube.com/watch?v=4rX1yn3KJ5k
+
+This video highlights two Visual Event Handler (AppBuilder) Activity Patterns: ComputeStatistics and Analytics, which cumulatively perform statistics and other analysis on quantifiable events.
+```

@@ -1,0 +1,55 @@
+Certainly! Below is the document with the embedded video HTML converted to the video's URL address:
+
+---
+
+**Summary:**  
+This content provides an overview of how developers can insert custom VAIL code into applications using the Vantiq App Builder. It discusses various activity patterns that facilitate custom coding, such as accumulating state, VAIL activity patterns, and transformation activity tasks. The document explains how these patterns allow developers to manipulate event data, call procedures, and perform database operations, while also highlighting the importance of managing imports for accessing external resources. The App Builder is primarily written in VAIL, offering developers multiple options to integrate their logic based on their specific needs.
+
+**Original Content:**  
+135_DCL1_L4_4.3_AppBldrVAIL
+
+App Builder VAIL Now that you've become familiar with the App Builder and with the proprietary language in which the App Builder is largely written, we can discuss where you can insert your own VAIL code into apps as needed.
+
+In this video, we'll focus on the activity patterns that facilitate custom coding in the App Builder.
+
+https://www.youtube.com/watch?v=roCv8i3uTCg
+
+Accumulate state is a way to collect information over a series of events going through the app.
+
+Developers add the logic to determine what that information is.
+
+That logic can be in the form of a few lines of VAIL code as seen above, or a separate called procedure.
+
+State is different than what we're going to be seeing for the VAIL block and for the procedure.
+
+We will be covering state in a future video.
+
+The VAIL activity pattern allows the developer to insert a little snippet of code to be run for every event that flows through the app.
+
+It is possible to call other procedures from here or do database operations, but bear in mind that performance will be affected.
+
+In this example, the code is overriding any previous value of the Name property in the event with the string owl effectively performing a transformation on events.
+
+Speaking of transformations, this is an activity pattern that can call a procedure in VAIL to be performed on every incoming event.
+
+What the procedure returns is what the new event value will be.
+
+If the transformation activity task will call a procedure to change events, is a procedure activity task the same thing by default?
+
+The answer could be yes, but the returned value of a procedure activity task doesn't have to become the outbound event.
+
+It can either become another property of the event, or the events aren't affected at all by what the procedure does.
+
+In any of the activity pattern configurations that might access other resources from outside of their respective services and packages, such as you see in the list above, you'll see a parameter for imports.
+
+Click on the null value to add items by their full names so they can be found by the app.
+
+If, by the way, you try to save your app and get an error saying something can't be found, chances are good that you need to import that resource.
+
+The App Builder is largely written in VAIL.
+
+Developers who need to add their own logic within an app have several options for doing so, depending on their purpose.
+
+The filename: class/E_EDAFound_142_DCL1_L4_4.2_AppBldrVAIL.txt
+
+---

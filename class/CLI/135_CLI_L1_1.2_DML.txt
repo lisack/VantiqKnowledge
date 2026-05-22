@@ -1,0 +1,46 @@
+**Summary:**
+
+This content provides an overview of using the Vantiq Command Line Interface (CLI) for data manipulation tasks, specifically focusing on selecting, updating, and deleting persistent data in types. It highlights the differences between using the CLI and the API, noting that the CLI is more suited for maintenance tasks like bulk uploads, while the API is better for creating and altering resources with greater granularity. The document includes a reference table for CLI data manipulation commands and provides examples of using select, insert, upsert, and delete commands. It emphasizes the importance of having a unique natural key for upserts and suggests using JSON files for more precise data selection.
+
+**Original Content:**
+
+filename: 135_CLI_L1_1.2_DML  
+video url: https://youtu.be/oFOJMljlSEo
+
+The CLI data manipulation language.
+
+The Vantiq CLI can select, update, and delete persistent data in types.
+
+The CLI can manipulate standard type data and so can the API.
+
+So why would we choose one tool over the other?
+
+Bear in mind that the CLI is meant for doing maintenance tasks on existing resources like bulk uploads, while the API can create and alter those resources.
+
+Here's a handy table of the CLI data manipulation language for reference.
+
+Generally, inserts and upserts are fine for up to about 1000 records, but the checked versions of them can easily handle even more.
+
+You can use the CLI select statement to verify that your bulk runs went smoothly.
+
+For greater precision in the selection, create a JSON file with the specifications and then use the minus qual option to include that file.
+
+In this example, you see that we're selecting all records from the type pump status where the RPMS property is greater than 4000.
+
+Insert, checked insert, upsert, and checked upsert all work the same way.
+
+Create an array of JSON records, then include it with the command as shown.
+
+Bear in mind that the type must have a unique natural key for upserts.
+
+You can't see it in the example exactly, but Molly Hua's hobby changed from ice skating to ice fishing after the upsert run.
+
+The delete command is a bulk delete.
+
+In other words, it takes out the entire type.
+
+In summary, use the CLI to perform and verify bulk data operations as needed.
+
+For creating and working with resources with deeper granularity, the API is the better tool.
+
+The filename: class/CLI/135_CLI_L1_1.2_DML.txt

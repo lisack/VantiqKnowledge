@@ -1,0 +1,129 @@
+**Summary:**
+This video focuses on configuring assemblies in Vantiq, particularly through the Configuration tab in the Assembly pane. It discusses the importance of making assemblies flexible for reuse by allowing certain properties to be configurable. The video explains how to create configuration properties, set default values, and map them to specific resources or procedures. It also covers testing configurations as a consumer and publishing assemblies to a catalog. The goal is to strike a balance between flexibility and ease of use for subscribers.
+
+**Original Content:**
+
+filename: 142_Assembly_L1_1.3_ConfigureAssemblies
+video url: https://youtu.be/5kNrq2Ojo4w
+
+Assembly Configuration In this video, we'll concentrate on the Configuration tab in the Assembly pane.
+
+In its current state, our simple Foundations class quiz application hardly needs any instructions.
+
+Once subscribers insert their own open AI key for the large language model, everything works as expected.
+
+That said, the usefulness of this assembly in its current form is severely limited.
+
+Subscribers can't change anything, so they can't reuse this installation for even a close purpose.
+
+This is the assembly authors dilemma.
+
+How to find the best trade off that allows subscribers to reuse the assembly for similar projects without allowing so many changes that subscribers are confused by all the choices?
+
+This brings us to the Configuration tab in the Assembly pane.
+
+This is probably the tab that requires the most thought, as it is where the author establishes how accommodating the assembly will be for similar, but not exact uses.
+
+Not everything can be configured.
+
+Once you choose to create a new configuration property, there's a limited number of types that it can be.
+
+Most of these are simle scalars, but notice components in the list, client, theme, et cetera.
+
+We'll use a few of these to see how they work as configurable properties.
+
+Viewing the configurable properties by resource makes it easy to see if there are specific aspects of a resource that can be made changeable.
+
+Notice that we can make the client theme into a configurable property by choosing Add a Configuration Property, which opens the pane on the right.
+
+We're calling this property Client Theme, and by default it will be in cornflower mode.
+
+Notice how these configurable properties are set up.
+
+You give them any name and description, then select their type.
+
+After that, you either provide a default value for the property or check the required box to force the subscriber to provide a value.
+
+Then there's an important section about where and how the property will be used.
+
+In the screenshot above, we've chosen Client as the resource, the specific client ID.
+
+Then what property of the client is being replaced, which is the color theme for the client in our assembly?
+
+Suppose we want our subscribers to be able to return the lesson content to the client in a way other than what we originally wrote a procedure for.
+
+We can accomplish this by creating an App component out of the Procedure Activity pattern that calls our Service procedure Get Content.
+
+Now the subscriber can substitute in an app component of their own with their own procedure that will retrieve the lecture content.
+
+There are also configuration properties we can use as variables in code.
+
+For an example, let's assume shockingly that some of the subscribers might want to use this application to quiz users on material other than the Foundation's class lectures.
+
+The main code that collects the material is called load DL1 and it's performing a search on the application's documents.
+
+A subscriber only needs to load their own lecture transcripts into the documents and set the search terms to collect them.
+
+That looks a lot like 2 settable properties in the assembly SI Name and Search name.
+
+I'm in my assemblies configuration tab and you can see that I have made five configurable properties.
+
+Two of them are Course Name and Reg search Name, and while the names don't quite match up here, they are being referenced in the code itself.
+
+The reason why the names don't have to quite match up is because they're being mapped in the configuration tab to the exact place where they're going to be used.
+
+So see, it's called Course Name, but it's being mapped to the procedure, the proper procedure, and the property.
+
+The exact same thing is happening with the red search name, which is being mapped to the search name within the Quiz Builder Load DL1 procedure.
+
+So those are scalar values being used as variables.
+
+Pretty straightforward.
+
+Let's take a look at this client theme.
+
+Notice it's being mapped to the client and by default it's Cornflour.
+
+Where did we get this cornflour?
+
+Do you remember the Add Assembly menu item?
+
+These are downloadable assemblies that include colored themes.
+
+Let's go ahead and download Pink, and once I do, Pink will automatically be one of the choices available to the client theme.
+
+At the bottom of our configuration list, we have a secret Subscribers need to provide their own Open AIAPI key in order for this assembly to work for them.
+
+And finally, we're going to allow our subscribers to swap out a whole chunk of their visual event handler by setting up a swappable app component.
+
+All there was before was a single activity task that called a service procedure that got content based on the lesson name.
+
+The subscriber will now have the freedom to swap in another app component that might do something more complex or just call another procedure.
+
+So these are the properties I've made configurable in order to make my assembly more flexible for different uses.
+
+I clicked Configure as Consumer so that I can test this application as if I were a subscriber myself.
+
+For now, I'll just leave all the default values and give it a trial run.
+
+It's interesting that the AI has decided that I get all three questions at once, but it's otherwise working.
+
+Developers who want certain actions to take place when the assembly is used can add code to the custom generation procedure.
+
+This is useful for ensuring that certain resources exist in the project, and if they don't, the code can make sure that they are created near the top left of the assembly.
+
+*** is a means to do a little sanity checking that the assembly will work as the author intended for consumers.
+
+Click on the Configure as Consumer icon to put the *** in consumer mode.
+
+Suddenly most of the information in the tabs will become read only, but all of the configurable properties will be visible and modifiable, and you can then run your application as if you were a subscriber.
+
+Authors may need to switch back and forth between the modes as they adjust their assemblies to be that perfect balance between flexibility and ease of use.
+
+To publish the assembly to a catalog, just click the cloud icon next to the catalog desired.
+
+Once published, the cloud icon will change to an X Clicking on that will unpublish the assembly, removing it from the availability in the catalog.
+
+The icon under update will turn blue and be clickable if changes have been made to the assembly since it was published.
+
+With a proper balance of configurations, users will be able to get the most out of your assemblies.
