@@ -1,0 +1,69 @@
+**144_MV_JoinAP**
+
+
+The Joint Activity Pattern The joint activity pattern in Service Event
+visual Event handlers combines events from different streams based on a
+commonality between them.
+
+
+Take a look at the event schema here.
+
+
+First has a string message and second has an integer, but they both have
+a property called common constraint.
+
+
+If we joined events from streams each based on one of these types, we'd
+get events that showed both a message and a digit where their common
+constraints matched.
+
+
+But events don't come into the system at exactly the same rate or
+quantity, so let's see how the join task behaves.
+
+
+Here's a visual event handler with two different event streams that
+will be joined based on their common constraint.
+
+
+Let's first configure the join activity pattern with what the 2 events
+have in common, which is first in dot common constraint set equal to 2nd
+in dot Common constraint within duration tells the system exactly how
+long to wait for matching events from all participating streams.
+
+
+Join order is very important.
+
+
+By default, the join goes from left to right with the left most side as
+the gating factor for whether or not you're going to see an event.
+
+
+Let's start by triggering event in the first in event stream with the
+common constraint of loop.
+
+
+The join stream will now wait 30 seconds to see if an event with the
+same common constraint comes through the 2nd stream and when it does, we
+now have a single event from both streams with the information from both
+events.
+
+
+What happens when event comes through the 2nd stream but no matching
+event comes from the first within that 32nd window?
+
+
+The answer is absolutely nothing.
+
+
+No event will occur and no timeout will ever occur because the join
+order starts from first in and it is the gating stream.
+
+
+If we send an event through the gating stream and no matching event
+arrives from the subordinate stream, a timeout event will occur.
+
+
+Finally, if a subordinate stream receives an event 1st and the gating
+stream receives the corresponding event that matches within the time
+frame, we will see an event.
