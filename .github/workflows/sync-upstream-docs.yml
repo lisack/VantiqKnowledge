@@ -1,0 +1,135 @@
+name: Sync docs from upstream Vantiq repos
+
+# Weekly sync of this knowledge repo from four upstream sources. Every target
+# is rebuilt from scratch each run (wipe-then-copy), so files removed upstream
+# never linger here. Only *.md is mirrored (this is a documentation corpus).
+#
+#   docs/             <- Vantiq/docs (PRIVATE), locale/en/md/dev/**.md
+#                        copied FLAT (subdirectory structure NOT preserved).
+#   extSrc/           <- Vantiq/vantiq-extension-sources (public)
+#                        *.md, structure PRESERVED.
+#   sdk/<shortname>/  <- every PUBLIC Vantiq repo whose name contains "sdk"
+#                        (discovered dynamically), *.md, structure PRESERVED.
+#   k8sdeploy_tools/  <- Vantiq/k8sdeploy_tools (PRIVATE)
+#                        *.md, structure PRESERVED.
+#
+# Prerequisite: repo secret VANTIQ_SYNC_TOKEN that can READ both private repos
+# (Vantiq/docs and Vantiq/k8sdeploy_tools). A fine-grained PAT with
+# Contents:Read on those two repos, or a classic PAT with the `repo` scope.
+# The public sources need no credentials.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'      # every Monday 06:00 UTC
+  workflow_dispatch: {}       # allow manual runs from the Actions tab
+
+permissions:
+  contents: write             # lets the job push the synced docs back
+
+concurrency:
+  group: sync-upstream-docs
+  cancel-in-progress: false
+
+env:
+  DEV_SRC_PATH: locale/en/md/dev          # subtree in Vantiq/docs
+  DOCS_DIR: docs                          # flat target
+  EXTSRC_REPO: Vantiq/vantiq-extension-sources
+  EXTSRC_DIR: extSrc                      # structure-preserving target
+  SDK_ORG: Vantiq
+  SDK_DIR: sdk                            # structure-preserving target
+  K8S_REPO: Vantiq/k8sdeploy_tools        # PRIVATE
+  K8S_DIR: k8sdeploy_tools                # structure-preserving target
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout VantiqKnowledge
+        uses: actions/checkout@v4
+
+      # 1) dev docs (private) -> docs/  (FLAT, wipe-then-copy)
+      - name: Sync dev markdown (flat) from Vantiq/docs
+        run: |
+          set -euo pipefail
+          git clone --no-checkout --depth 1 --filter=blob:none \
+            "https://x-access-token:${VANTIQ_SYNC_TOKEN}@github.com/Vantiq/docs.git" /tmp/vantiq-docs
+          ( cd /tmp/vantiq-docs && git sparse-checkout init --cone && git sparse-checkout set "${DEV_SRC_PATH}" && git checkout )
+          src="/tmp/vantiq-docs/${DEV_SRC_PATH}"
+          [ -d "$src" ] || { echo "::error::Source path ${DEV_SRC_PATH} not found in Vantiq/docs"; exit 1; }
+          dupes="$(find "$src" -type f -name '*.md' -printf '%f\n' | sort | uniq -d)"
+          if [ -n "$dupes" ]; then
+            echo "::error::Flattening would collide on these filenames:"; echo "$dupes"; exit 1
+          fi
+          rm -rf "${DOCS_DIR}"; mkdir -p "${DOCS_DIR}"
+          find "$src" -type f -name '*.md' -exec cp -f {} "${DOCS_DIR}/" \;
+        env:
+          VANTIQ_SYNC_TOKEN: ${{ secrets.VANTIQ_SYNC_TOKEN }}
+
+      # 2) extension sources (public) -> extSrc/  (structure preserved)
+      - name: Sync markdown from ${{ env.EXTSRC_REPO }} into ${{ env.EXTSRC_DIR }}/
+        run: |
+          set -euo pipefail
+          git clone --depth 1 "https://github.com/${EXTSRC_REPO}.git" /tmp/extsrc
+          rm -rf "${EXTSRC_DIR}"; mkdir -p "${EXTSRC_DIR}"
+          rsync -a --prune-empty-dirs \
+            --exclude='.git/' --include='*/' --include='*.md' --exclude='*' \
+            /tmp/extsrc/ "${EXTSRC_DIR}/"
+
+      # 3) all public Vantiq *sdk* repos -> sdk/<shortname>/  (structure preserved)
+      - name: Sync markdown from public Vantiq sdk repos into ${{ env.SDK_DIR }}/
+        run: |
+          set -euo pipefail
+          repos=()
+          page=1
+          while :; do
+            resp="$(curl -fsSL "https://api.github.com/orgs/${SDK_ORG}/repos?per_page=100&type=public&page=${page}")"
+            cnt="$(printf '%s' "$resp" | python3 -c 'import sys,json;print(len(json.load(sys.stdin)))')"
+            names="$(printf '%s' "$resp" | python3 -c "import sys,json;[print(r['name']) for r in json.load(sys.stdin) if not r.get('archived') and 'sdk' in r['name'].lower()]")"
+            [ -n "$names" ] && while IFS= read -r n; do repos+=("$n"); done <<< "$names"
+            [ "$cnt" -lt 100 ] && break
+            page=$((page+1))
+          done
+          if [ "${#repos[@]}" -eq 0 ]; then
+            echo "::error::No public Vantiq repos with 'sdk' in the name were found"; exit 1
+          fi
+          echo "sdk repos: ${repos[*]}"
+
+          rm -rf "${SDK_DIR}"; mkdir -p "${SDK_DIR}"
+          for repo in "${repos[@]}"; do
+            short="$(printf '%s\n' "$repo" | tr '-' '\n' | grep -viE '^(vantiq|sdk)$' | paste -sd- - || true)"
+            [ -z "$short" ] && short="$repo"
+            short="$(printf '%s' "$short" | tr '[:upper:]' '[:lower:]')"
+            git clone --depth 1 "https://github.com/${SDK_ORG}/${repo}.git" "/tmp/sdk_${short}"
+            mkdir -p "${SDK_DIR}/${short}"
+            rsync -a --prune-empty-dirs \
+              --exclude='.git/' --include='*/' --include='*.md' --exclude='*' \
+              "/tmp/sdk_${short}/" "${SDK_DIR}/${short}/"
+          done
+
+      # 4) k8s deploy tools (private) -> k8sdeploy_tools/  (structure preserved)
+      - name: Sync markdown from ${{ env.K8S_REPO }} into ${{ env.K8S_DIR }}/
+        run: |
+          set -euo pipefail
+          git clone --depth 1 \
+            "https://x-access-token:${VANTIQ_SYNC_TOKEN}@github.com/${K8S_REPO}.git" /tmp/k8s
+          rm -rf "${K8S_DIR}"; mkdir -p "${K8S_DIR}"
+          rsync -a --prune-empty-dirs \
+            --exclude='.git/' --include='*/' --include='*.md' --exclude='*' \
+            /tmp/k8s/ "${K8S_DIR}/"
+        env:
+          VANTIQ_SYNC_TOKEN: ${{ secrets.VANTIQ_SYNC_TOKEN }}
+
+      - name: Commit & push if anything changed
+        run: |
+          set -euo pipefail
+          git config user.name  "vantiq-docs-sync[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          targets="${DOCS_DIR} ${EXTSRC_DIR} ${SDK_DIR} ${K8S_DIR}"
+          if [ -n "$(git status --porcelain -- $targets)" ]; then
+            git add -- $targets
+            git commit -m "chore(docs): sync from upstream Vantiq repos ($(date -u +%Y-%m-%d))"
+            git push
+            echo "Synced changes pushed."
+          else
+            echo "No documentation changes upstream."
+          fi
