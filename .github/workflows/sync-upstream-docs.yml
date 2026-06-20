@@ -133,3 +133,12 @@ jobs:
           else
             echo "No documentation changes upstream."
           fi
+
+      # Hop ②: refresh the manifested kr/ corpus in _144_TestKRMCP from the
+      # just-synced working tree. Content-only: refreshes docs that drifted,
+      # leaves manifests/structure and namespace-native docs untouched.
+      - name: Publish refreshed docs to _144_TestKRMCP namespace
+        run: python3 .github/scripts/kr_sync.py --publish
+        env:
+          KR_TOKEN: ${{ secrets.VANTIQ_KR_WRITE_TOKEN }}
+          KR_REPO: ${{ github.workspace }}
