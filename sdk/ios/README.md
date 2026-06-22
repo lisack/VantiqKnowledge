@@ -1,5 +1,3 @@
-Vantiq SDK for iOS
-
 # vantiq-sdk-ios
 
 [![CI Status](http://img.shields.io/travis/Vantiq/vantiq-sdk-ios.svg?style=flat)](https://travis-ci.org/Vantiq/vantiq-sdk-ios)

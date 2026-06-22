@@ -283,6 +283,20 @@ Select which of these three debug panes is visible by using the pull-down menu i
 
 Use the **Collapse Dock Down** button to collapse the Debug Dock to save space in the IDE. Use the **Expand Dock Up** button to restore the Debug Dock to its full height. In expanded state, the vertical size of the dock is changed by clicking and dragging on the gray dividing line at the top of the dock.
 
+## Deleting Projects and Resources
+
+Projects can be deleted from the **Projects > Manage Projects...** dialog by selecting one or more projects in the list and clicking **Delete Selected**, or by right-clicking a single project and choosing **Delete**. This will present a confirmation dialog with two choices:
+
+* **Delete Project(s)**— removes only the project entries themselves. The resources inside those projects are left in the namespace and remain available to any other project that references them.
+* **Delete Project(s) and Resources** — removes the selected projects *and* the resources they contain.
+
+When you choose **Delete Project and Resources**, the IDE will only delete a resource if every project that currently references it is also being deleted in the same operation. In other words, a resource is preserved when at least one project that is *not* part of the current deletion still uses it. This protects shared resources from being unintentionally removed when a project that happens to reference them is deleted.
+
+For example, if Project A and Project B both reference a Type `Sensor`:
+
+* Deleting only Project A with **Delete Project and Resources** will leave `Sensor` in place because Project B still uses it.
+* Selecting both Project A and Project B and choosing **Delete Projects and Resources** will remove `Sensor`, because no remaining project references it.
+
 ## Integration with Version Control Systems
 
 Modelo allows you to "export" a Project and its contents into a zip file. Once this zip has been expanded into a directory tree it can be checked into a Version Control System (VCS) such as Git or TFS. 

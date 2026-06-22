@@ -26,7 +26,7 @@ A **source** resource defines the integration with a specific MQTT stream and co
 	* **automaticReconnect** true if the client should attempt to reconnect on connection failure
 	* **qos** Quality of Service level for the topics the stream subscribes to. QoS is defined as a String with one of the following values: `AT_MOST_ONCE`, `AT_LEAST_ONCE` or `EXACTLY_ONCE`. If not specified, defaults to `AT_LEAST_ONCE`. Note that the QoS for PUBLISH must be specified on the VAIL Publish command-line and defaults to `AT_MOST_ONCE`.
 
-While the configuration properties listed above are the most commonly used, the config JSON object maps to the [Vert.x MQTT Client Options](<https://vertx.io/docs/4.2.3/apidocs/io/vertx/mqtt/MqttClientOptions.html>) configuration. Therefore, any property supported by `MqttClientOptions` can be added to the config object, even if it is not explicitly listed here. One
+While the configuration properties listed above are the most commonly used, the config JSON object maps to the [Vert.x MQTT Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/mqtt/MqttClientOptions.html>) configuration. Therefore, any property supported by `MqttClientOptions` can be added to the config object, even if it is not explicitly listed here. One
 example would be to specify a maximum message size using the `maxMessageSize` property or configure the client [to use SSL](#ssl-setup).
 
 ## Create an MQTT Source
@@ -60,7 +60,7 @@ POST https://dev.vantiq.com/api/v1/resources/sources
     "name": "myMqttSource",
     "type": "MQTT",
     "config": {
-        "serverURIs": ["tcps://me.vantiq.com:1883"],
+        "serverURIs": ["tcps://me.vantiq.com:8883"],
         "topics": ["com/accessg2/stream/mqtt/example"],
         "keepAliveInterval": 30,
         "connectionTimeout": 30,
@@ -119,7 +119,7 @@ for the time of the network connection.
 
 ## SSL Setup
 
-An MQTT source can be configured for either one-way or two-way SSL communication by specifying additional [Vert.x MQTT Client Options](<https://vertx.io/docs/4.2.3/apidocs/io/vertx/mqtt/MqttClientOptions.html>) configuration properties expressed as their JSON representation. Below are some usage examples. Note that SSL configuration properties
+An MQTT source can be configured for either one-way or two-way SSL communication by specifying additional [Vert.x MQTT Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/mqtt/MqttClientOptions.html>) configuration properties expressed as their JSON representation. Below are some usage examples. Note that SSL configuration properties
 for AMQP, MQTT and Remote sources are identical in their usage. You can look at the SSL Setup documentation for those
 sources for additional examples.
 
@@ -132,7 +132,7 @@ If the trust store is accessible on a file system readable by the Vantiq server 
 
 ```json
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "username": "user",
     "password": "password",
@@ -151,7 +151,7 @@ can be specified as a base64 encoded value,
 $ cat /path/to/sourceTrustStore.jks | base64
 
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "username": "user",
     "password": "password",
@@ -170,7 +170,7 @@ $ cat /path/to/sourceTrustStore.jks | base64
 # Also define a Secret named SourceTrustStorePassword containing the trust store password
 
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "username": "user",
     "password": "password",
@@ -186,7 +186,7 @@ Assuming that two CA certificates must be trusted and are accessible from files 
 
 ```json
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "username": "user",
     "password": "password",
@@ -205,7 +205,7 @@ $ cat /path/to/ca-cert-1 | base64
 $ cat /path/to/ca-cert-2 | base64
 
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "username": "user",
     "password": "password",
@@ -228,7 +228,7 @@ If the key store is accessible on a file system readable by the Vantiq server,
 
 ```json
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "trustStoreOptions": {
         "path": "/path/to/sourceTrustStore.jks",
@@ -254,7 +254,7 @@ $ cat /path/to/sourceKeyStore.jks | base64
 # Also define the store passwords as Secrets (SourceTrustStorePassword and SourceKeyStorePassword)
 
 {
-    "serverURIs": ["tcps://me.vantiq.com:1883"],
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
     "topics": ["com/accessg2/stream/mqtt/example"],
     "trustStoreOptions": {
         "value": "@secrets(SourceTrustStore)",
@@ -267,7 +267,40 @@ $ cat /path/to/sourceKeyStore.jks | base64
 }
 ```
 
-Refer to the [Vert.x MQTT Client Options](<https://vertx.io/docs/4.2.3/apidocs/io/vertx/mqtt/MqttClientOptions.html>)
+Instead of using a Java keystore, the client certificate and private key can be provided directly in PEM format using `pemKeyCertOptions`. Both the client certificate and its corresponding private key must be specified.
+
+For example, if the client certificate is in `client-cert.pem` and the private key is in `client-key.pem`,
+
+```json
+# Copy/paste the following output to a Secret named ClientCert
+$ cat /path/to/client-cert.pem | base64
+# Copy/paste the following output to a Secret named ClientKey
+$ cat /path/to/client-key.pem | base64
+
+{
+    "serverURIs": ["tcps://me.vantiq.com:8883"],
+    "topics": ["com/accessg2/stream/mqtt/example"],
+    "pemTrustOptions": {
+        "certValues": ["@secrets(CertAuthority1)", "@secrets(CertAuthority2)"]
+    },
+    "pemKeyCertOptions": {
+        "certValues": [
+            "@secrets(ClientCert)"
+        ],
+        "keyValues": [
+            "@secrets(ClientKey)"
+        ]
+    }
+}
+```
+
+With this configuration:
+
+- `pemTrustOptions` defines which Certificate Authorities (CAs) the client trusts when validating the broker’s certificate.
+- `pemKeyCertOptions.certValues` provides the client certificate sent to the broker during the TLS handshake.
+- `pemKeyCertOptions.keyValues` provides the private key used to prove ownership of that certificate.
+
+Refer to the [Vert.x MQTT Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/mqtt/MqttClientOptions.html>)
 document for a complete list of configuration options. Note: in that document, a reference to `Buffer`
 means that a base64 encoded value can be specified (e.g., trustStoreOptions). Any `add` method translates into an array
 (e.g., pemTrustOptions) and any `set` method translates into a single property setting (e.g., path or value).

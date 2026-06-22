@@ -119,6 +119,14 @@ Global resources can also be referenced through the use of imports.  The followi
     
 provides access to the type *Robots* from the global scope.
 
+#### Topic imports
+
+Specifically for topic imports, the resourceId must be enclosed in quotes. E.g.
+
+```
+import topic "/com.example.pkg/sensors/temperature"
+```
+
 # VAIL Declarations
 
 [Rules](#rules), [services](#services), and [procedures](#procedures) are created by submitting a VAIL declaration of the resource. The body of a rule or procedure consists of a sequence of [VAIL statements](#statements).
@@ -533,7 +541,7 @@ A service procedure declaration consists of an optional [visibility modifier](#v
 <VAIL Statements>*
 ```
 
-Any comment at the top of a procedure declaration becomes the _description_ for the procedure.  This description will be passed to any use of the procedure or its service in the [Submit Prompt ActivityPattern](apps.md#submit-prompt), [LLM.submitPrompt procedure](#llm) or [Tool GenAI Component](genaibuilder.md#tool).  The top-level comment/description must be before any [Package Declaration](#package-declaration) for the procedure, if there is one.
+Any comment at the top of a procedure declaration becomes the _description_ for the procedure.  This description will be passed to any use of the procedure or its service in the [Submit Prompt ActivityPattern](apps.md#submit-prompt), [io.vantiq.ai.LLM.submitPrompt procedure](#llm) or [Tool GenAI Component](genaibuilder.md#tool).  The top-level comment/description must be before any [Package Declaration](#package-declaration) for the procedure, if there is one.
 
 For example:
 
@@ -558,7 +566,7 @@ The procedure visibility modifier governs whether or not a procedure can be invo
 
 * `PRIVATE` -- indicates that the procedure can only be invoked from another procedure in the same service or from a [service event handler](services.md#event-handlers) defined by the service.  Useful for modularizing internal service behavior without having to make it part of the service interface.  Private procedures cannot be invoked remotely.  Invocation of a stateful private procedure by a procedure with a conflicting state access modifier (for example partitioned from stateless) is legal, but requires the use of the [EXECUTE](#execute) statement.
 
-<b id ="state-access-modifiers">State Access Modifiers</b>
+<b id="state-access-modifiers">State Access Modifiers</b>
 
 Service procedures have access to any state that is defined by their service.  There are 4 possible state access patterns:
 
@@ -1668,6 +1676,8 @@ The package names `io.vantiq` and `system` are reserved and may not be used.
 
 ### Resource Import
 
+Imports are **useful** when targeting packaged resources, and **necessary** when targeting unpackaged resources.
+
 Using an `import` statement allows the resource instance to be referenced using just its simple name (typically the part after the last “.”) or by the specified alias if one is provided.  The syntax is:
 
 ```
@@ -1720,7 +1730,7 @@ There are several circumstances that result in implicit declaration of a variabl
 
 ### Variable References
 
-Several VAIL operations support the use of variable references in order to dynamically specify the target of the statement.  Variable references have the form `@<variableName>` and indicate that the system should use the current value of the variable as the name of the target resource.  For example, the following code:
+The `@<variableName>` form is a **dynamic resource reference**, not a generic value reference.  It tells the system to read the variable's current value and use it as the *name of a target resource* (type, topic, source, node) in clauses where the grammar expects a resource identifier.  For example, the following code:
 
     var variableName = "Sensor"
     SELECT * FROM @variableName AS s
@@ -1729,8 +1739,42 @@ results in the system issuing a SELECT against the type **Sensor** and is equiva
 
 	SELECT * FROM Sensor as s
 
+#### Valid Positions -- Resource-Targeting Clauses
+
+The `@<variableName>` form may be used wherever a clause expects the name of a resource:
+
+    var typeName = "Sensor"
+    SELECT * FROM @typeName AS s              // type reference
+
+    var topicName = "/myTopic/subtopic/new"
+    PUBLISH event TO TOPIC @topicName         // topic reference
+
+    var sourceName = "mySource"
+    PUBLISH event TO SOURCE @sourceName       // source reference
+
+    var nodeName = "remoteNode"
+    EXECUTE foo() PROCESSED BY @nodeName      // node reference
+
+In each case, `@<variableName>` is equivalent to having written the resource name as a literal identifier in that position.
+
 The documentation of each operation will indicate when/if this construct is explicitly supported (no mention means that there is no support in that context).
-    
+
+#### Invalid Positions -- Value Contexts
+
+In any position where the grammar expects a *value* -- WHERE comparisons, arithmetic, the right-hand side of an [assignment](#assignment), procedure arguments, [object](#object) or [array](#arrays) literal elements, return expressions, and so on -- use the **bare variable name**, not `@variableName`.  Bare identifiers in those contexts already resolve to the variable's value, so `@` is both unnecessary and an error.
+
+    // CORRECT -- bare names in value contexts
+    var cutoff = now().minusMillis(90 days)
+    SELECT * FROM system.collaborations AS c WHERE c.ars_createdAt < cutoff
+    var total = x + y
+    log.info("v={}", [val])
+    return result
+
+    // WRONG -- `@` is not a value-reference operator
+    SELECT * FROM system.collaborations AS c WHERE c.ars_createdAt < @cutoff   // parse error
+    var total = @x + @y                                                        // parse error
+    log.info("v={}", [@val])                                                   // parse error
+
 ### Assignment
 
 A traditional assignment statement is available to assign a value to a variable.  The example assignment:
@@ -2023,6 +2067,12 @@ EXECUTE * ("parm1", "parm2") WHERE name == procName
     
 This will execute either a procedure named: **paul** or a procedure named: **sharon** depending on the value of the variable: **a**.
 
+When the target is a [service procedure](#service-procedures), the constraint can also filter on `serviceName` to unambiguously identify the procedure within a specific service:
+
+```
+EXECUTE * () WHERE name == "myProcedure" and serviceName == "com.example.MyService"
+```
+
 A convenient technique for selecting procedures on criteria other than name is to qualify the request on the value of  **properties** in the **procedures** resource. The **properties** value can be set when the procedure is defined using the [`WITH` clause](#with-clause). For example, if **properties** for a procedure contains an object in the following form:
 
 ```json
@@ -2162,7 +2212,7 @@ For example:
     var eventType = "PipelineMonitor/recordData"
     PUBLISH { segmentId: "123", pressure: 50.0 } TO SERVICE EVENT @eventType
 
-The referenced [service event type](services.md#event-types) must be *inbound*.
+The referenced [service event type](services.md#event-types) must be *inbound*, unless the publishing procedure or handler belongs to the service that owns the event type.
 
 ### Sending to an External System
 
@@ -2656,7 +2706,7 @@ VAIL uses exceptions to handle errors and other exceptional events.  An exceptio
 
 * **code** -- a `String` value used to identify the error (and its associated message template).  The "error codes" for exceptions produced by Vantiq begin with `io.vantiq` (there are also some legacy error codes beginning with `com.accessg2.ag2rs`).
 * **message** -- a `String` value which contains the fully formatted form of the error message.
-* **params** -- an `Array` value which contains the substitution parameters that were used to construct the fully formatted error message.  The items in the `Array` may be of any legal VAIL type.
+* **params** -- an `Array` value which contains the substitution parameters that were used to construct the fully formatted error message.  The items in the `Array` may be of any legal [VAIL type](#vail-types).
 * **isFormatted** -- a `Boolean` value which indicates whether the message has already been formatted. This is primarily for internal use. Generally, any value that comes from an exception event will have `isFormatted` set to `true`. If VAIL code builds exception values by hand, `isFormatted` should correspond to the state of the `message` property. If `true` then the `message` property must contain the fully formatted message.  If `false` then the `message` property must contain the message template (see the [Java MessageFormat class](https://docs.oracle.com/javase/8/docs/api/java/text/MessageFormat.html)) and the `params` property must contain the substitution parameters. Omission of the `isFormatted` property is equivalent to setting it to `false`.
 
 After an exception occurs, the runtime system attempts to find something to handle it. The set of possible "somethings" to handle the exception is the ordered list of procedures that had been called to get to the procedure where the error occurred. The list of procedures is known as the *call stack*.  In the case of the processing of a rule, the rule will always be at the top of this stack.
@@ -3360,15 +3410,127 @@ The following procedures are designed to provide syntax and semantics that align
 
 As described in the [Services Section](resourceguide.md#services) of the Resource Guide, services are a resource used to organize collections of procedures. The following is a list of Built-In Services.
 
+> **Referencing a built-in service from inside a package.**
+> 
+> When a rule or procedure declares a `package`, an unqualified name resolves against that package scope, not the global scope (the same rule that governs calls between procedures in a service). A bare reference such as `Notification.retractPayload(...)` is therefore looked up as `<your.package>.Notification.retractPayload` and fails — and if a local service of the same name exists, it silently shadows the built-in. To use a built-in service from a packaged resource, import it after the `package` line, e.g. `import service Notification`. Exception: certain services (e.g. **Math**, **ResourceAPI**) resolve by their bare name from any scope with no import (importing it is harmless but only adds a WARNING). Try importing built-in services first, and later remove any imports indicated by a warning.
+
 ### A2A
 
 The **io.vantiq.ai.A2A** service provides utility procedures related to the [Agent to Agent protocol](https://a2a-protocol.org/latest/specification/).
 
-* **A2A.getAgentCard(agentName String Required)** -- returns the [Agent Card](https://a2a-protocol.org/latest/specification/#55-agentcard-object-structure) for the named agent.
+* **io.vantiq.ai.A2A.getAgentCard(agentName String Required)** -- returns the [Agent Card](https://a2a-protocol.org/latest/specification/#55-agentcard-object-structure) for the named agent.
+* **io.vantiq.ai.A2A.messageSend(agentName String Required, message io.vantiq.a2a.Message Required, options Object): io.vantiq.a2a.Task** -- sends *message* to the agent identified by *agentName* and returns the resulting [Task](https://a2a-protocol.org/latest/specification/#61-task-object). The *message*'s `role` must be `"user"`. When invoked from within an agent, the receiving agent runs as a subtask of the calling agent's current task; otherwise it runs as a top-level request to the named agent service. The *options* parameter is used to influence the message sending behavior. It is an `Object` with the following (optional) sub-properties:
+    * **propagateContext** (Boolean) -- when set to `true` (the default), the value of the message's *contextId* property will be set that of the currently executing task. Only applies if the message's *contextId* is not already set.
+    * **propagateExtensions** (Boolean) -- when set to `true` (the default is `false`), the value of the message's *extensions* property will be set to that of the currently executing task. Only applies if the message's *extensions* property is not already set.
 
-The following types are defined as part of the A2A framework:
+* **io.vantiq.ai.A2A.messageStream(agentName String Required, message io.vantiq.a2a.Message Required, options Object): Sequence** -- equivalent to **io.vantiq.ai.A2A.messageSend**, but returns a `Sequence` so callers can observe events emitted while the receiving agent processes the request rather than waiting for the completed [Task](#task). Events are forwarded through the sequence in the order they occur; the final event is always a [TaskStatusUpdate](#taskstatusupdate) whose *final* flag is `true` and whose *status.state* is one of the terminal task states (e.g. `"completed"`, `"failed"`). Each streamed event is one of:
+    * [Task](#task) (`kind` is `"task"`) -- the task created from the supplied *message*. Typically the first event in the sequence, emitted with `status.state` set to `"submitted"`.
+    * [TaskArtifactUpdate](#taskartifactupdate) (`kind` is `"artifact-update"`) -- a streamed delivery of an [artifact](#artifact) produced by the receiving agent.
+    * [TaskStatusUpdate](#taskstatusupdate) (`kind` is `"status-update"`) -- a streamed status change for the task.
 
-* **io.vantiq.a2a.Task** -- represents a stateful unit of work being processed by the agent. Can only be called when processing requests that were received via the standard [agent framework](agents.md#defining-agents). In the current release this will only occur when an agent is invoked during [plan execution](#agent).
+The A2A framework defines the following types:
+
+#### Artifact
+
+The **io.vantiq.a2a.Artifact** type represents a tangible output generated by an agent during the processing of a [Task](#task). Artifacts are the results or products of the agent's work; they are provided as input to **io.vantiq.ai.Agent.sendTaskArtifactUpdate** and surface as part of a task's `artifacts` list. The properties are:
+
+* **artifactId** (String) -- a unique identifier for the artifact. Auto-generated as a UUID if not supplied.
+* **name** (String) -- an optional human-readable name for the artifact.
+* **description** (String) -- an optional description of the artifact's content.
+* **parts** (io.vantiq.a2a.Part[]) -- the artifact's content, expressed as a list of [parts](#part).
+* **metadata** (Object) -- extension metadata for the artifact. Used by the framework to track the artifact's declared [VAIL type](#vail-types) (under the `declaredType` key, populated by builders such as **io.vantiq.a2a.Artifact.forValue** and **io.vantiq.a2a.Artifact.forResource**) and any associated discussion reference (under the `discussionReference` key).
+* **extensions** (String[]) -- URIs identifying A2A protocol extensions that are present in or contributed to this artifact. Defaults to a list containing the Vantiq artifact-type and JSON-value extensions.
+
+The following procedures construct instances of **io.vantiq.a2a.Artifact**:
+
+* **io.vantiq.a2a.Artifact.build(parts io.vantiq.a2a.Part[] Required, artifactId String, name String, description String, metadata Object, extensions String[]): io.vantiq.a2a.Artifact** -- constructs an Artifact from the supplied *parts*. The remaining parameters set the corresponding properties of the resulting artifact and may be omitted.
+* **io.vantiq.a2a.Artifact.forValue(value Any Required, declaredType String): io.vantiq.a2a.Artifact** -- constructs an Artifact holding *value*. If *value* is a list, one [Part](#part) is produced for each element; otherwise a single Part holds *value*. The optional *declaredType* identifies the [VAIL type](#vail-types) of *value* and is recorded in the artifact's metadata under the `declaredType` key; if omitted, `Any` is used.
+* **io.vantiq.a2a.Artifact.forResource(resourceName String Required, value Any Required): io.vantiq.a2a.Artifact** -- equivalent to **io.vantiq.a2a.Artifact.forValue**, with *declaredType* derived from *resourceName* (a Vantiq system resource name or type, or an arbitrary type name). In addition, each resulting [Part](#part) is annotated with a resource reference to the underlying instance so that consumers can resolve it later.
+
+#### Message
+
+The **io.vantiq.a2a.Message** type represents a single communication turn -- or a piece of contextual information -- between a client and an agent. Messages are used for instructions, prompts, replies, and status updates. Instances are provided as input to procedures such as **io.vantiq.ai.A2A.messageSend**, **io.vantiq.ai.A2A.messageStream**, and **io.vantiq.ai.Agent.sendTaskStatusUpdate**, and surface as part of a [Task](#task)'s `history`. The properties are:
+
+* **messageId** (String) -- a unique identifier for the message, supplied by its creator. Auto-generated as a UUID if not supplied.
+* **role** (String) -- the role of the message originator. Must be either `"user"` (the default, used for messages from the client) or `"agent"` (used for messages from the agent). Must be `"user"` when sending a message to an agent via **io.vantiq.ai.A2A.messageSend** or **io.vantiq.ai.A2A.messageStream**.
+* **parts** (io.vantiq.a2a.Part[]) -- the message content, expressed as a list of [parts](#part).
+* **taskId** (String) -- the id of the task this message is related to, if any.
+* **contextId** (String) -- the context the message is associated with.
+* **metadata** (Object) -- extension metadata for the message.
+* **extensions** (String[]) -- URIs identifying A2A protocol extensions that are present in or contributed to this message. The Vantiq supported extensions are:
+    * `https://vantiq.com/agents/discussion` -- requests the use of Vantiq [discussions](agents.md#discussions).
+    * `https://vantiq.com/agents/data/rfc7159` -- allows the use of RFC7159 compliant values in an [artifacts's](#artifact) data [part](#part). Enabled by default and cannot be disabled.
+    * `https://vantiq.com/agents/artifacts/typing` -- adds VAIL typing information to the [artifact](#artifact) metadata. Only applies to artifacts created from typed procedure results. Enabled by default and cannot be disabled.
+* **referenceTaskIds** (String[]) -- the ids of tasks referenced as context by this message.
+
+The following procedures construct instances of **io.vantiq.a2a.Message**:
+
+* **io.vantiq.a2a.Message.build(parts io.vantiq.a2a.Part[] Required, messageId String, taskId String, contextId String, role String, metadata Object, extensions String[], referenceTaskIds String[]): io.vantiq.a2a.Message** -- constructs a Message from the supplied *parts*. The remaining parameters set the corresponding properties of the resulting message and may be omitted; *role* defaults to `"user"` and *messageId* is auto-generated when not supplied.
+* **io.vantiq.a2a.Message.forValue(value Any Required): io.vantiq.a2a.Message** -- constructs a Message holding *value*. If *value* is a list, one [Part](#part) is produced for each element via **io.vantiq.a2a.Part.forValue**; otherwise a single Part holds *value*.
+
+#### Part
+
+The **io.vantiq.a2a.Part** type represents a distinct piece of content within a [Message](#message) or [Artifact](#artifact). A Part is a union type whose concrete shape is determined by its *kind*: a `text` part holds plain text, a `data` part holds structured JSON data, and a `file` part holds file content. The properties are:
+
+* **kind** (String) -- the kind of content held by the part. One of:
+    * `text` -- the part holds plain textual content. The *text* property is populated.
+    * `data` -- the part holds structured JSON data. The *data* property is populated.
+    * `file` -- the part holds file content. The *file* property is populated.
+* **metadata** (Object) -- extension metadata associated with the part. The framework records the part's declared [VAIL type](#vail-types) under the `declaredType` key, and a reference to the underlying Vantiq instance (when applicable) under the `resourceReference` key.
+* **text** (String) -- the textual content of the part. Present when *kind* is `text`.
+* **data** (Object) -- the structured data of the part. Present when *kind* is `data`.
+* **strict** (Boolean) -- present when *kind* is `data`. When `true`, *data* must be a JSON Object; when `false` (the default), *data* may be any value permitted by [RFC 7159](https://datatracker.ietf.org/doc/html/rfc7159).
+* **file** (Object) -- the file content for the part. Present when *kind* is `file`. Has the following properties:
+    * **bytes** (String) -- the file's content as a Base64-encoded string. Mutually exclusive with *uri*.
+    * **uri** (String) -- a URL from which the file's content can be retrieved. Mutually exclusive with *bytes*.
+    * **name** (String) -- the file's original filename (e.g. `"report.pdf"`).
+    * **mimeType** (String) -- the file's media type (e.g. `"image/png"`). Strongly recommended.
+
+The following procedures construct instances of **io.vantiq.a2a.Part**:
+
+* **io.vantiq.a2a.Part.forValue(value Any Required, declaredType String): io.vantiq.a2a.Part** -- constructs a Part holding *value*. If *value* is already a Part it is returned unchanged; if *value* is a Map a `data`-kind part is produced; otherwise a `text`-kind part is produced from the string representation of *value*. The optional *declaredType* identifies the [VAIL type](#vail-types) of *value* and is recorded in the part's metadata under the `declaredType` key; if omitted, `Any` is used.
+* **io.vantiq.a2a.Part.buildText(text String Required, metadata Object): io.vantiq.a2a.Part** -- constructs a `text` part containing *text*.
+* **io.vantiq.a2a.Part.buildData(data Object Required, metadata Object, strict Boolean): io.vantiq.a2a.Part** -- constructs a `data` part containing *data*. When *strict* is `true`, *data* must be a JSON Object; when `false` (the default), *data* may be any JSON value.
+* **io.vantiq.a2a.Part.buildFileFromBytes(bytes String Required, name String, mimeType String, metadata Object): io.vantiq.a2a.Part** -- constructs a `file` part whose content is *bytes*, supplied as a Base64-encoded string.
+* **io.vantiq.a2a.Part.buildFileFromUri(uri String Required, name String, mimeType String, metadata Object): io.vantiq.a2a.Part** -- constructs a `file` part whose content is referenced by *uri*.
+
+#### Task
+
+The **io.vantiq.a2a.Task** type represents the stateful unit of work being processed by an agent on behalf of a client. A task encapsulates the entire interaction related to a specific goal or request. Tasks are created when an agent receives a request via the standard [agent framework](agents.md#defining-agents); in the current release this only occurs when an agent is invoked during [plan execution](#agent). The currently active Task can be retrieved from within an agent via **io.vantiq.ai.Agent.getCurrentTask**. The properties are:
+
+* **id** (String) -- a unique identifier for the task.
+* **contextId** (String) -- a server-generated identifier used for contextual alignment across interactions.
+* **status** (Object) -- the current status of the task. Has the following properties:
+    * **state** (String) -- the task's lifecycle state. One of: `submitted`, `working`, `input-required`, `completed`, `canceled`, `failed`, `rejected`, `auth-required`, or `unknown`. The terminal states (no further transitions possible) are `completed`, `canceled`, `failed`, and `rejected`; `failed` and `rejected` additionally indicate an error condition.
+    * **message** (io.vantiq.a2a.Message) -- an optional [message](#message) supplying additional status information from the agent.
+    * **timestamp** (String) -- ISO 8601 datetime string indicating when the status was recorded (e.g. `"2023-10-27T10:00:00Z"`).
+* **history** (io.vantiq.a2a.Message[]) -- the [messages](#message) exchanged so far during the processing of the task.
+* **artifacts** (io.vantiq.a2a.Artifact[]) -- the [artifacts](#artifact) produced by the agent while processing the task.
+* **metadata** (Object) -- extension metadata for the task.
+* **parentTask** (io.vantiq.a2a.Task) -- when this task was created as a subtask of another (e.g. via **io.vantiq.ai.A2A.messageSend** invoked from inside an agent), the parent task; otherwise `null`. This is a Vantiq extension to the standard A2A Task and is not present in the task's serialized form.
+
+#### TaskArtifactUpdate
+
+The **io.vantiq.a2a.TaskArtifactUpdate** type represents the streamed delivery of an [Artifact](#artifact) produced for a [Task](#task). Instances are emitted by **io.vantiq.ai.Agent.sendTaskArtifactUpdate** and surface as one of the event types in the `Sequence` returned by **io.vantiq.ai.A2A.messageStream** and **io.vantiq.ai.Agent.executePlanAsSequence**. The properties are:
+
+* **taskId** (String) -- the unique identifier of the task that produced the artifact.
+* **contextId** (String) -- the server-generated identifier used for contextual alignment across interactions.
+* **artifact** (io.vantiq.a2a.Artifact) -- the [artifact](#artifact) that was generated or updated.
+* **append** (Boolean) -- when `true`, the content of *artifact* should be appended to a previously sent artifact with the same id rather than treated as a replacement.
+* **lastChunk** (Boolean) -- when `true`, this is the final chunk of *artifact*.
+* **metadata** (Object) -- extension metadata for the update.
+* **kind** (String) -- the event type. Always `"artifact-update"`.
+
+#### TaskStatusUpdate
+
+The **io.vantiq.a2a.TaskStatusUpdate** type represents a streamed status change for a [Task](#task). Instances are emitted by **io.vantiq.ai.Agent.sendTaskStatusUpdate** and surface as one of the event types in the `Sequence` returned by **io.vantiq.ai.A2A.messageStream** and **io.vantiq.ai.Agent.executePlanAsSequence**. The properties are:
+
+* **taskId** (String) -- the unique identifier of the task.
+* **contextId** (String) -- the server-generated identifier used for contextual alignment across interactions.
+* **status** (Object) -- the new status of the task. Has the same shape as the `status` property of [Task](#task).
+* **final** (Boolean) -- when `true`, this is the final event in the stream for this task.
+* **metadata** (Object) -- extension metadata for the update.
+* **kind** (String) -- the event type. Always `"status-update"`.
 
 ### Agent
 
@@ -3382,10 +3544,14 @@ The procedures in this service make use the following types:
 * **io.vantiq.ai.PlanningGraphNode** -- represents a node in a planning graph.  The properties are:
     * **id** (String) -- a unique identifier for the node.
     * **tool** (String) -- the tool to use when computing the node's value.  The legal values are:
-        * `user` -- used to request input from the initial caller of the agent.
-        * `llm` -- used to submit a prompt to an LLM for processing.
+        * `system.user` -- used to request input from the initial caller of the agent.
+        * `system.llm` -- used to submit a prompt to an LLM for processing.
+        * `system.extract` -- used to extract requested information from previously computed results.
         * `<name>` -- used to invoke a named tool.  The exact interpretation depends on the value of *toolType*.
-    * **toolType** (String) -- indicates how to interpret tool names. A value of `agent` (the default) means that the tool name refers to an agent which must exist. A value of `skill` means that the tool name refers to a skill provided by the current agent.
+    * **toolType** (String) -- indicates how to interpret tool names. If the property is not present, then the default value (`agent`) is assumed. The possible values are:
+        * `agent` (the default) -- the tool name refers to an agent by name. The node input will be sent to that agent as the content of a message.
+        * `skill`-- the tool name refers to a skill provided by the current agent. The input will be used to construct an invocation of the procedure bound to that skill.
+        * `planner` -- the tool name refers to a procedure which must be defined by the agent. The procedure is assumed to return an instance of `io.vantiq.ai.PlanningGraph` which will injected into the current graph in place of the current node.
     * **input** -- the input value to be provided to the invoked tool. The input may contain a reference to the output of another node in the form of a "variable".
     * **desc** -- a description of the goal for this node.
 * **io.vantiq.ai.PlanningGraphEdge** -- represents a directed edge between two nodes in the graph.  The properties are:
@@ -3394,21 +3560,36 @@ The procedures in this service make use the following types:
 
 The service procedures are:
 
-* **Agent.executePlan(planGraph io.vantiq.ai.PlanningGraph Required, userRequest Any, requestContext String): Any** -- Executes the given plan which is represented by a DAG.  Execution starts at the roots and proceeds until a value has been calculated for each node. This is done by invoking the node's *tool* using the specified *input*. The procedure's return value is an `Object` with the following properties:
+* **io.vantiq.ai.Agent.executePlan(planGraph io.vantiq.ai.PlanningGraph Required, userRequest Any, contextId String, options Object): Any** -- Executes the given plan which is represented by a DAG.  Execution starts at the roots and proceeds until a value has been calculated for each node. This is done by invoking the node's *tool* using the specified *input*. If a *contextId* value is provided, then it will be used when calling the Agent's [User Request Bridge Procedure](agents.md#user-request-bridge-procedure). Otherwise, it is ignored. The *options* parameter is used to alter the default behavior of specified tools. It consists of an `Object` which can contain the following properties (each of which is also an `Object`):
+
+    * **system.llm** -- options relating to the behavior of the `system.llm` tool. Also applies to direct LLM use when formatting user requests and the final plan solution. The sub-properties are:
+        * `llm` - the name of the Vantiq LLM to use when executing the tool.
+    * **agent** -- options relating to sending messages to an agent. The sub-properties match those defined for [`io.vantiq.ai.A2A.messageSend`](#a2a).
+
+    The procedure's return value is an `Object` with the following properties:
+
     * **evidence** -- the values computed for each node in the graph.  This is an `Object` with one property for each node id.
     * **response** (optional) -- the final response to the user's request.  Only present if the user's request was provided.  This will be a `String` which is suitable for display to the user.
     * **inputs** (optional) -- the input values used to create the response.  Only present if the user's request was provided.  This will be an `Any[]` with one item for each leaf node value.
-
-    If a *requestContext* value is provided, then it will be used when calling the Agent's [User Request Bridge Procedure](agents.md#user-request-bridge-procedure).
-
-* **Agent.getCurrentTask(): io.vantiq.a2a.Task** -- returns the currently active agent task. Only relevant when the agent is invoked as a planning tool. Will throw an exception if the agent is not currently processing a task.
-* **Agent.requestUserInput(requestData Any Required, requestContext Any): Any** -- used to request input from the initiator of an agent request. The value of *requestData* will be provided and the resulting response will be returned by this procedure. If a value is provided for *requestContext* then it will be used when calling the Agent's [User Request Bridge Procedure](agents.md#user-request-bridge-procedure). 
+    
+* **io.vantiq.ai.Agent.executePlanAsSequence(planGraph io.vantiq.ai.PlanningGraph Required, userRequest Any, contextId String, options Object): Sequence** -- equivalent to **executePlan**, but returns a `Sequence` so callers can observe execution events as the plan runs. Events emitted by the agents invoked during plan execution are forwarded through the sequence in the order they occur; the final element is the same `Object` (containing *evidence* and, when *userRequest* is supplied, *response* and *inputs*) that **executePlan** would have returned. Each streamed event is one of:
+    * a [Task](#task) (`kind` is `"task"`) -- the current state of an invoked agent's task, including its current `status`, `history`, and any `artifacts` produced so far.
+    * a [TaskStatusUpdate](#taskstatusupdate) (`kind` is `"status-update"`) -- a streamed status change for an invoked agent's task.
+    * a [TaskArtifactUpdate](#taskartifactupdate) (`kind` is `"artifact-update"`) -- a streamed delivery of an [artifact](#artifact) produced by an invoked agent's task.
+* **io.vantiq.ai.Agent.getAgentsMd(targetPackage String): Object** -- returns the contents of any applicable `Agents.md` documents. The return value is an `Object` with the following optional properties:
+    * **agentContext** (String) -- the contents of the `Agents.md` document associated with the current agent. Located by walking up the agent's name (treated as a package hierarchy). Omitted if no such document is found.
+    * **userContext** (String) -- the contents of the `Agents.md` document associated with *targetPackage*. Located by walking up *targetPackage*'s hierarchy, falling back to the organization's root namespace if no document is found. Only present when *targetPackage* is supplied and a matching document is found.
+* **io.vantiq.ai.Agent.getCurrentTask(): io.vantiq.a2a.Task** -- returns the currently active agent task. Only relevant when the agent is invoked as a planning tool. Will throw an exception if the agent is not currently processing a task.
+* **io.vantiq.ai.Agent.getDispatchPlan(): Object** -- returns the dispatch graph generated for the agent's currently active task. Only relevant when the agent is invoked as a planning tool. Will throw an exception if the agent is not currently processing a task.
+* **io.vantiq.ai.Agent.requestUserInput(requestData Any Required, contextId String): Any** -- used to request input from the initiator of an agent request. The value of *requestData* will be provided and the resulting response will be returned by this procedure. If a value is provided for *contextId* then it will be used when calling the Agent's [User Request Bridge Procedure](agents.md#user-request-bridge-procedure).
+* **io.vantiq.ai.Agent.sendTaskArtifactUpdate(artifact io.vantiq.a2a.Artifact Required, append Boolean)** -- sends an artifact update for the agent's currently active task. If *append* is `true`, the contents of *artifact* are appended to a previously sent artifact rather than treated as a new value. Defaults to `false`.
+* **io.vantiq.ai.Agent.sendTaskStatusUpdate(statusMessage io.vantiq.a2a.Message Required)** -- sends a status update message for the agent's currently active task.
 
 ### Callback
 
 The **io.vantiq.Callback** service provides the means for a client to register a "callback" which can be invoked by another service.  Once the callback has completed, it can return a value to the "caller" which will resume processing.  Basically it provides the same capability as a [service procedure](#service-procedures) for cases where the target of the invocation is *not* a service (most typically it will be a [Vantiq Client](cbuser.md)).  It contains the following procedures:
 
-* **Callback.register(callbackId String Required): String** -- Register a new callback with the given *callbackId*.  The id value must be unique for the current namespace.  The return value is the event path on which invocation events will arrive.  The caller is expected to subscribe for these events and respond to them when received.  The invocation events have the following properties:
+* **io.vantiq.Callback.register(callbackId String Required): String** -- Register a new callback with the given *callbackId*.  The id value must be unique for the current namespace.  The return value is the event path on which invocation events will arrive.  The caller is expected to subscribe for these events and respond to them when received.  The invocation events have the following properties:
     * `callbackId` -- the id of the callback being invoked.
     * `invocationId` -- the id of this invocation.
     * `data` -- the data provided when the callback was invoked.
@@ -3451,17 +3632,19 @@ ChatMessage instances are used by the [ConversationalMemory](#conversationmemory
 
 To assist in the creation of Chat Messages, Vantiq offers several "builders" which are built-in procedures used to create specific types of chat messages.  The most commonly used builders are:
 
-* **ChatMessage.buildHumanMessage(content Required, properties Object)** - builds a message of type `human` with the given content.
+* **io.vantiq.ai.ChatMessage.buildHumanMessage(content Required, properties Object)** - builds a message of type `human` with the given content.
 * **ChatMessage.buildSystemMessage(content Required, properties Object)** - build a message of type `system` with the given content.
 
 These let you construct a prompt for the LLM to be interpreted as either a user request (human messages) or precondition/instruction for the LLM (system messages).  In the simplest case, the content provided is a single string, containing a "prompt".  However, the builders also supports arrays of strings or `Object` instances.  The latter is used to construct more complex prompts if/when a model supports them.  For example, "multi-modal" models (such as OpenAI's GPT-4o) provide the ability to include image data in the prompts for analysis.  The following VAIL code constructs a message which includes both a text prompt and an image reference (in this case using a URL):
 
     var msg = io.vantiq.ai.ChatMessage.buildHumanMessage([
         {type: "text", text: prompt},
-        {type: "image_url", image_url: {url: imageUrl}},
+        {type: "image", url: imageUrl},
     ])
 
-The `image_url.url` value can be provided as a [ResourceReference](#resourcereference) referring to a [Document](resourceguide.md#documents), or [Temp Blob](resourceguide.md#tempblobs) instance. In these cases, the referenced resource will be materialized (subject to the `documentExpansion` quota) and submitted as part of the prompt. Information about the `documentExpansion` quota can be found in the [Administrators Reference Guide](namespaces.md#quotas).
+The `{type: "image", url: ...}` form uses the vendor-agnostic *flat* image syntax, which is recommended because it is supported by all multi-modal LLMs (it is translated into each provider's native format).  Provider-specific syntaxes are also accepted — for example OpenAI's chat/completions form `{type: "image_url", image_url: {url: ...}}` or its responses-API form `{type: "input_image", image_url: ...}`.
+
+The image value (the `url` above) can be a publicly accessible URL or a [ResourceReference](#resourcereference) referring to a [Document](resourceguide.md#documents) or [Temp Blob](resourceguide.md#tempblobs) instance. When a reference is provided, the referenced resource is materialized (subject to the `documentExpansion` quota) and submitted as part of the prompt. Information about the `documentExpansion` quota can be found in the [Administrators Reference Guide](namespaces.md#quotas).
 
 The *properties* parameter is optional.  When present, the values are placed in the *ars_properties* property of the Chat Message.
 
@@ -3474,7 +3657,8 @@ The service also defines builders which are more specialized and are not typical
 
 * **ChatMessage.buildAIMessage(content Required, properties Object)** - constructs a message of type `ai` with the given content.
 * **ChatMessage.buildChatMessage(content Required, properties Object)** - constructs a message of type `chat` with the given content.
-* **ChatMessage.buildFunctionCallMessage(functionName String Required, arguments Object, properties Object)** - constructs a message of type `ai` which represents a request to invoke the named function with the supplied arguments.  **NOTE -- typically messages of this type will be returned by an LLM and not fabricated by the application.**
+* **ChatMessage.buildFunctionCallMessage(functionName String Required, arguments Object, properties Object)** - (_deprecated_) constructs a message of type `ai` which represents a request to invoke the named function with the supplied arguments.
+* **ChatMessage.buildToolCallMessage(name String Required, toolCalls Object Array Required, additionalKWArgs Object, properties Object)** - constructs a message of type `ai` which represents a request to invoke the tools specified in the toolCalls argument. See the LLM Reference Guide [Tool section](llms.md#tool-custom-invocation) for a detailed usage example. **NOTE -- typically messages of this type will be returned by an LLM and not fabricated by the application.**
 
 ### Client
 
@@ -3555,7 +3739,7 @@ The **io.vantiq.ai.ConversationMemory** service supports management of "conversa
 
 The service has the following procedures:
 
-* **ConversationMemory.startConversation(initialState io.vantiq.ai.ChatMessage Array, conversationId String, properties Object): String** – start an AI "conversation".  If provided, the conversation will start with the given `initialState`; otherwise it will be empty.  Once established, the conversation will keep track of any request/response pairs that occur as part of the conversation (indicated by passing the conversation’s id to the [io.vantiq.ai.SemanticSearch.answerQuestion](#semanticsearch) or [io.vantiq.ai.LLM.submitPrompt](#llm) procedures). The *properties* parameter can be used to add user defined properties to the conversation's property bag.  The return value is an opaque String referred to as a "conversation id".  This value can be provided by the caller (useful when associating the conversation with an existing resource such as a collaboration).  Otherwise, it will be generated by the system.
+* **io.vantiq.ai.ConversationMemory.startConversation(initialState io.vantiq.ai.ChatMessage Array, conversationId String, properties Object): String** – start an AI "conversation".  If provided, the conversation will start with the given `initialState`; otherwise it will be empty.  Once established, the conversation will keep track of any request/response pairs that occur as part of the conversation (indicated by passing the conversation’s id to the [io.vantiq.ai.SemanticSearch.answerQuestion](#semanticsearch) or [io.vantiq.ai.LLM.submitPrompt](#llm) procedures). The *properties* parameter can be used to add user defined properties to the conversation's property bag.  The return value is an opaque String referred to as a "conversation id".  This value can be provided by the caller (useful when associating the conversation with an existing resource such as a collaboration).  Otherwise, it will be generated by the system.
 * **ConversationMemory.getConversation(conversationId String Required): io.vantiq.ai.ChatMessage Array** – returns the current state of the specified conversation.
 * **ConversationMemory.addChatMessages(conversationId String Required, newMessages io.vantiq.ai.ChatMessage Array Required): io.vantiq.ai.ChatMessage Array** – adds the given new messages to the end of the conversation.
 * **ConversationMemory.setConversation(conversationId String Required, converationState io.vantiq.ai.ChatMessage Array Required)** - set the current state of the specified conversation to the given messages array.
@@ -3604,6 +3788,10 @@ The **Encode**, **Decode** and **Hash** services are useful for interacting with
 * **Hash.hmacSha1(key, val)** - hashes a `String` using the hmac-sha1 algorithm and specified *key* which can either be a `String` or byte array. The result is a byte array that can be encoded with the **Encode** service, or can be cast to a `String` with `.toString()`.
 * **Hash.hmacSha256(key, val)** - hashes a `String` using the hmac-sha256 algorithm and specified *key* which can either be a `String` or byte array. The result is a byte array that can be encoded with the **Encode** service, or can be cast to a `String` with `.toString()`.
 * **Hash.hmacSha512(key, val)** - hashes a `String` using the hmac-sha512 algorithm and specified *key* which can either be a `String` or byte array. The result is a byte array that can be encoded with the **Encode** service, or can be cast to a `String` with `.toString()`.
+
+In addition to hashing a literal *val*, the **Hash.sha1**, **Hash.sha256**, **Hash.sha384**, **Hash.sha512**, and **Hash.md5** procedures can hash the content of a document or temp blob. To do so, supply a *resourceRef* argument instead of *val* — a [Resource Reference](#resourcereference) (in `String` form) to a [Document](resourceguide.md#documents) or [Temp Blob](resourceguide.md#tempblobs) — and the procedure hashes that resource's content. Exactly one of *val* or *resourceRef* must be specified; supplying both, or neither, is an error. The following example hashes a document and base64-encodes the result:
+
+    Encode.base64(Hash.sha256(resourceRef: "system.documents/myImage"))
 
 ### Event Processing
 <a name="event"></a>
@@ -3738,9 +3926,9 @@ This will return an object containing the following values:
 
 ### LLM
 
-The **io.vantiq.ai.LLM** service provides methods used to interact with a Large Language Model.  Vantiq has preconfigured support for the following generative LLMs: [GPT-4](https://platform.openai.com/docs/models/gpt-4) and [GPT-3.5](https://platform.openai.com/docs/models/gpt-3.5-turbo).
+The **io.vantiq.ai.LLM** service provides methods used to interact with a Large Language Model.  These methods operate on any *generative* [LLM](resourceguide.md#llms) resource; see the [LLM Reference Guide](llms.md) for the supported providers and models.
 
-* **LLM.submitPrompt(llmName String, prompt, conversationId String, responseProperties Object, functions, runtimeConfig, functionAuthorizer, tools)** - submits the specified prompt to the named [LLM](resourceguide.md#llms) and returns the generated response.  Typically this response is a `String` which is synthesized by the LLM.  The arguments are:
+* **io.vantiq.ai.LLM.submitPrompt(llmName String, prompt, conversationId String, responseProperties Object, functions, runtimeConfig, functionAuthorizer, tools)** - submits the specified prompt to the named [LLM](resourceguide.md#llms) and returns the generated response.  Typically this response is a `String` which is synthesized by the LLM.  The arguments are:
 
     * **llmName** - the name of the target LLM.  This must refer to a *generative* LLM.
     * **prompt** - the prompt to submit to the LLM.  This must be either a `String` or an [`io.vantiq.ai.ChatMessage`](#chatmessage) Array.
@@ -3757,7 +3945,7 @@ The **io.vantiq.ai.LLM** service provides methods used to interact with a Large 
 
     * **tools** - an optional Array of AI tools descriptors. These descriptors can be either an instance of the `io.vantiq.ai.FunctionDescriptor` schema type or a ResourceReference instance referring to a VAIL [service](#services) or [procedure](#procedures).  When specified, they are provided to the LLM along with the provided prompt.  The LLM may then choose to request an invocation of a tool in order to obtain the context needed to respond to the given prompt.  When referencing a service or procedure, this invocation will be handled automatically.  When describing a tool as a schema (e.g., using `io.vantiq.ai.FunctionDescriptor`) the tool cannot be called and the `submitPrompt` returns an instance of  [`io.vantiq.ai.ChatMessage`](#chatmessage) representing a request to invoke the tool.  If a _description_ exists for a procedure, the LLM will use that description to help decide which procedure to invoke. For a ResourceReference, if both the service interface and the procedure have a description defined for the procedure, the one from the procedure will be used. See [LLMs Reference Guide](llms.md#tools) for examples.
     
-* **LLM.submitPromptAsSequence(llmName String, prompt, conversationId String, responseProperties Object, functions, runtimeConfig, functionAuthorizer, tools)** - submits the specified prompt to the named [LLM](resourceguide.md#llms) and returns the generated response as a [sequence](#sequences).  This is used to stream output to the caller as it is produced.  The parameter definitions are identical to those for *submitPrompt*.
+* **io.vantiq.ai.LLM.submitPromptAsSequence(llmName String, prompt, conversationId String, responseProperties Object, functions, runtimeConfig, functionAuthorizer, tools)** - submits the specified prompt to the named [LLM](resourceguide.md#llms) and returns the generated response as a [sequence](#sequences).  This is used to stream output to the caller as it is produced.  The parameter definitions are identical to those for *submitPrompt*.
 
 > Since this is a built-in procedure, it cannot be used as part of an [EXECUTE](#execute) statement.  Therefore its results must be processed using an [iteration](#iteration) statement.
     
@@ -3817,7 +4005,7 @@ the motion of entities in images. It contains the following procedures:
 * **MotionTracking.trackMotion(state, newObjects, algorithm, qualfier, maxAbsent, timeOfObservation, coordinateProperty, labelProperty)** -- returns an `Object` with the following properties: *trackedObjects* containing the new object positions and *droppedObjects* containing the list of objects dropped after this call.
     * **state** - the current set of tracked objects. A `null` value indicates no current state.
     * **newObjects** - the set of new objects with positions.
-    * **algorithm** - [algorithm](imageprocessing.md#algorithms) to use to determine motion.
+    * **algorithm** - algorithm to use to determine motion.
     * **qualifier** - value used to determine if two positions *could* be movement of the same entity.
     * **maxAbsent** - an interval after which an entity is considered missing. Missing objects are dropped from the set of known objects.
     * **timeOfObservation** -- time to assign to new positions.  If unspecified, use the current time.
@@ -3933,7 +4121,7 @@ that references the calling Rule or Procedure.
 
 The **io.vantiq.ai.SemanticSearch** service supports the answering of questions using the context stored in a specified [semantic index](resourceguide.md#semantic-indexes).
 
-* **SemanticSearch.answerQuestion(indexName String Required, question Required, qaLLM String, conversationId String, minSimilarity Real, contextPrompt String, answerProperties Object, runtimeConfig Object): Object** - answer a question using the context contained in the specified semantic index.  The expected parameters are:
+* **io.vantiq.ai.SemanticSearch.answerQuestion(indexName String Required, question Required, qaLLM String, conversationId String, minSimilarity Real, contextPrompt String, answerProperties Object, runtimeConfig Object): Object** - answer a question using the context contained in the specified semantic index.  The expected parameters are:
 
     * `indexName` - the name of the [SemanticIndex](resourceguide.md#semantic-indexes) to use when answering the question.
     * `question` - the question to be answered.  This is either a `String` or an `io.vantiq.ai.ChatMessage` instance.  The latter form is typically used when the application wants to attach properties to the question when it is recorded in a conversation.
@@ -3950,7 +4138,7 @@ The **io.vantiq.ai.SemanticSearch** service supports the answering of questions 
     * **metadata** (Object Array) – an array of metadata objects derived from the index entries used to synthesize the answer.  The exact metadata present is determined by the index entries. The semantic index may be configured to exclude this property.
     * **rephrasedQuestion** (String) -- the question rephrased by the LLM using the relevant context. If __rephraseQuestion__ is set to `false` this will still contain the rephrased question, but it will not be the question asked to the LLM. This property is only included if the semantic index is configured to include it.
     
-* **SemanticSearch.answerQuestionAsSequence(indexName String Required, question Required, qaLLM String, conversationId String, minSimilarity Real, contextPrompt String, answerProperties Object, runtimeConfig Object): Object** - answer a question using the context contained in the specified semantic index and return the answer as a [sequence](#sequences).  The parameter definitions are the same as those for *answerQuestion*.
+* **io.vantiq.ai.SemanticSearch.answerQuestionAsSequence(indexName String Required, question Required, qaLLM String, conversationId String, minSimilarity Real, contextPrompt String, answerProperties Object, runtimeConfig Object): Object** - answer a question using the context contained in the specified semantic index and return the answer as a [sequence](#sequences).  The parameter definitions are the same as those for *answerQuestion*.
 
 > Since this is a built-in procedure, it cannot be used as part of an [EXECUTE](#execute) statement.  Therefore its results must be processed using an [iteration](#iteration) statement.
     
@@ -3976,16 +4164,16 @@ The **io.vantiq.ai.SemanticSearch** service supports the answering of questions 
 
 The **io.vantiq.StorageManager** service provides procedures to manage database transactions when working with a pluggable storage manager that supports them. For more information about pluggable storage managers, see the [Storage Manager Guide](storagemanagers.md) and the section on [transaction support](storagemanagers.md#transaction-support).
 
-* **StorageManager.startTransaction(storageManager String, options Object): String** - starts a transaction on the specified storage manager and returns the transaction ID.
-* **StorageManager.commitTransaction(storageManager String, transaction String, options Object)** - commits the specified transaction in the given storage manager.
-* **StorageManager.abortTransaction(storageManager String, transaction String, options Object)** - aborts the specified transaction in the given storage manager.
+* **io.vantiq.StorageManager.startTransaction(storageManager String, options Object): String** - starts a transaction on the specified storage manager and returns the transaction ID.
+* **io.vantiq.StorageManager.commitTransaction(storageManager String, transaction String, options Object)** - commits the specified transaction in the given storage manager.
+* **io.vantiq.StorageManager.abortTransaction(storageManager String, transaction String, options Object)** - aborts the specified transaction in the given storage manager.
 
 ### Template
 
 The **io.vantiq.text.Template** service provides procedures to generate text from a template. 
 
-* **Template.format(template, input)** - returns the text generated by applying the input to the template. The *input* is an `Object` of key/value pairs where the keys are the names of the variables in the *template* to be substituted with the key values. Variables are of the form `${keyName}` or `$keyName`.  To include a literal `$` in your template use the escape sequence `\$`.  The code that processes the *template* value will fully interpret any escape sequences (this is in addition to the normal interpretation of those sequences when used in a VAIL `String` constant).  For example, if you want your template to contain the `\` character, your template string value would need to contain `\\\\` (and not simply `\\`).
-* **Template.documentReference(docName)** - returns a reference to the document resource named *docName*. This reference can be used as a parameter of **Template.format()**.
+* **io.vantiq.text.Template.format(template, input)** - returns the text generated by applying the input to the template. The *input* is an `Object` of key/value pairs where the keys are the names of the variables in the *template* to be substituted with the key values. Variables are of the form `${keyName}` or `$keyName`.  To include a literal `$` in your template use the escape sequence `\$`.  The code that processes the *template* value will fully interpret any escape sequences (this is in addition to the normal interpretation of those sequences when used in a VAIL `String` constant).  For example, if you want your template to contain the `\` character, your template string value would need to contain `\\\\` (and not simply `\\`).
+* **io.vantiq.text.Template.documentReference(docName)** - returns a reference to the document resource named *docName*. This reference can be used as a parameter of **io.vantiq.text.Template.format()**.
 
 In its simplest form, a template is just a string containing variables replaced by the key values from the input. For example,
 
@@ -4006,7 +4194,7 @@ We can use this template as follows,
 import service io.vantiq.text.Template
 
 var input = {guest: "alice", host: "bob"}
-var ref = Template.documentReference("greetingTemplate")
+var ref = io.vantiq.text.Template.documentReference("greetingTemplate")
 Template.format(ref, input) // returns "Hello alice, this is bob."
 ```
 
@@ -4102,12 +4290,12 @@ import service io.vantiq.text.Template
 
 var input = {
     personality: "funny",
-    author: Template.documentReference("author.txt"),
-    question: Template.documentReference("question.txt")
+    author: io.vantiq.text.Template.documentReference("author.txt"),
+    question: io.vantiq.text.Template.documentReference("question.txt")
 }
 
 var template = {
-    prompt: Template.documentReference("prompt.txt"),
+    prompt: io.vantiq.text.Template.documentReference("prompt.txt"),
     ask: "The question is: ${question}"    
 }
 

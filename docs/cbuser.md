@@ -44,8 +44,6 @@ To create a new Client, use the **Add** button to select **Client...**, then cli
 
 Choose one of the built-in Client Templates (e.g., _BrowserEmpty_ or _MobileEmpty_) and provide a name for the Client, then click **OK** to display the Client Builder for the new Client.
 
-You can also choose to use the AI Client Assistant to generate the start page using AI. See  the section [AI Client Assistant](#ai-client-assistant) below for more detail.
-
 After creating and editing a Client, you may want to use that Client to create other similar Clients. In that case, enable **Save as Client Template** in a Client's Advanced Properties. **Save as Client Template** means that whenever the Client is saved, it is also saved as a Custom Client Template and is displayed in the New Client dialog. In the figure above, the _Notifications_ Client Template is an example of a Custom Client Template. Custom Client Templates are saved as two files in the Vantiq document store in the _vantiq/clientTemplates_ hierarchy:
 
 * the template itself has a file extension of _ctp_
@@ -479,6 +477,8 @@ The Widgets are arranged in a class hierarchy which is shown below; note that on
         * [Chat](cbref.md#chat)
         * [Checkbox](cbref.md#checkbox)
         * [ComboBox](cbref.md#combobox)
+        * [Conversation](cbref.md#conversation)
+        * [Discussion](cbref.md#discussion)
         * [DocumentViewer](cbref.md#documentviewer)
         * [Droplist](cbref.md#droplist)
         * [ImageMarkup](cbref.md#imagemarkup)
@@ -497,6 +497,7 @@ The Widgets are arranged in a class hierarchy which is shown below; note that on
         * [RadioButtons](cbref.md#radiobuttons)
         * [SectionLabel](cbref.md#sectionlabel)
         * [Signature](cbref.md#signature)
+        * [Tree](cbref.md#tree)
         * [VideoRecorder](cbref.md#videorecorder)
     * [Canvas](cbref.md#canvas)
     * [StaticHtml](cbref.md#statichtml)
@@ -1992,45 +1993,3 @@ The Document Asset Cache may also be filled explicitly by using the Client **Pro
 Note that if the contents of the URL are modified (for example, a PDF document is updated) _after_ the document is cached, the cached copy will not match the updated contents. It is up to the mobile app user to clear the Document Asset Cache so that the updated contents are retrieved. Both the Vantiq Android and iOS apps have a button titled **Clear Document Cache** that allows the user to remove all cached documents so their contents are refreshed the next time the Client is run.
 
 (_Advanced technical note: Why are there two separate caches? This has to do with the way Clients are executed on the Vantiq mobile apps. Most widgets (such as StaticImage) run inside a "WebView" on the mobile app, just as they run in a browser on the desktop. These rely on the "Offline Asset" cache which lives inside the WebView. However some widgets (such as ImageViewers and DocumentViewers) run natively in the mobile app and therefore do not have access to the WebView cache. These require a different cache on the mobile app itself, known as the "Document Asset Cache"._)
-
-## AI Client Assistant
-The AI Client Assistant uses a generative AI engine to translate natural language descriptions of a user interface into widgets and lay them out on a page. Those descriptions are generally referred to as _prompts_. Writing effective prompts is referred to as [prompt engineering](https://en.wikipedia.org/wiki/Prompt_engineering). To make effective use of the AI Client Assistant, it's helpful to have some examples of prompts that are good starting points to describe a page. Below are a few examples of such prompts that can be translated into a user interface.
-
-### Patient Care Example
-Produce a display that lists each patient's value on the stress scale, highlighting the patients who are exceeding the stress limits. Include in the list the environmental stress score for each patient's location. 
-Allow the user to select a patient and drill down into the details of that patient's biometric readings and their relevant health history, which can be obtained from their medical records in their EHR system.
-
-### Pump Monitoring Example
-Monitor a pump's temperature and pressure in real-time.  Also, display historical data for reference. Display a warning message when the pressure or temperature is too high. Show the location of the pump in trouble on a map.
-
-### Image Processing Example
-Create a dashboard to show 4 images of a live video feed from cameras in a 2x2 format.
-If a camera is selected, show the location of the camera on a floor plan, and also display the number of people captured in the area where the camera is installed.
-
-### Using AI Client Assistant
-To use the AI Client Assistant, click on the **AI Client Assistant** toolbar button in the Client Builder. There is also an option in the New Client Dialog and New Page Dialog which will open the AI Client Assistant automatically when creating a new client or new page.
-
-![AIClientAssistant](assets/img/cbuser/aiClient1.png)
-
-On the right of the pane, the AI Client Assistant is displayed. Use the text entry field at the bottom of the Assistant to enter the description of your user interface. For example, enter Patient Care Example text:
-
-```text
-Produce a display that lists each patient's value on the stress scale highlighting the patients that are exceeding the stress limits. Include in the list, the environmental stress score for each patient's location.
-Allow the user to select a patient and drill down into the details of that patient's biometric readings and their relevant health history which can be obtained from their medical records in their EHR system.
-```
-After hitting the **Send** button, the AI will respond with a description of the user interface and widgets are layed out on the Client Builder. Please note that the result generated by AI may vary.
-
-![AIGeneratedUI](assets/img/cbuser/aiClient2.png)
-
-While AI Client Assistant is still open, you can modify the generated UI with more prompts. For example, enter the following text:
-
-```text
-Add a tab to display patient detail information such as name, age, address, etc.
-```
-
-After hitting the **Send** button, the page is modified with a third tab added.
-
-![ModifiedGeneratedUI](assets/img/cbuser/aiClient3.png)
-
-You can continue to refine your UI in the assistant. You can also exit the assistant and use the Client Builder features to modify your UI. Once you exit the assistant, your conversation with the AI is gone. The next time you run the AI Client Assistant it will start a new conversation.
-

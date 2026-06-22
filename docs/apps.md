@@ -86,7 +86,7 @@ From these built-in Activity Patterns larger [_Components_](appcomponents.md) ca
 
 ## Creating a VEH
 
-When creating a new VEH, the diagram consists of a single Event Stream task. From there, more event streams and downstream tasks can be added by right clicking on an existing task and selecting one of the options from the contextual menu. Each task added to the VEH diagram needs to be properly configured in order for the handler to compile. VEH are compiled whenever they are saved, and if no errors are found during compilation, the VEH will generate a collection of **hidden** VAIL artifacts that implement each of the tasks. If errors are detected during compilation of the app, it will still be saved. When this happens any task in which an error was detected will be highlighted in red.
+When creating a new VEH, the initial diagram consists of a single Event Stream task. From there, more event streams and downstream tasks can be added by right clicking on an existing task and selecting one of the options from the contextual menu. Each task added to the VEH diagram needs to be properly configured in order for the handler to compile. VEH are compiled whenever they are saved, and if no errors are found during compilation, the VEH will generate a collection of **hidden** VAIL artifacts that implement each of the tasks. If errors are detected during compilation of the app, it will still be saved. When this happens any task in which an error was detected will be highlighted in red.
 
 The App Builder is designed to facilitate an iterative development process. For example: Start with an initial Event Stream and a log stream task to see what raw events are being received. Next add a transformation task that processes the outbound events from the raw event stream and then log the output of the transformation. Then add a filter to the output of the transformation and log the filtered event stream. Once you've tuned the filter and transformation activities to produce the output you expect, you can add a Notify task to the output of the filter task, and you've built an entire handler.
 
@@ -456,7 +456,7 @@ If the `trackingRegionFilter` is provided, the set of regions considered will be
 
 When using the `trackingRegionFilter` value `name in [name in ["mainStreet", "bikePath"]`, that expression is added to a SELECT query on the `TrackingRegions` in the namespace. If no `TrackingRegions` qualify, then the set of `TrackingRegions` considered will be empty.
 
-Path elements will contain velocity information if any of the `TrackingRegions` selected contain `distance` or `direction` definitions. The `velocity` property is an object containing `speed` and `direction` properties. Either, neither, or both may be present depending upon the `TrackingRegions` definitions and selection (based on the expression present in the `trackingRegionFilter` property). Please see the [Tracking Regions](resourceguide.md#trackingregions) section of the [Resource Guide](resourceguide.md) and the [Motion Tracking](imageprocessing.md#motion-tracking) section of the [Image Processing Guide](imageprocessing.md) for more details.
+Path elements will contain velocity information if any of the `TrackingRegions` selected contain `distance` or `direction` definitions. The `velocity` property is an object containing `speed` and `direction` properties. Either, neither, or both may be present depending upon the `TrackingRegions` definitions and selection (based on the expression present in the `trackingRegionFilter` property). Please see the [Tracking Regions](resourceguide.md#trackingregions) section of the [Resource Guide](resourceguide.md) and the [Motion Tracking](rules.md#motion-tracking) built-in service for more details.
 
 The following is an example of output from a `BuildAndPredictPath` activity. Here, we are observing a traffic intersection. A set of `TrackingRegions` is defined, including one region for an intersection, one for the main street, and a bike path. (Note -- the example is long. To reduce the length, we've remove repeated common structures. These are shown as *...position info...*.)
 
@@ -868,7 +868,7 @@ Delay the emission of an inbound event for some duration of time. The delay inte
 }
 ```
 
-the event will only be sent to the downstream task after 5 seconds have passed. It's also possible to set the delay configuration property to an interval string that is constant for all events, like `5 seconds` or `2 hours`.
+the event will only be sent to the downstream task after 5 seconds have passed. It's also possible to set the delay configuration property to an interval string that is constant for all events, like `5 seconds` or `2 hours`. Unlike most other intervals in Vantiq, delay supports time values less than one second, so you could specify a delay of `10` or `10 milliseconds` if you wanted to delay events for a fraction of a second.
 
 The Delay Activity Pattern has only one required property:
 
@@ -889,7 +889,7 @@ The Dwell Activity Pattern contains the following configuration properties:
 * **condition** -- two options:
   * _VAIL Conditional Expression_: A VAIL boolean expression that expresses the state which must be maintained to trigger the dwell task. The condition can reference any property of the inbound event like `event.propX > event.propY AND event.id == "XYZ"`.
   * _Visual Filter_: A visual interface that allows users to create a condition using a series of dropdowns and text fields. The visual filter is a more user-friendly way to create a condition.
-* **duration** -- How long the condition must hold true across sequential events to trigger output from the dwell task.
+* **duration** -- How long the condition must hold true across sequential events to trigger output from the dwell task. This is expressed as an interval string such as `30 seconds` or `5 minutes`. Unlike most other intervals in Vantiq, dwell supports time values less than one second, so you could specify a duration of `10` or `10 milliseconds` if you wanted to trigger dwell for a state that holds true for a fraction of a second.
 
 The Dwell Activity Pattern contains one optional configuration property:
 
@@ -972,7 +972,7 @@ The Enrich Activity Pattern requires two configuration properties:
 
 Escalations trigger an event after a certain amount of time if they are not cancelled first. Escalations are a useful way to verify something happens within a set amount of time and triggering some additional behaviors if the thing doesn't happen. Escalations can be cancelled or triggered early using the [EscalateState activity pattern](#escalatestate). Escalate contains the following configuration properties:
 
-* **escalationTime** - The amount of time, in milliseconds, before the escalation event is triggered. May be an integer, a duration string, or a VAIL expression. 
+* **escalationTime** - The amount of time, in milliseconds, before the escalation event is triggered. May be an integer, a duration string, or a VAIL expression. Unlike most other time intervals in Vantiq, escalationTime supports time values less than one second, so you could specify an escalationTime of `500` or `500 milliseconds` if you wanted to trigger the escalation after only a fraction of a second. Given that escalations are typically used by humans, an escalationTime of less than a few seconds would be unusual, but the flexibility is there if needed.
 * **outboundBehavior** - Optional. What the output event will look like. Chosen from a list of three options:
     * _Replace outbound event with Escalate results_ - Send the default event for Escalate tasks.  
         This is the default behavior if no option is selected.
@@ -1708,7 +1708,7 @@ Threshold also contains the following optional configuration properties:
 
 If the initializeCondition is not specified, the first event will never trigger a threshold crossing.
 
-* **withinDuration** -- A duration that indicates how far apart two sequential events can be and still trigger the threshold. If two events occur further apart, they will not trigger the threshold.
+* **withinDuration** -- A duration that indicates how far apart two sequential events can be and still trigger the threshold. If two events occur further apart, they will not trigger the threshold. This value can be expressed as an interval string such as `30 seconds` or `10 minutes`. If not specified, there is no time limit for sequential events to trigger the threshold. Unlike most other intervals in Vantiq, withinDuration supports time values less than one second, so you could specify a duration of `10` or `10 milliseconds` if you wanted to detect rapid fluctuations in a value.
 * **direction** -- One of these values: _true_, _false_, or _both_. Used to specify the boolean value that the condition must evaluate to after crossing the threshold in order to trigger a threshold event. For instance, if it only matters when a temperature reading goes over 100, but not when it goes back under, use a direction value of _true_ along with the condition `event.temp > 100`. If the temp was 101 in the previous event, and a new event occurred with a temp value of 90, the evaluation of the condition has changed from true to false, which is the false direction, so the new event would not trip the threshold. A direction value of _both_ indicates that crossing the threshold in either direction will emit an event. For some more examples given the condition `event.temp > 100`, consider the following table, where the temperature changes from x -> y over two sequential events:
 
 &nbsp;&nbsp;&nbsp;![Threshold Table](./assets/img/apps/ThresholdTable.png "Threshold Table")
@@ -1872,7 +1872,7 @@ For each tracked object, TrackMotion updates _location_ with the following prope
 * `delta` -- the value used to determine motion. The value depends on the algorithm employed. This value may be missing when an object first appears. Since it has no previous position, no `delta` is applicable.
 * `timeOfObservation` -- the time ascribed to this observation of position.
 
-For more information, please see the [Motion Tracking](imageprocessing.md#motion-tracking) section of the [Image Processing Guide](imageprocessing.md).
+For more information, please see the [Motion Tracking](rules.md#motion-tracking) built-in service.
 
 The TrackMotion Activity Pattern requires the following configuration properties:
 

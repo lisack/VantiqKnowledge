@@ -1,5 +1,3 @@
-JavaScript SDK Connector
-
 ## Repository Contents
 
 *	[ExtensionWebSocketClient](#client) -- Acts as a translator between Vantiq and the generic source. Formats and sends

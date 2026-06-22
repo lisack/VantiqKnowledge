@@ -77,7 +77,7 @@ When a message arrives on a streaming source an event is generated which will be
 
 #### Source Schema
 
-The definition of a stream source may optionally include a reference to a schema type which represents the structure of the data produced by the source.  This schema is purely informational and is used by Modelo and Pronto to make it easier to process the source events.  However, the system will not validate if the data produced by the source actually matches the referenced schema type.  Some sources support the receipt of data from multiple "locations" (for example, an MQTT source may receive data from multiple topics).  In these cases it is assumed that all of the data conforms to the same underlying schema.  If that isn't true, you should define a distinct source for each desired schema.
+The definition of a stream source may optionally include a reference to a schema type which represents the structure of the data produced by the source.  This schema is purely informational and is used by the Vantiq IDE to make it easier to process the source events.  However, the system will not validate if the data produced by the source actually matches the referenced schema type.  Some sources support the receipt of data from multiple "locations" (for example, an MQTT source may receive data from multiple topics).  In these cases it is assumed that all of the data conforms to the same underlying schema.  If that isn't true, you should define a distinct source for each desired schema.
 
 ### Query
 
@@ -97,7 +97,7 @@ The notify function is invoked from a rule to send data or notifications via a s
 Sources that connect to external systems often need to be secured by passwords, access tokens, or secrets. These 
 credentials often need to be secured in such a way that users of a source don't have access to the 
 underlying credentials. To secure credentials in a source configuration, certain config properties can contain references 
-to secrets, which store a credential securely. Users of the source can see the name of the secret, but not the value
+to [secrets](../resourceguide.md#secrets), which store a credential securely. Users of the source can see the name of the secret, but not the value
 associated with that secret. The credentials configuration properties that can contain a reference to a secret are specific to the
 type of source. For example, email sources must specify a username and password for the credentials used to access the 
 email server, and the password configuration property can be a reference to a secret. View the documentation for each
@@ -145,6 +145,7 @@ However, a user may override the source's Query and Publish operations.
 
 An Object property called `mockProcedures` represents the configuration for a source's Mocking behavior. 
 The `mockProcedures` object has two keys: 
+
  * **query** (String): The name of the Procedure that runs on query from Source when `mockMode` is _true_
  * **publish** (String): The name of the Procedure that runs on publish to Source when `mockMode` is _true_
 

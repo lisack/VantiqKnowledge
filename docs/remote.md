@@ -50,7 +50,7 @@ The relevant source properties are as follows:
 	* **requestDefaults** A request document which provides default values to use when issuing a request to the source (including a polling request). See request document schema for details on the expected contents.
 	* **pollingInterval** The interval at which the REST service is polled, in seconds. If a value of 0 is provided then no polling occurs.
 	* **query** A request document which describes the query to perform when polling (see request document schema for details on the expected contents). If a query isn’t provided then the source defaults to performing a GET operation on the base URI with no authentication and assumes content type JSON.
-	* **clientOptions** The JSON object form of [Vert.x HTTP Client Options](<https://vertx.io/docs/4.5.12/apidocs/io/vertx/core/http/HttpClientOptions.html>) used to configure the client when connecting to the REST service.
+	* **clientOptions** The JSON object form of [Vert.x HTTP Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/core/http/HttpClientOptions.html>) used to configure the client when connecting to the REST service.
 
 ### Fetching Access Tokens on Demand
 
@@ -735,7 +735,7 @@ contains the following information:
 
 A Remote Source can be configured for either one-way or two-way SSL communication using the optional `clientOptions`
 configuration property. This property is the JSON object form of the
-[Vert.x HTTP Client Options](<https://vertx.io/docs/4.5.12/apidocs/io/vertx/core/http/HttpClientOptions.html>).
+[Vert.x HTTP Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/core/http/HttpClientOptions.html>).
 Below are some usage examples of this configuration option.
 
 ### One-way SSL
@@ -913,9 +913,9 @@ $ cat /path/to/sourceKeyStore.jks | base64
 ```
 
 Note that if a keystore contains several keys you can specify which key to use by providing the `alias`
-[store options](https://vertx.io/docs/4.5.12/apidocs/io/vertx/core/net/JksOptions.html) property.
+[store options](https://vertx.io/docs/4.5.28/apidocs/io/vertx/core/net/JksOptions.html) property.
 
-Refer to the [Vert.x HTTP Client Options](<https://vertx.io/docs/4.5.12/apidocs/io/vertx/core/http/HttpClientOptions.html>)
+Refer to the [Vert.x HTTP Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/core/http/HttpClientOptions.html>)
 document for a complete list of configuration options. Note: in that document, reference to `Buffer`
 means that a base64 encoded value can be specified (e.g., trustStoreOptions). Any `add` method translates into an array
 (e.g., pemTrustOptions) and any `set` method translates into a single property setting (e.g., path or value).

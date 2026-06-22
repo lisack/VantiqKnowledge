@@ -172,36 +172,40 @@ A logical NOR operation is one that does not satify any of the given expressions
 
 ##### **GeoJSON**
 
-For [GeoJSON](http://geojson.org/) data types, the following operators are supported:
+For [GeoJSON](http://geojson.org/) data types, the following operators are supported.  The supported GeoJSON geometry types are `Point`, `LineString`, and `Polygon`.  An optional third coordinate element (altitude/elevation) may be included and will be preserved, but is not used in spatial queries.
+
+**Note:** GeoJSON coordinates use `[longitude, latitude]` ordering (not `[latitude, longitude]`).
 
 ###### *Intersection* (`$geoIntersects`)
 
-To determine if the given location intersects with a given shape, use the `$geoIntersects` operator.  E.g, 
+To determine if a stored location intersects with a given shape, use the `$geoIntersects` operator.  The `$geometry` value can be any supported GeoJSON type.  E.g.,
 
 ```json
 { 
-    prop: { 
+    "prop": { 
         "$geoIntersects": { 
             "$geometry": { 
-                type:        "Polygon", 
-                coordinates: [ [0,0], [1,0], [1,1], [0,1] ]
+                "type":        "Polygon", 
+                "coordinates": [ [ [0,0], [1,0], [1,1], [0,1], [0,0] ] ]
             }
         }
     }
 }
 ```
 
+Note that Polygon coordinates are an array of linear rings, where each ring is a closed array of positions (the first and last positions must be identical).
+
 ###### *Within* (`$geoWithin`)
 
-To determine if the given location resides within a given shape, use the `$geoWithin` operator.  E.g.,
+To determine if a stored location resides entirely within a given shape, use the `$geoWithin` operator.  E.g.,
 
 ```json
 { 
-    prop: { 
+    "prop": { 
         "$geoWithin": { 
             "$geometry": { 
-                type:        "Polygon", 
-                coordinates: [ [0,0], [1,0], [1,1], [0,1] ]
+                "type":        "Polygon", 
+                "coordinates": [ [ [0,0], [1,0], [1,1], [0,1], [0,0] ] ]
             }
         }
     }
@@ -210,39 +214,41 @@ To determine if the given location resides within a given shape, use the `$geoWi
 
 ###### *Proximity* (`$near` and `$nearSphere`)
 
-To determine if the given location is a given distance away from a given point, use the `$near` operator.  E.g.,
+To find locations within a given distance of a point, use the `$near` or `$nearSphere` operator.  Both operators accept `$maxDistance` and `$minDistance` constraints specified in **meters**.  The `$nearSphere` operator calculates distances using spherical geometry, which is appropriate for geographic coordinates.  E.g.,
 
 ```json
 { 
-    prop: { 
+    "prop": { 
         "$near": { 
             "$geometry": { 
-                type:        "Point", 
-                coordinates: [ 13, 42 ]
+                "type":        "Point", 
+                "coordinates": [ 13, 42 ]
             },
-            "$maxDistance": 4,
-            "$minDistance": 3
+            "$maxDistance": 100000,
+            "$minDistance": 0
         }
     }
 }
 ```
 
-To perform a proximity search using spherical geometry, use the `$nearSphere` operators.  E.g.,
+Using `$nearSphere`:
 
 ```json
 { 
-    prop: { 
+    "prop": { 
         "$nearSphere": { 
             "$geometry": { 
-                type:        "Point", 
-                coordinates: [ 13, 42 ]
+                "type":        "Point", 
+                "coordinates": [ 13, 42 ]
             },
-            "$maxDistance": 4,
-            "$minDistance": 3
+            "$maxDistance": 100000,
+            "$minDistance": 0
         }
     }
 }
 ```
+
+Results from proximity queries are returned sorted by distance from the query point (nearest first).
 
 #### `props` Parameter
 

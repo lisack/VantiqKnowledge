@@ -15,15 +15,24 @@ This document assumes that:
 * if iOS support is desired, [CocoaPods](https://cocoapods.org/) must be installed on the macOS development machine
 
 ### Installation Instructions
-* Edit the _package.json_ file at the root of the React Native app to include the following two dependencies:
+* Edit the _package.json_ file at the root of the React Native app to include the following dependencies:
 	* `"react-native-root-siblings":"^5.0.1"`
-	* `"vantiq-react":"0.1.5"`
+	* `"vantiq-react":"^0.1.9"`
 * Execute `npm install` to complete the installations.
 
 ### iOS Post-Installation Instructions
 * `cd ios`
 * edit _Podfile_, including the following in the target section for your app: `pod 'vantiq-ui-ios', :inhibit_warnings => true`. This should be the first line inside the target `do` statement.
+* edit _Podfile.properties.json_ to set the `newArchEnabled` property to false: `"newArchEnabled": "false"`. This disables React's new architecture, which is required for Vantiq functionality.
 * `pod install`
+* `cd ..`
+* `npm uninstall react-native-worklets` to regress from React's new architecture.
+* `npm install react-native-reanimated@^3.15.0` to regress from React's new architecture.
+* `npm install` to update the installations.
+* `cd ios`
+* `pod deintegrate`
+* `pod install`
+
 * The following bullet points make multiple references to edits to the _AppDelegate.m_ file. The AppDelegate.m file edits are complicated so there is a sample of a [complete AppDelegate.m](#sample-ios-appdelegatem-file) file at the bottom of this document.
 * If you're using Keycloak-based authentication:
 	* Edit the _AppDelegate.m_ file to include the following:

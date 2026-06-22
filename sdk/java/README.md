@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/Vantiq/vantiq-sdk-java.svg?branch=master)](https://travis-ci.org/Vantiq/vantiq-sdk-java)
 
 # Vantiq SDK for Java
 

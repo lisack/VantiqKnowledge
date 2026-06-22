@@ -24,7 +24,7 @@ An **AMQP source** defines the integration with a specific AMQP data stream and 
 	* **password** credentials for accessing the AMQP server
 	* **passwordType** specify whether the password is a plain text password, or a reference to a secret containing the actual password
 
-While the configuration properties listed above are the most commonly used, the config JSON object maps to the [Vert.x AMQP Client Options](<https://vertx.io/docs/4.2.3/apidocs/io/vertx/amqp/AmqpClientOptions.html>) configuration. Therefore, any property supported by `AmqpClientOptions` can be added to the config object, even if it is not explicitly listed here. As an example, you can look at the [SSL setup](#ssl-setup) section.
+While the configuration properties listed above are the most commonly used, the config JSON object maps to the [Vert.x AMQP Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/amqp/AmqpClientOptions.html>) configuration. Therefore, any property supported by `AmqpClientOptions` can be added to the config object, even if it is not explicitly listed here. As an example, you can look at the [SSL setup](#ssl-setup) section.
 
 ## Create an AMQP Source
 The following example illustrates how to create an AMQP source using the REST API. AMQP sources can also be defined in the [Vantiq IDE](../../../../) by using the **Add** button to select **Source...**.
@@ -101,7 +101,7 @@ Received AMQP messages might contain a contentType value. To enforce usage of th
 
 ## SSL Setup
 
-An AMQP Source can be configured for either one-way or two-way SSL communication by specifying additional [Vert.x AMQP Client Options](<https://vertx.io/docs/4.2.3/apidocs/io/vertx/amqp/AmqpClientOptions.html>) configuration properties expressed as their JSON representation. Below are some usage examples. Note that SSL configuration properties
+An AMQP Source can be configured for either one-way or two-way SSL communication by specifying additional [Vert.x AMQP Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/amqp/AmqpClientOptions.html>) configuration properties expressed as their JSON representation. Below are some usage examples. Note that SSL configuration properties
 for AMQP, MQTT and Remote Sources are identical in their usage. You can look at the SSL Setup documentation for those
 Sources for additional examples.
 
@@ -249,7 +249,7 @@ $ cat /path/to/sourceKeyStore.jks | base64
 }
 ```
 
-Refer to the [Vert.x AMQP Client Options](<https://vertx.io/docs/4.2.3/apidocs/io/vertx/amqp/AmqpClientOptions.html>)
+Refer to the [Vert.x AMQP Client Options](<https://vertx.io/docs/4.5.28/apidocs/io/vertx/amqp/AmqpClientOptions.html>)
 document for a complete list of configuration options. Note: in that document, reference to `Buffer`
 means that a base64 encoded value can be specified (e.g., trustStoreOptions). Any `add` method translates into an array
 (e.g., pemTrustOptions) and any `set` method translates into a single property setting (e.g., path or value).
@@ -370,7 +370,7 @@ By default, an AMQP source starts reading from the beginning of an Event Hubs pa
 }
 ```
 
-To have fine-grained control over the initial offset, you can specify the [`AmqpReceiverOptions`](https://vertx.io/docs/apidocs/io/vertx/amqp/AmqpReceiverOptions.html) `selector` property. The `AmqpReceiverOptions` setting is specified within the `options` configuration property,
+To have fine-grained control over the initial offset, you can specify the [`AmqpReceiverOptions`](https://vertx.io/docs/4.5.28/apidocs/io/vertx/amqp/AmqpReceiverOptions.html) `selector` property. The `AmqpReceiverOptions` setting is specified within the `options` configuration property,
 
 ```
 ...

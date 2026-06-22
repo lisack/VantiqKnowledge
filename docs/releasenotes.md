@@ -1,13 +1,108 @@
 # 1.44 Release Notes
 
-> The Visual Analytics (VA) features of the Vanitq Platform have been removed.  This includes support for the *images*, *videos*, and *tensorflows* resources, for Vision Script, and for all features that were specific to these resources.
+> The Visual Analytics (VA) features of the Vantiq Platform have been removed.  This includes support for the *images*, *videos*, and *tensorflows* resources, for Vision Script, and for all features that were specific to these resources.
 
 ## Server Enhancements
 
+### AI Support
+
+* GenAI Flow input prompts can now reference images stored as a [Document](resourceguide.md#documents) or [Temp Blob](resourceguide.md#tempblobs). See [Image reference](llms.md#image-reference).
+* Image generation models now support multi-turn editing via the `extra_request_params` configuration (for example, OpenAI's `previous_response_id`). See [Multi-turn editing](llms.md#multi-turn-editing).
+* Added Anthropic as a model provider, accessed using the `anthropic/` model-name prefix.
+* OpenAI embedding models can now be specified using the `openai/` prefix (for example, `openai/text-embedding-3-small`).
+* HuggingFace embedding models can now be specified using the `huggingface/` prefix, including models from any HuggingFace Hub organization.
+
 ## UI Enhancements
 
-An Assembly may depend on other Assemblies to provide its functionality. An assembly that is dependent on other assemblies can mark those assemblies.  Then those dependent assemblies will be automatically subscribed to when the assembly is subscribed to. See [Dependent Assemblies](assemblies.md#dependent-assemblies).
+### IDE
 
+* When deleting one or more projects with the **Delete Project and Resources** (or **Delete Projects and Resources**) option, the IDE now skips any resources that are still referenced by another project that is *not* part of the same deletion. Previously, a shared resource could be removed even though another (non-deleted) project still depended on it. Resources that exist only in the projects being deleted are still removed as before. See [Deleting Projects and Resources](ide.md#deleting-projects-and-resources).
+* [Groups](resourceguide.md#groups) can now be added to Projects.
+* MCP Server definitions can now be created and edited in the IDE.
+* When using Claude Code (or other AI assistant technology) the user can request a summary of the changes in the current session. This will result in a "VIA Session" record to be written in the target namespace. This record will contain information about the changes, such as the Markdown Description and a list of the affected Vantiq resources. These session records can be queried using the "Test / VIA Sessions" menu in the IDE. You can drill in to cause any modified resources to be opened in their corresponding editor. There is a new button in the navbar (shown using the VIA icon) that will take you directly to the most current session description.
+* If Claude Code (or other AI assistant technology) modifies a Project definition in the open namespace a dialog will ask if you want to reload the Project to see the changed configuration.
+* Documents may now be opened for editing by clicking on them.
+* Users can expand/collapse all resources in the Project Contents tree using the new "Expand All" and "Collapse All" buttons in the Project Contents settings.
+* Added IDE Option, Confirmation>Unsaved Changes, to display an alert if the user navigates away from the IDE. This is disabled by default.
+
+### Assemblies
+
+* An Assembly may depend on other Assemblies to provide its functionality. An assembly that is dependent on other assemblies can mark those assemblies. Then those dependent assemblies will be automatically subscribed to when the assembly is subscribed to. See [Dependent Assemblies](assemblies.md#dependent-assemblies).
+
+* The events and procedures shown on an Assembly's **Interface** are now organized by Service.
+
+### Service Builder
+
+* You may now set or edit a Service Connector's `metricsConfig` from both the **Add Service Connector** popup and the **Service Connector** pane.
+* A GenAI procedure may be switched between **public** and **private** using a checkbox in the procedure's properties side panel.
+* Clicking the name of a task in the Generation Error display now opens the configuration for the relevant task.
+
+### Groups
+
+* A **Group** may now be assigned to Services and GenAI procedures. 
+* The **Catalog** pane can be used to add groups to Services, Event Types, and Semantic Indexes as well, instead of only Assemblies.
+* Groups may now be created without an owner ("unowned" groups).
+* Read-only Services and private procedures may not be assigned a group.
+
+### Design Modeler
+
+* Multiple Design Model resources may now be added from a single **Add Service** or **Add Client** popup.
+* Added links between Services whose Visual Event Handlers have Notify tasks and the Clients those Notify tasks reference.
+* Design Model templates have been removed as an option when creating new Design Models.
+
+### Debug Configurations
+
+* Now allows for resources to be directly added to a configuration.
+
+### GenAI Builder
+
+* Generation errors now include a **More Details** / **Less Details** toggle that reveals additional information and documentation links.
+* Model name suggestions are now categorized into submenus.
+* The `documentCompressorCount` parameter in the `SemanticIndexWithCompression` AI Task is now capped at a maximum of 20.
+* Removed the GuardrailsAI GenAI Component due to issues with the underlying library.
+
+### Procedure and Parameter Editors
+
+* A **Resource Explorer** lookup is now available next to every parameter that takes a procedure or a service.
+* Object and array values may now be pasted or typed directly in the **Edit Mixed Array of Any Types** popup.
+
+### Event Generators
+
+* Object values may now be set and edited in Event Generator Descriptors.
+
+### Scheduled Events
+
+* The scheduled start time is now a clickable link.
+
+### Semantic Indexes
+
+* Semantic Indexes may now be opened directly after being subscribed to or installed.
+* A Remote Semantic Index's description becomes read-only once it has been saved.
+
+### Catalogs
+
+* Added support for connecting a new namespace to a renamed catalog.
+
+### Client Builder
+
+* The new [Tree](cbref.md#tree) Widget allows you to display a tree of nested items the user can view and select.
+* The new [Discussion](cbref.md#discussion) Widget is similar to the [Conversation](cbref.md#conversation) Widget but it is used to talk specifically to [GenAI Agents](agents.md).
+* [DataTable](cbref.md#datatable) Widgets are built on top of the 3rd-party [DataTables](https://datatables.net) library - support has been upgraded to Version 2.3.3.
+* [DataTable](cbref.md#datatable) Widgets now support a Height Size Policy of Explicit or SizeToParent. When set this overrides the [rowsPerPage](cbref.md#rowsperpagenumber) property.
+* [DataTable](cbref.md#datatable) Widgets now support an ["On Row Expanded"](cbref.md#on-row-expanded-event) event which can be used to insert additional HTML beneath any data row.
+* When a Client has the "marked as Launchable" property set you will now also see an additional new option called "Launch Automatically". This only applies to the Client Launcher - if this is the only "launchable" Client in the namespace then the Client Launcher list will be bypassed and the Client will launch automatically. (This means you can omit the "run=" parameter in the URL.)
+* The [TabbedLayout](cbref.md#tabbedlayout) Widget has a new boolean property called [hideTabsAtRuntime](cbref.md#hidetabsatruntimeboolean) which allows you to prevent the tabs from being shown at runtime.
+* The [client.popupPage()](cbref.md#popuppage) method now supports extra parameters that allow you to control where the popup will appear above the Client.
+* The Client supports two new methods [client.a2aMessageSend()](cbref.md#a2amessagesend) and [client.a2aMessageStream()](cbref.md#a2amessagestream) which will send messages in the [A2AMessage](https://a2a-protocol.org/latest/topics/key-concepts) format to an Agent.
+* The DynamicMapViewer (Google Maps widget) now has an option to enable or disable **Points of Interest**, and the `showPointsOfInterest` setting may be changed dynamically at runtime.
+
+### LLM Playground
+* The user prompt input field now supports Shift + Up/Down Arrow to navigate through prompt history.
+* Prompt templates now support both ${} and {} substitution formats.
+* Improved the Load Template dialog by preselecting text documents only.
+
+### Deployment Tool
+* Allow deployment parameters to be configured for secrets that do not have an associated resource.
 
 # 1.43 Release Notes
 

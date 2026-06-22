@@ -63,6 +63,114 @@ To perform custom initialization beyond simple creation of the properties, state
 
 The system invokes the initializers automatically any time it must create or recreate the associated state. For example, if the partitioned state is invalidated due to a change to the partitioned state type, then the system will recreate it and run the partitioned initializer.
 
+### Type Coercion for State Variables
+
+The properties of a service's state types are *statically typed*: once a state variable is declared as `String`, `Real`, `Integer`, etc., the VAIL compiler enforces that every assignment to that variable produces a value of the matching type.  If a mismatch is detected, the system will reject the procedure with an error such as:
+
+```
+ERROR: Reassigning type of service state variable 'myVar' from 'String' to 'Any'
+```
+
+This enforcement is stricter than for ordinary local variables.  The following subsections describe the most common situations in which a type mismatch arises and how to resolve each one using the appropriate [type conversion procedure](rules.md#type-specific-procedures).
+
+#### Object Property Access Produces `Any`
+
+Accessing a property on a value whose compile-time type is `Object` (or `Any`) produces type `Any`, even if you know at runtime that the property holds a `String` or `Integer`.  Assigning this directly to a typed state variable triggers the error.
+
+For example, suppose the partitioned state declares `currentZone` as `String`, and a helper procedure returns an `Object`:
+
+```
+// This will FAIL: matchedZone.zoneId has a compile-time type of Any
+currentZone = matchedZone.zoneId
+```
+
+To address this apply the conversion method that matches the state variable's declared type:
+
+```
+// Correct: explicitly convert to String
+currentZone = matchedZone.zoneId.toString()
+```
+
+The same pattern applies to other types:
+
+```
+// State variable declared as Integer
+currentCount = someObject.count.toInteger()
+
+// State variable declared as Real
+currentValue = someObject.measurement.toReal()
+```
+
+#### Assigning `null` Produces `Any`
+
+The literal `null` has type `Any` in VAIL.  Assigning `null` directly to a typed state variable will trigger the same type mismatch error.  Similarly, a local variable initialized from `null` (`var x = null`) is inferred as `Any`, and assigning that variable to a typed state property propagates the mismatch.
+
+```
+// This will FAIL: null has type Any, but currentZone is String
+currentZone = null
+```
+
+To address this use a type-appropriate empty or default value instead of `null`:
+
+```
+// Use an empty string for String state variables
+currentZone = ""
+
+// Use 0 or 0.0 for numeric state variables
+currentCount = 0
+currentValue = 0.0
+```
+
+If you need to conditionally reset a state variable, ensure the assigned value is always of the correct type:
+
+```
+if (shouldReset) {
+    currentZone = ""
+} else {
+    currentZone = matchedZone.zoneId.toString()
+}
+```
+
+#### Numeric Arithmetic Can Produce `Scalar`
+
+When `Integer` and `Real` values are mixed in an arithmetic expression, the result type is `Scalar` (a generalized numeric type) rather than `Integer` or `Real`.  Assigning a `Scalar` value to a state variable declared as `Real` or `Integer` triggers the error.
+
+A common case involves `DateTime.getTime()`, which returns an `Integer`.  Dividing by a `Real` literal produces `Scalar`:
+
+```
+// This will FAIL: Integer / Real produces Scalar, not Real
+var elapsed = timestamp.getTime() / 1000.0
+cumulativeSeconds = cumulativeSeconds + elapsed
+```
+
+To address this convert the operand(s) to the target type *before* arithmetic, or convert the final result:
+
+```
+// Option 1: convert the Integer operand first
+var ms = timestamp.getTime().toReal()
+cumulativeSeconds = cumulativeSeconds + (ms / 1000.0)
+
+// Option 2: convert the entire expression result
+cumulativeSeconds = (cumulativeSeconds + timestamp.getTime() / 1000.0).toReal()
+```
+
+For `Integer` state variables, use `.toInteger()` in the same way.
+
+#### Summary of Common Conversions
+
+| State Variable Type | Expression Type | Conversion Method |
+|---------------------|-----------------|-------------------|
+| `String`            | `Any` (from Object property) | `.toString()` |
+| `Integer`           | `Any` or `Scalar` | `.toInteger()` |
+| `Real`              | `Any` or `Scalar` | `.toReal()` |
+| `Boolean`           | `Any` | `.toBoolean()` |
+| `DateTime`          | `Any` | `.toDate()` |
+| `Decimal`           | `Any` | `.toDecimal()` |
+
+The full list of available conversion methods for each type is documented in [Type Specific Procedures](rules.md#type-specific-procedures).
+
+> These type enforcement errors appear only in the `vailErrors` response field when a procedure is saved (upserted), not at runtime.  They cannot be tested interactively, so careful use of conversion methods during development avoids repeated save-and-check cycles.
+
 ### Scheduled Procedures
 
 Stateful services may declare *scheduled* procedures to help them perform periodic, background tasks, such as persisting state in resource instances or resetting statistics being computed. This is done by specifying a scheduling interval as part of the procedure declaration. The minimum supported interval is `1 minute` and the minimum increment is `1 minute`. Execution of scheduled procedures is aligned, meaning that all invocations start at the top of the hour and offset from there (so an interval of 10 minutes means 0, 10, 20, 30,… and an interval of 15 minutes means 0, 15, 30,…).
@@ -177,6 +285,7 @@ In addition to the service state, the following collaboration management procedu
     * collaboration -- the associated active collaboration instance.
     * isNew -- "true" if the collaboration instance was created, otherwise "false".
 * `ActiveCollabsSetEntity(collaborationId String REQUIRED, entityId String REQUIRED, entityRoleName String REQUIRED, entity Object REQUIRED)` -- Set the given entity value in the collaboration with the specified id.  Returns the updated collaboration.
+* `ActiveCollabsSetResult(collaborationId String REQUIRED, resultName String REQUIRED, resultValue Object REQUIRED)` -- Set the value of the named result in the specified collaboration instance. If the specified collaboration instance is inactive or does not exist, then the request is a no-op. Returns the updated collaboration.
 * `ActiveCollabsStartConversation(collaborationId String REQUIRED, conversationName String, conversationProperties Object, collaborationName String): String` -- Starts/continues the named conversation ("default" if none is specified) in the collaboration with the given id.  The collaboration will be created if it does not currently exist.  Returns the id of the conversation.
 
 > API Migration Notes:

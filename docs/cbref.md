@@ -7,6 +7,94 @@ This is a "Reference Guide" for the classes that make up the Client Builder API.
 
 This section describes the functions and properties of the "Client" object. There is always a single "Client" object available that represents the running Client; it is usually accessible through the "client" argument to event handlers.
 
+### a2aMessageSend()
+#### Send a message in Agent2Agent protocol to an Agent
+
+```js
+a2aMessageSend(agentName:string,msg:A2AMessage,options:any=null):Promise
+```
+
+This method provides a way to send a message to an Agent using the [Agent2Agent (A2A) Protocol](https://a2a-protocol.org).
+
+* agentName:string - The full name of the Agent (Service) to which the message should be sent
+* msg:A2AMessage - An object in the [A2AMessage](https://a2a-protocol.org/latest/topics/key-concepts) format that contains the message to be sent.
+* options:any - Extra options to be added to the payload
+
+The method returns a Promise since the results are returned asynchronously. Here is an example of using this method:
+
+```js 
+  let userMsg = "What is the capital of California?";
+  let options = null;
+  
+  let message = new A2AMessage();
+  message.parts.push(new A2ATextPart(userMsg));
+  
+  console.log("Message=" + userMsg);
+  
+  client.a2aMessageSend("com.vantiq.MyAgent",message,options).then(
+          function(response)
+          {
+            //
+            //  Response from the Agent
+            //
+            console.log("RESPONSE:" + JSON.stringify(response,null,3));
+          },
+          function(error)
+          {
+            console.error("ERROR:" + JSON.stringify(error,null,3));
+          }
+);
+```
+
+
+
+### a2aMessageStream()
+#### Send a message in Agent2Agent protocol to an Agent and stream the results
+
+```js
+a2aMessageStream(agentName:string,msg:A2AMessage,options:any=null,inProgressCallback:Function=null):Promise
+```
+
+This method provides a way to send a message to an Agent using the [Agent2Agent (A2A) Protocol](https://a2a-protocol.org). Receives intermediate "streaming" results if the Agent supports it.
+
+* agentName:string - The full name of the Agent (Service) to which the message should be sent
+* msg:A2AMessage - An object in the [A2AMessage](https://a2a-protocol.org/latest/topics/key-concepts) format that contains the message to be sent.
+* options:any - Extra options to be added to the payload
+* inProgressCallback:Function - An optional callback function that receives the results
+
+The method returns a Promise since the results are returned asynchronously. Here is an example of using this method:
+
+```js 
+  let userMsg = "What is the capital of California?";
+  let options = null;
+  
+  let message = new A2AMessage();
+  message.parts.push(new A2ATextPart(userMsg));
+  
+  console.log("Message=" + userMsg);
+  
+  client.a2aMessageStream("com.vantiq.MyStreamingAgent",message,options,function(progress)
+  {
+    //
+    //  Intermediate "progress" messages provided by the Agent
+    //
+    console.log("PROGRESS:" + JSON.stringify(progress,null,3));
+  }).then(
+          function(response)
+          {
+            //
+            //  Final response from the Agent
+            //
+            console.log("RESPONSE:" + JSON.stringify(response,null,3));
+          },
+          function(error)
+          {
+            console.error("ERROR:" + JSON.stringify(error,null,3));
+          }
+  );
+);
+```
+
 ### abort()
 #### Abort the Client after trapping an exception
 
@@ -2295,7 +2383,7 @@ Inside an event handler you might use this API operation like this:
 #### Open a Page as a popup dialog
 
 ```js
-popupPage(pageName: string, popupTitle: string, parameters: any, callback: Function): void
+popupPage(pageName: string, popupTitle: string, parameters: any=null, callback: Function=null, pagePosition:PagePosition=PagePosition.Center, xOffset:number=0, yOffset:number=0): void
 ```
 
 * pageName:string - The name of the page to be opened as a popup dialog. The page must be in "Browser" layout.
@@ -2306,11 +2394,15 @@ popupPage(pageName: string, popupTitle: string, parameters: any, callback: Funct
 
 * callback:Function - (optional) A callback function that will be invoked when the popup Page exits via [client.closePopup()](#closepopup).
 
-This function is similar to [client.goToPage()](#gotopage) except that instead of "navigating to" the Page it will be popped up inside a modal dialog. (The popup
-will be sized so as to "frame" the contents of the Page.) 
+* pagePosition:PagePosition - (optional) Specify where the popup should be positioned relative to the Page area (defaults to PagePosition.Center. Other options are .NW, .N, .NE, .W, .E, .SW, .S and  .SE)
+
+* xOffset:number - (optional) Specify how many horizonal pixels the popup should be offset from the pagePosition.
+
+* yOffset:number - (optional) Specify how many vertical pixels the popup should be offset from the pagePosition.
+
+This function is similar to [client.goToPage()](#gotopage) except that instead of "navigating to" the Page it will be popped up inside a modal dialog. (The popup will be sized so as to "frame" the contents of the Page.)
 
 This function can throw an exception in some situations, such as if there is already a page popped up or the target page is not in "Browser" layout.
-
 
 The popup will be visible until [client.closePopup()](#closepopup) is called.
 
@@ -2329,6 +2421,11 @@ Here's an example of how this call might be used, assuming that "MyPopupPage" is
 
 ```
 
+This example shows how to position the popup so it is centered horizontally above the Page and aligned to the top but offset downward by 10 pixels.
+
+```js
+   client.popupPage("MyPopupPage","A Custom Title",null,null,PagePosition.N,0,10);
+```
 
 
 
@@ -5303,6 +5400,93 @@ where "this" points to the Page object, "client" points to the Client object, an
 
 Use the 'On Swipe' function to provide Page navigation functionality that is natural for user's of mobile apps.
 
+
+
+
+
+
+
+
+## TreeWidgetObject
+These objects are used describe the contents of a [Tree](#tree) Widget. The objects are arranged in a strict hierarchy where each node has a single parent (except for the "root") and each node can have one or more children. Nodes with children may be opened and closed ("isExpanded"). Single nodes may be selected (if "selectableNodes" is set to "true").
+
+For example, you might build a simple tree like this:
+
+```js
+var root = new TreeWidgetObject("The Root");
+
+var cats = new TreeWidgetObject("Cats");
+var dogs = new TreeWidgetObject("Dogs");
+
+root.addChild(cats);
+root.addChild(dogs);
+
+cats.addChild("Miss Kitty Fantastico");
+cats.addChild("Spot");
+
+dogs.addChild("Snuff");
+dogs.addChild("Zero");
+
+var myTree = client.getWidget("TheTreeWidget");
+myTree.root = root;
+```
+`
+This section describes some useful methods and properties defined on all TreeWidgetObjects.
+
+### constructor:(label:string,tooltip:string=null)
+
+When instantiating a TreeWidgetObject you should always supply a "label". This label does not have to be unique, but it should be to avoid user confusion.
+
+### addChild(two:TreeWidgetObject):TreeWidgetObject
+
+Add a node to another (which will become its parent).
+
+### children:TreeWidgetObject[]
+
+A read-only list of the TreeWidgetObject's children.
+
+### icon:string
+
+You may enter a valid icon name such as "glyphicon-asterisk" or "fa-automobile". For a list of valid icons see the Client Builder property sheet.  The default is "null" which means the node has no icon.
+
+
+### isExpanded:boolean
+
+If the node has children this lets you control whether it is open or closed.
+
+### isSelected:boolean
+
+Only one node may be selected at a time.
+
+### label:string
+
+The TreeWidgetObject's label.
+
+### menuObjects:MenuObject[]
+
+You may specify a context menu for any node - the MenuObjects are the same ones used by the [MenuBar](#menubar) Widget.
+
+### parent:TreeWidgetObject
+
+This node's parent - all nodes have a parent except the root.
+
+### remove():void
+
+Remove this node from its parent.
+
+### removeChild(two:TreeWidgetObject):void
+
+Remove the indicated child from this node.
+
+### sortChildrenByLabel(ascending:boolean=true)
+
+For a node with children this causes them to be sorted by their label.
+
+### tooltip:string
+
+The tooltip which would be displayed when hovering the mouse over the node.
+
+
 ## Uploader
 
 This section describes the Uploader class which allows you to construct a request to upload specific scalar and media data to the Vantiq server. Before reading this section you should refer [here](cbuser.md#uploading-data-to-the-server) which explains what the Uploader does and why you might want to use it.
@@ -5530,6 +5714,7 @@ The Widgets are arranged in a class hierarchy which is shown below; note that on
         * [Checkbox](#checkbox)
         * [ComboBox](#combobox)
         * [Conversation](#conversation)
+        * [Discussion](#discussion)
         * [DocumentViewer](#documentviewer)
         * [Droplist](#droplist)
         * [ImageMarkup](#imagemarkup)
@@ -5548,6 +5733,8 @@ The Widgets are arranged in a class hierarchy which is shown below; note that on
         * [MultilineInput](#multilineinput)
         * [RadioButtons](#radiobuttons)
         * [SectionLabel](#sectionlabel)
+        * [Signature](cbref.md#signature)
+        * [Tree](#tree)
         * [VideoRecorder](#videorecorder)
     * [StaticHtml](#statichtml)
     * [StaticImage](#staticimage)
@@ -6631,6 +6818,35 @@ This only applies when using a streamed Gen AI Procedure. Value is in bytes and 
 ### title:string
 #### The title to appear at the top of the Conversation Widget
 
+### 'On Action Button' Event
+
+In the Client Builder you are able to define 3 different types of "action buttons" which will appear in and around the message area. These are found in the "Specific" area of the property sheet:
+
+* User Message Actions - These are buttons which will appear next to messages entered by the user
+* System Message Actions - These are buttons which will appear next to message responses sent by the system
+* Latest Message Actions - These are buttons which will only appear next the most recent message response sent by the system
+
+These action buttons are identified by a unique key and have an optional Label, Icon and Tooltip.
+
+The "On Action Button" Event Handler is called whenever one of these buttons is clicked. This call will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onActionButton(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains properties that help identify which button was clicked and which message was associated with it:
+
+* index - the index of the action within its set of action buttons
+* message - the text of the message the button is associated with
+* key - the unique key that was assigned to the button
+* label - the label for the button
+* tooltip - the tooltip for the button
+
+
+
+
 
 ### 'On Data Arrived' Event
 
@@ -6691,6 +6907,174 @@ When configured to use a Procedure the "extra" object looks like this:
 ```
 
 In either case you may alter the contents of "obj" to override what the user typed and change what is actually sent to the server.
+
+
+
+<hr>
+
+## Discussion
+<span style="font-style:italic;">[Widget](#widget) &#x2192; [ControlWidget](#controlwidget) &#x2192; [Chat](#chat) &#x2192; Discussion</span>
+
+
+This Widget is similar to the [Conversation](#conversation), but is intended specifically for interaction with Services which are designated as [Agents](agents.md). Any input supplied by the user is sent to the Agent using the streaming Agent-to-Agent (A2A) protocol.
+
+The Discussion Widget manages one or more "InteractionThreads" - each of these represents a dialog the user is having with an Agent. Each thread is represented by a read-only InteractionThread object with properties which contain information about the thread:
+
+* discussion:any - A copy of the last-known state of the corresponding Discussion object
+* discussionId:string - The id of the corresponding Discussion object
+* isActive:boolean - "true" if this InteractionThread is currently visible in the Discussion Widget
+* serviceName:string - The name of the Agent Service that this InteractionThread communicates with
+* title:string - The title for the thread, which comes from the "title" property of the Discussion
+
+There are other properties defined by the InteractionThread object but they are for internal use only.
+
+There is only a single InteractionThread visible and usable at a time, known as the "active" thread. The Discussion Widget always contains one special InteractionThread that indicates the "default" thread that is defined in the Client Builder. This InteractionThread does *not* have an actual Discussion associated with it. The discussionId is a special string defined as Discussion.GENERAL.
+
+Typically this "General" thread is used to talk to an Agent whose job it is to analyze requests and send them to other Agents which *do* have a Discussion. In order for the user to see and communicate with these Discussions it is the responsibility of the Client to call the onDiscussionInserted() method, which tells the Widget to create a new InteractionThread to represent the Agent/Discussion. Usually the Client will provide a UI that allows the user to know about (and switch between) the various threads. (You might do this with a List or Tree or even a set of buttons.)
+
+
+
+### activeDiscussionId:string
+#### Get or Set the id of the currently active Discussion
+
+This contains the Discussion id associated with the currently active InteractionThread. (This will return Discussion.GENERAL for the "default" InteractionThread.)
+
+It can only be set to a Discussion id of one of the currently known InteractionThreads.
+
+
+### activeInteractionThread:InteractionThread
+#### Get or Set the currently active InteractionThread
+
+This contains the currently active InteractionThread. It can only be set to an InteractionThread which is currently known to the Discussion Widget.
+
+
+
+### getInteractionThreadByDiscussionId()
+#### Get the InteractionThread associated with a Discussion
+
+```js
+var it = getInteractionThreadByDiscussionId(discussionId:string):InteractionThread
+```
+* discussionId: string - The Discussion id
+
+This method returns the InteractionThread associated with the supplied discussion id. If there is no match then "null" will be returned.
+
+
+
+### onDiscussionDeleted()
+#### Tell the Discussion Widget that a Discussion has been deleted
+
+```js
+onDiscussionDeleted(discussion:any)
+```
+* discussion: any - The Discussion which was deleted
+
+This method tells the Discussion Widget that a Discussion it may know about has been deleted. The Discussion's id will be used to search for a matching InteractionThread and if found it will be discarded. If the InteractionThread happened to be active then the Widget will switch to the default ("General") InteractionThread.
+
+Typically the Client will learn about the creation, update and deletion of Discussions by creating an "On Data Changed" DataStream for the "system.discussions" Type.
+
+
+### onDiscussionInserted()
+#### Tell the Discussion Widget that a new Discussion has been inserted
+
+```js
+var it = onDiscussionInserted(discussion:any):InteractionThread
+```
+* discussion: any - The Discussion which was inserted
+
+This method tells the Discussion Widget that a new Discussion has been created and that a new InteractionThread should be created to represent it.
+
+Typically the Client will learn about the creation, update and deletion of Discussions by creating an "On Data Changed" DataStream for the "system.discussions" Type.
+
+
+
+### onDiscussionUpdated()
+#### Tell the Discussion Widget that a new Discussion has been updated
+
+```js
+onDiscussionUpdated(discussion:any)
+```
+* discussion: any - The Discussion which was updated
+
+This method tells the Discussion Widget that an existing Discussion has been updated and that the InteractionThread title may need to change to match.
+
+Typically the Client will learn about the creation, update and deletion of Discussions by creating an "On Data Changed" DataStream for the "system.discussions" Type.
+
+### state:DiscussionState
+#### Get the current "state" of the Discussion Widget
+
+This is a read-only property that uses a set of possible values to describe the current state of the Discussion Widget:
+
+* DiscussionState.Unrealized - The Widget is not attached to a Page - should never happen
+* DiscussionState.Idle - The Widget is idle and waiting for user input
+* DiscussionState.InProgress - A request is in progress so new input is not being accepted
+* DiscussionState.InputRequested - The Widget is waiting for the user to respond to a request for input
+
+### 'On Action Button' Event
+
+In the Client Builder you are able to define 3 different types of "action buttons" which will appear in and around the message area. These are found in the "Specific" area of the property sheet:
+
+* User Message Actions - These are buttons which will appear next to messages entered by the user
+* System Message Actions - These are buttons which will appear next to message responses sent by the system
+* Latest Message Actions - These are buttons which will only appear next the most recent message response sent by the system
+
+These action buttons are identified by a unique key and have an optional Label, Icon and Tooltip.
+
+The "On Action Button" Event Handler is called whenever one of these buttons is clicked. This call will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onActionButton(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains properties that help identify which button was clicked and which message was associated with it:
+
+* index - the index of the action within its set of action buttons
+* message - the text of the message the button is associated with
+* key - the unique key that was assigned to the button
+* label - the label for the button
+* tooltip - the tooltip for the button
+
+
+
+
+### 'On Data Arrived' Event
+
+This Widget supports an "On Data Arrived" Event Handler. This handler will be called whenever a response to a user's request is sent to the Discussion widget. This call will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onDataArrived(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains two properties:
+
+* response:any - An Agent-to-Agent (A2A) prootcol Task object that contains the complete response. (A description can be found [here](https://agent2agent.info/docs/concepts/task/))
+* prompt:string - The previous user input which provoked this response
+* isShown:boolean - Your code can set this to "false" if you want this response to be hidden from the user.
+
+
+
+
+
+
+### 'On Send Request' Event
+
+This Widget supports an 'On Send Request' Event Handler. It allows your code to see and change any request sent by the user. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onSendRequest(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself. "extra" is an object which contains the "extra.message" property containing the text of the user's input. You may alter the contents of "message" to override what the user typed and change what is actually sent to the server.
+
+
+
+
+
+
 
 
 <hr>
@@ -6808,6 +7192,8 @@ The style of the text may be specified as one of "normal", or "italic".
 
 The Data Table only shows "rowsPerPage" rows of data at a time; there is a "paginator" widget shown at the bottom of the table that allows you to page forward and backward through the data.
 
+This property will be ignored if the DataTable's Height Size Policy is set to Explicit or SizeToParent.
+
 ### selectedObjectIndex:number
 #### Index of the currently selected row object in original data set
 
@@ -6847,15 +7233,15 @@ where "client" points to the Client object, "page" points to the current Page an
 
 The "extra" parameter contains an object with information describing the click; these properties are defined:
 
-
-* dataRowIndex: The row number within the data array of the button which was clicked (the first row is "0").
-* dataColumnIndex: The column number within the DataTable of the button which was clicked (the first column is "0").
-* columnName: The property name that corresponds to the column that was clicked.
-* columnTitle: The title of the column that was clicked.
 * buttonLabel: The label text of the button that was clicked.
-* dataObject: The "row object" for the row that was clicked.
-* rowSelector: A JQuery selector for the "row" element (tr) which contains the clicked button
+* columnName: The property name that corresponds to the column that was clicked.
 * columnSelector: A JQuery selector for the "column" element (td) which contains the clicked button
+* columnTitle: The title of the column that was clicked.
+* dataColumnIndex: The column number within the DataTable of the button which was clicked (the first column is "0").
+* dataObject: The "row object" for the row that was clicked.
+* dataRowIndex: The row number within the data array of the button which was clicked (the first row is "0").
+* physicalRowIndex: The physical row number containing the button that was clicked (the first row is "0").
+* rowSelector: A JQuery selector for the "row" element (tr) which contains the clicked button
 
 
 
@@ -6872,16 +7258,16 @@ where "client" points to the Client object, "page" points to the current Page an
 
 The "extra" parameter contains an object with information describing the click; these properties are defined:
 
-
-* dataRowIndex: The row number within the data array of the checkbox which was clicked (the first row is "0").
-* dataColumnIndex: The column number within the DataTable of the checkbox which was clicked (the first column is "0").
-* columnName: The property name that corresponds to the column that was clicked.
-* columnTitle: The title of the column that was clicked.
 * checkboxLabel: The label text of the checkbox that was clicked.
-* dataObject: The "row object" for the row that was clicked.
-* isChecked: A boolean that represents the current state of the checkbox.
-* rowSelector: A JQuery selector for the "row" element (tr) which contains the clicked checkbox
+* columnName: The property name that corresponds to the column that was clicked.
 * columnSelector: A JQuery selector for the "column" element (td) which contains the clicked checkbox
+* columnTitle: The title of the column that was clicked.
+* dataColumnIndex: The column number within the DataTable of the checkbox which was clicked (the first column is "0").
+* dataObject: The "row object" for the row that was clicked.
+* dataRowIndex: The row number within the data array of the checkbox which was clicked (the first row is "0").
+* isChecked: A boolean that represents the current state of the checkbox.
+* physicalRowIndex: The physical row number containing the checkbox that was clicked (the first row is "0").
+* rowSelector: A JQuery selector for the "row" element (tr) which contains the clicked checkbox
 
 
 ### 'On Data Consumed' Event
@@ -6901,99 +7287,6 @@ The "extra" parameter contains an object with information describing the incomin
 * ignore: A boolean value which is initially set to "false". If your code changes this to "true" the object will not be delivered to the widget for display.
 
 
-### 'On Format Cell' Event
-
-This event is fired when a value is about to be displayed within a cell of the DataTable; the handler may be used to change the displayed value. The code will be wrapped in a function with a signature of the form:
-
-```
-Client_<page name>_<widget name>_onFormatCell(client,page,extra)
-```
-
-where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
-
-The "extra" parameter contains an object with information describing the cell; these properties are defined:
-
-* dataRowIndex: The row number within the data array of the checkbox which was clicked (the first row is "0").
-* dataColumnIndex: The column number within the DataTable of the checkbox which was clicked (the first column is "0").
-* columnName: The property name that corresponds to the column that was clicked.
-* columnTitle: The title of the column that was clicked.
-* dataObject: The "row object" for the row that was clicked.
-* cellValue: The string that is about to be displayed in this cell.
-
-The string in "extra.cellValue" is about to be displayed in this cell; you may alter this value to change what will actually be displayed.
-
-
-### 'On Format Cell Background' Event
-
-This event is still defined for backwards compatibility but has been deprecated. Instead you should use the "On Render Cell" event defined below.
-
-
-### 'On Render Cell' Event
-
-This event is fired when a value is about to be displayed within a cell of the DataTable; the handler may be used to change the CSS style of the various DOM elements that it contains based on the data it displays. (This would allow you to change things such as "font-style".) The code will be wrapped in a function with a signature of the form:
-
-```
-Client_<page name>_<widget name>_onRenderCell(client,page,extra)
-```
-
-where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
-
-The "extra" parameter contains an object with information describing the cell; these properties are defined:
-
-* dataRowIndex: The row number within the data array of the checkbox which was clicked (the first row is "0").
-* dataColumnIndex: The column number within the DataTable of the checkbox which was clicked (the first column is "0").
-* columnName: The property name that corresponds to the column that was clicked.
-* columnTitle: The title of the column that was clicked.
-* dataObject: The "row object" for the row that was clicked.
-* trElement: A JQuery selector that points to the '&lt;tr>' element which contains the cell.
-* tdElement: A JQuery selector that points to the '&lt;td>' element which contains the cell.
-* buttonElement: For columns containing "Buttons" this will be a JQuery selector that points to the '&lt;button>' element within the cell.
-* inputElement: For columns containing "Checkboxes" this will be a JQuery selector that points to the '&lt;input>' element within the cell.
-* labelElement: For columns containing "Checkboxes" this will be a JQuery selector that points to the '&lt;label>' element within the cell.
-* imgElement: For columns containing "Images" this will be a JQuery selector that points to the '&lt;img>' element within the cell.
-
-The JQuery selectors such as "extra.tdElement" can be used to change the CSS styling of this cell. For example,
-
-```
-extra.tdElement.css("font-style","italic");
-```
-
-
-### 'On Image Click' Event
-
-This event is fired when the user clicks on an "Image" column which has been defined in the DataTable.
-The code will be wrapped in a function with a signature of the form:
-
-```
-Client_<page name>_<widget name>_onImageClick(client,page,extra)
-```
-
-where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
-
-The "extra" parameter contains an object with information describing the click; these properties are defined:
-
-
-* dataRowIndex: The row number within the data array of the button which was clicked (the first row is "0").
-* dataColumnIndex: The column number within the DataTable of the button which was clicked (the first column is "0").
-* columnName: The property name that corresponds to the column that was clicked.
-* columnTitle: The title of the column that was clicked.
-* dataObject: The "row object" for the row that was clicked.
-* rowSelector: A JQuery selector for the "row" element (tr) which contains the clicked image
-* columnSelector: A JQuery selector for the "column" element (td) which contains the clicked image
-
-
-### 'On Select' Event
-
-This Widget supports an "On Select" Event Handler. The code will be wrapped in a function with a signature of the form:
-
-```
-Client_<page name>_<widget name>_onSelect(client,page,extra)
-```
-
-where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
-
-The "extra" parameter contains the row object which was selected.
-
 
 
 ### 'On Deselect' Event
@@ -7009,6 +7302,140 @@ where "client" points to the Client object, "page" points to the current Page an
 The "extra" parameter contains the row object which was deselected.
 
 
+
+### 'On Format Cell' Event
+
+This event is fired when a value is about to be displayed within a cell of the DataTable; the handler may be used to change the displayed value. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onFormatCell(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains an object with information describing the cell; these properties are defined:
+
+* cellValue: The string that is about to be displayed in this cell.
+* columnName: The property name that corresponds to the column being formatted.
+* columnTitle: The title of the column being formatted.
+* dataColumnIndex: The column number within the DataTable being formatted (the first column is "0").
+* dataObject: The "row object" of the row being formatted.
+* dataRowIndex: The row number within the data array of the row being formatted(the first row is "0").
+* physicalRowIndex: The physical row number containing the row being formatted (the first row is "0").
+
+
+The string in "extra.cellValue" is about to be displayed in this cell; you may alter this value to change what will actually be displayed.
+
+
+### 'On Format Cell Background' Event
+
+This event is still defined for backwards compatibility but has been deprecated. Instead you should use the "On Render Cell" event defined below.
+
+
+
+### 'On Image Click' Event
+
+This event is fired when the user clicks on an "Image" column which has been defined in the DataTable.
+The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onImageClick(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains an object with information describing the click; these properties are defined:
+
+* columnName: The property name that corresponds to the column that was clicked.
+* columnSelector: A JQuery selector for the "column" element (td) which contains the clicked image
+* columnTitle: The title of the column that was clicked.
+* dataColumnIndex: The column number within the DataTable of the image which was clicked (the first column is "0").
+* dataObject: The "row object" for the row that was clicked.
+* dataRowIndex: The row number within the data array of the image which was clicked (the first row is "0").
+* physicalRowIndex: The physical row number containing the image which was clicked (the first row is "0").
+* rowSelector: A JQuery selector for the "row" element (tr) which contains the clicked image
+
+
+
+
+
+### 'On Render Cell' Event
+
+This event is fired when a value is about to be displayed within a cell of the DataTable; the handler may be used to change the CSS style of the various DOM elements that it contains based on the data it displays. (This would allow you to change things such as "font-style".) The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onRenderCell(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains an object with information describing the cell; these properties are defined:
+
+* buttonElement: For columns containing "Buttons" this will be a JQuery selector that points to the '&lt;button>' element within the cell.
+* columnName: The property name that corresponds to the column being rendered.
+* columnTitle: The title of the column being rendered.
+* dataColumnIndex: The column number within the DataTable of the cell being rendered (the first column is "0").
+* dataRowIndex: The row number within the data array of the cell being rendered (the first row is "0").
+* dataObject: The "row object" for the row being rendered.
+* imgElement: For columns containing "Images" this will be a JQuery selector that points to the '&lt;img>' element within the cell.
+* inputElement: For columns containing "Checkboxes" this will be a JQuery selector that points to the '&lt;input>' element within the cell.
+* labelElement: For columns containing "Checkboxes" this will be a JQuery selector that points to the '&lt;label>' element within the cell.
+* physicalRowIndex: The physical row number containing the row being rendered (the first row is "0").
+* tdElement: A JQuery selector that points to the '&lt;td>' element which contains the cell.
+* trElement: A JQuery selector that points to the '&lt;tr>' element which contains the cell.
+
+
+The JQuery selectors such as "extra.tdElement" can be used to change the CSS styling of this cell. For example,
+
+```
+extra.tdElement.css("font-style","italic");
+```
+
+### 'On Row Expanded' Event
+
+If this event is defined, then all rows in the DataTable are shown with a "disclosure" button which causes them to expand and contract. When expanded this event can supply a fragment of HTML which will be displayed underneath the open row.
+
+```
+Client_<page name>_<widget name>_onRowExpanded(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains an object with information describing the row; these properties are defined:
+
+* dataRowIndex: The row number within the data array for the row being expanded (the first row is "0").
+* physicalRowIndex: The physical row number within the current page (the first row is "0").
+* dataObject: The "row object" for the row being expanded.
+* rowSelector: The JQuery selector for the current physical row
+* html: A string set by the handler for the HTML to be shown in the expanded area. (defaults to "")
+
+For example, you might use this to add an optional image to an expanded row if the dataObject has one:
+
+```
+if (extra.dataObject.employeeImage)
+{
+    let img = client.getDocumentUrl(extra.dataObject.employeeImage);
+    extra.html = "<img src=\"" + img  + "\">";
+}
+else
+{
+    extra.html = "No Image";
+}
+```
+
+
+
+### 'On Select' Event
+
+This Widget supports an "On Select" Event Handler. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onSelect(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself.
+
+The "extra" parameter contains the row object which was selected.
 
 
 
@@ -9950,6 +10377,11 @@ getPageVisibility(index:number):boolean
 Normally all of the "pages" which are defined in a TabbedLayout will be visible at runtime. This method can be used to find out whether a page is currently visible (true) or hidden (false).
 
 
+### hideTabsAtRuntime:boolean
+#### Cause the Tabs to be hidden at runtime
+
+When set to true this causes the tabs defined by the TabbedLayout to be hidden (defaults to "false"). This means it is the Client's responsibilty to provide some alternate programmatic means (using setPageVisibility()) to switch tabs at runtime.
+
 ### setPageVisibility()
 #### Set one of the TabbedLayout's pages to be shown or hidden
 
@@ -9985,6 +10417,89 @@ The "extra" parameter contains an object with information describing the change;
 * newTabLabelLocalized: The label of the tab which is now active (the actual displayed value after localization).
 
 
+<hr>
+
+## Tree
+<span style="font-style:italic;">[Widget](#widget) &#x2192; [ControlWidget](#controlwidget) &#x2192; Tree</span>
+
+This Widget is used to display a tree of nested items. All of the nodes within the tree are described by a nested hierarchy of TreeWidgetObjects described [TreeWidgetObject](#treewidgetobject).
+
+
+
+
+
+### getTreeObjectByLabel(label:string):TreeWidgetObject
+
+Return the TreeWidgetObject whose "label" property matches the supplied parameter.
+
+* label: string - The label to search for
+
+This method can return null if the label is not found. If more that one item has the same label if returns the first one found.
+
+### noContentsMessage:string
+By default this property is "null" and the Tree will display the text "No Contents". You may set this property to a different value to override that.
+
+
+
+### root:TreeWidgetObject
+The TreeWidgetObject representing the topmost item in the TreeWidgetObject hierarchy.
+
+### selectableNodes:boolean
+Determine whether nodes in the tree should be selectable (The default is "true").
+
+### selectedTreeWidgetObject:TreeWidgetObject
+This property may to be used to set or get the currently selected TreeWidgetObject.
+
+
+### showRoot:boolean
+Determine whether the root object is actually shown in the Tree. (The default is "false").
+
+
+
+
+
+
+### 'On Node Clicked' Event
+
+This Widget supports an 'On Node Click' Event Handler. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onNodeClicked(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself. 'extra.node' contains the TreeWidgetObject which was clicked.
+
+### 'On Node Expanded Changed' Event
+
+This Widget supports an 'On Node Expanded' Event Handler. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onNodeExpandedChanged(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself. 'extra.node' contains the TreeWidgetObject which changed.
+
+
+### 'On Node Menu Clicked' Event
+
+This Widget supports an 'On Node Menu Clicked' Event Handler. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onNodeMenuClicked(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself. 'extra.node' is the node whose menu was used, 'extra.key' is the key of the menu item and 'extra.menuItem' is the MenuItem itself.
+
+
+### 'On Node Selection Changed' Event
+
+This Widget supports an 'On Node Selection Changed' Event Handler. The code will be wrapped in a function with a signature of the form:
+
+```
+Client_<page name>_<widget name>_onNodeSelectionChanged(client,page,extra)
+```
+
+where "client" points to the Client object, "page" points to the current Page and "this" points to the Widget itself. 'extra.node' contains the TreeWidgetObject which changed.
 
 <hr>
 

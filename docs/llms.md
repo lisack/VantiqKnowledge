@@ -442,23 +442,250 @@ property](https://api.python.langchain.com/en/latest/chat_models/langchain_opena
 
 ### Embedding Models
 
-If the OpenAI embedding model you want to use does not appear in the Model Name drop-down list, you can define it by creating a custom configuration. Set the `class_name` property to `langchain_openai.embeddings.OpenAIEmbeddings` and the `model` property to the desired model name.
+To use an OpenAI embedding model, select it from the Model Name drop-down list or enter it manually using the syntax `openai/<model-name>`, for example `openai/text-embedding-3-small`. 
 
-For example, to use the `text-embedding-3-large` model, the configuration would be:
-```
+Some OpenAI embedding models, such as `text-embedding-3-small` and `text-embedding-3-large`, support variable output dimensions, allowing you to select an embedding size that fits your use case. Specify the desired size using the `Vector Size` property.
+
+If the variable-dimension model appears in the Model Name drop-down list, simply set the `Vector Size` property. The server recognizes the model and automatically adds the required `dimensions` configuration based on the value you provide, so you do not need to specify it yourself. If no vector size is specified, the model's default size is used (1536 for `text-embedding-3-small` and 3072 for `text-embedding-3-large`).
+
+If the variable-dimension model you want is not listed, you can still enter it manually using `openai/<model-name>`. In this case, you must specify the desired dimension in two places: the `Vector Size` property and the `dimensions` configuration property. These values must match.
+
+For instance, to use a non-listed variable-dimension model with an embedding size of 512, set `Vector Size` to 512 and provide the following configuration:
+
+```text
 {
-   "class_name": "langchain_openai.embeddings.OpenAIEmbeddings",
-   "model": "text-embedding-3-large",
-   "dimensions": "3072"
+  "dimensions": 512
 }
 ```
 
-Note that `text-embedding-3-large` is a model with configurable dimensions, this is why the `dimensions` property is included.
-It specifies the expected embedding size. For such models, make sure to set the `Vector Size` property to the same value
-as the `dimensions` property.
+### Image Generation
 
-For example,
-![OpenAI Embedding Configuration](assets/img/ai/OpenAICustomEmbedding.png)
+To use a GPT Image Generation model, for example gpt-image-1.5, you must define an LLM generative model that uses the OpenAI Responses API and specifies the image model as a built-in `image_generation` tool. The mainline model is defined as a text-capable model, such as gpt-4.1 or gpt-5. The mainline model decides when and how to generate or edit an image based on your prompt, and the tool `action` parameter controls whether that choice is automatic or forced to generation or editing; it defaults to `auto`.
+
+For example, using models from the mini family,
+
+![OpenAI Image Generation Configuration](assets/img/ai/OpenAIGenImage.png)
+
+with Configuration:
+
+```
+{
+   "use_responses_api": true,
+   "output_version": "responses/v1",
+   "model_kwargs": {
+      "tools": [
+         {
+            "type": "image_generation",
+            "model": "gpt-image-1-mini",
+            "size": "1024x1024",
+            "quality": "low",
+            "output_format": "jpeg"
+         }
+      ]
+   }
+}
+```
+
+Please refer to the OpenAI documentation for more details on the available image generation models and `image_generation` tool configuration options.
+
+#### Image reference
+
+To specify an image reference in the prompt, you can provide a publicly accessible image URL, a Vantiq [Document](resourceguide.md#documents) or [Temp Blob](resourceguide.md#tempblobs) reference, or an OpenAI file id (a reference to an image file uploaded to OpenAI).  A Document or Temp Blob reference — for example, a frame captured from a [Video Source](sources/video.md) — is materialized and submitted as part of the prompt, subject to the `documentExpansion` quota.
+
+The recommended, vendor-agnostic way to reference an image is the *flat* `image` content type, whose `url` may be a URL or a Document/Temp Blob reference:
+
+```
+var msg = io.vantiq.ai.ChatMessage.buildHumanMessage([
+    {type: "text", text: "Convert the image to grayscale."},
+    {type: "image", url: "system.documents/myImage.png"}
+])
+```
+
+Provider-specific syntaxes are also accepted.  OpenAI's chat/completions form takes the URL or reference in `image_url.url`:
+
+```
+var msg = io.vantiq.ai.ChatMessage.buildHumanMessage([
+    {type: "text", text: "Convert the image to grayscale."},
+    {type: "image_url", image_url: {url: "https://example.com/image.png"}}
+])
+```
+
+and its responses-API form accepts either an `image_url` (URL or reference) or a `file_id` for an image uploaded to OpenAI:
+
+```
+var msg = io.vantiq.ai.ChatMessage.buildHumanMessage([
+    {type: "text", text: "Convert the image to grayscale."},
+    {type: "input_image", file_id: fileId}
+])
+```
+
+To upload an image document to OpenAI and get a fileId value, you can define a REMOTE source and create a procedure that triggers the upload and returns the file id of the uploaded image. 
+
+For example, assuming a package `some.example` with a service named `ImageService` and a REMOTE source named `OpenAI_FileUpload`,
+
+```
+package some.example
+stateless PROCEDURE ImageService.publishImageAsOpenAIFile(imageName String)
+
+var rRef = "system.documents/" + imageName
+
+var ret = SELECT ONE FROM SOURCE OpenAI_FileUpload WITH 
+			method: "POST",
+            parts: [ { name: "purpose", content: "vision" },
+                     { name: "file", filename: imageName, ref: rRef, 
+                       contentType: "image/jpeg" }]
+
+if (ret && ret.id) {
+    // Return OpenAI file id
+    return ret.id
+} else {
+    exception("file.upload.error", "Failed uploading file {0) to OpenAI ", [imageName])
+}
+```
+
+The REMOTE source `OpenAI_FileUpload` is configured to upload files to the OpenAI file endpoint (`/v1/files`). The source credential type must be set to `Access Token` and reference an OpenAI API key, stored as a Vantiq [Secret](resourceguide.md#secrets) (_menu Administer > Advanced > Secrets_).
+
+```
+{
+    "accessTokenType": "secret",
+    "accessToken": "/system.secrets/OpenAIKey",
+    "uri": "https://api.openai.com/v1/files"
+}
+```
+
+#### Multi-turn editing
+
+Some image generation models can refine a previously generated image over multiple turns.  With OpenAI's Responses API this is done by passing the `previous_response_id` of the prior generation back to the model on the next call.
+
+Because `previous_response_id` is provider-specific and is not part of the standard model interface, you declare it in the LLM configuration using `extra_request_params`.  This is a list of parameter names that, when supplied in the GenAI Procedure's `config` argument (the flow's [runtime configuration](genaibuilder.md#runtime-configuration)), are forwarded as-is to the inference endpoint:
+
+```
+{
+   "use_responses_api": true,
+   "output_version": "responses/v1",
+   "model_kwargs": {
+      "tools": [
+         {
+            "type": "image_generation",
+            "model": "gpt-image-1",
+            "size": "1024x1024",
+            "quality": "low",
+            "output_format": "jpeg"
+         }
+      ]
+   },
+   "extra_request_params": ["previous_response_id"]
+}
+```
+
+To use the model, build a GenAI Flow whose [LLM component](genaibuilder.md#llm) runs this image-generation LLM, and set that component's **output type** to `None` so the flow returns the full [ChatMessage](rules.md#chatmessage).  This preserves the response `id` (needed to continue the exchange) and the generated image, which is returned in the message content as an `image_generation_call` part whose `result` holds the base64-encoded image.  Expose the flow as a [GenAI Procedure](services.md#genai-procedures) — `ImageService.genImageFlow` in the examples below.
+
+The following procedure generates an image, saves it as a [Document](resourceguide.md#documents), and returns the response `id` so the image can be edited in a later turn:
+
+```
+package org.test
+stateless PROCEDURE ImageService.genImage()
+
+var msg = io.vantiq.ai.ChatMessage.buildHumanMessage([
+    {type: "text", text: "Create a picture of a mouse flying over the moon."}
+])
+
+var response = ImageService.genImageFlow([msg])
+var ret = "no image saved"
+
+for (part in response.content) {
+    if (part.type == "image_generation_call") {
+        var image_base64 = part.result
+        UPSERT system.documents(name: "myTestImage.jpg", content: Decode.base64Raw(image_base64), fileType: "image/jpg")
+        ret = "image saved as myTestImage.jpg - response Id: " + response.id + " - imageId: " + part.id
+    }
+}
+
+return ret
+```
+
+To continue editing, call the flow again with that response `id`, which gets passed as `previous_response_id` in the `config` argument:
+
+```
+package org.test
+stateless PROCEDURE ImageService.editImage_FromResponseId(responseId String required, prompt String)
+
+if (prompt == null) {
+    prompt = "Change the image to be black and white"
+}
+
+var msg = io.vantiq.ai.ChatMessage.buildHumanMessage([
+    {type: "text", text: prompt}
+])
+
+var response = ImageService.genImageFlow([msg], {previous_response_id: responseId})
+var ret = response
+
+for (part in response.content) {
+    if (part.type == "image_generation_call") {
+        var image_base64 = part.result
+        UPSERT system.documents(name: "myTestImageEdited.jpg", content: Decode.base64Raw(image_base64), fileType: "image/jpg")
+        ret = "image saved as myTestImageEdited.jpg"
+    }
+}
+
+return ret
+```
+
+The same `extra_request_params` mechanism can forward any other provider-specific parameter that is not part of the standard model interface.
+
+## Anthropic
+
+Vantiq integrates with Anthropic, allowing access to Claude generative models.
+
+To define an Anthropic model using the IDE, you need to provide:
+
+* **Model Name** -- `anthropic/<model>` where `<model>` is the Anthropic model name, for example `anthropic/claude-sonnet-4-6`.
+* **Credentials** -- the Anthropic API Key.
+
+For example, an Anthropic model can be defined as:
+
+```json
+{
+  "name": "ClaudeLLM",
+  "modelName": "anthropic/claude-sonnet-4-6",
+  "type": "generative",
+  "description": "Claude model from Anthropic",
+  "config": {
+    "apiKeySecret": "AnthropicAPIKey"
+  }
+}
+```
+
+## HuggingFace
+
+Vantiq integrates with HuggingFace embedding models. Unlike the other providers, a HuggingFace model runs locally on the Vantiq server — the model is downloaded from [huggingface.co](https://huggingface.co) the first time it is used, cached on the server, and run in-process. No API key is required, but the server needs outbound access to `huggingface.co` for the initial download.
+
+To define a HuggingFace model using the IDE, you need to provide:
+
+* **Model Name** -- `huggingface/<model>` for a model from the `sentence-transformers` organization (for example, `huggingface/all-MiniLM-L12-v2`), or `huggingface/<org>/<model>` for a model hosted under any other HuggingFace Hub organization (for example, `huggingface/BAAI/bge-large-en-v1.5`). A bare model name is resolved against the `sentence-transformers` organization, so models from other organizations must use the `<org>/<model>` form.
+* **Vector Size** -- the output dimension of the embedding model. For well-known `sentence-transformers` models this is set automatically and may be omitted; for any other model you must set it to match the model's output dimension.
+
+For example, a HuggingFace model can be defined as:
+
+```json
+{
+  "name": "HuggingFaceEmbedder",
+  "modelName": "huggingface/all-MiniLM-L12-v2",
+  "type": "embedding"
+}
+```
+
+For a model that is not one of the well-known `sentence-transformers` models, set the `Vector Size` property to match its output dimension:
+
+```json
+{
+  "name": "BgeEmbedder",
+  "modelName": "huggingface/BAAI/bge-large-en-v1.5",
+  "type": "embedding",
+  "vectorSize": 1024
+}
+```
 
 ## Usage
 
@@ -642,7 +869,7 @@ Note that the `tool_calls` property is a list that may contain multiple tools. E
 
 Another use case for defining a tool with a custom schema is to explicitly manage its invocation, providing complete control over the process. Based on the _tool call_ description returned by the LLM, you can access the necessary invocation information, invoke the tool, and then provide the tool's response back to the LLM. This allows the LLM to generate an appropriate response using the context provided by the tool.
 
-To do this, you can use the built-in service procedure [`ChatMessage.buildToolResultMessage`](rules.md#chatmessage-builders). This procedure wraps the tool invocation response as a tool message, which can be added back to the LLM prompt context. Note that when adding a tool result message to the prompt context, you must also add the initial LLM result with the _tool call_ descriptions. This ensures that the LLM has the necessary context. 
+To do this, you can use the built-in service procedure [`ChatMessage.buildToolResultMessage`](rules.md#chatmessage-builders). This procedure wraps the tool invocation response as a tool message, which can be added back to the LLM prompt context. Note that when adding a tool result message to the prompt context, you must also add the preceding Tool Call AI message containing the tool call descriptions (for example, the `getTemperature` tool call shown in the previous section). This ensures that the LLM has the necessary context: the initial prompts, that Tool Call AI message, and the corresponding tool result message associated with that tool call.
 
 The following VAIL code illustrates how to define a tool with a custom schema and how to explicitly manage its invocation. We continue using `getCurrentTemperature` as a tool, but now we use the `submitPrompt` built-in service procedure along with a function descriptor schema,
 
@@ -692,7 +919,7 @@ if (typeOf(result) == "Object") {
     prompts.add(toolResult)
 
 	// with complete context, invoke LLM again - we should now get the expected response 
-	result = LLM.submitPrompt(llmName: llmName, prompt: prompts, tools: [schema])
+	result = LLM.submitPrompt(llmName: llmName, prompt: prompts)
 } else {
 	exception("org.test.error", "expected a message response with tool_calls", [])
 }
@@ -704,6 +931,58 @@ return result
 Once the tool is invoked using the information from the `tool_calls` property description (`<tool invocation>` placeholder above), a tool result message is created and added to the prompt context. The tool response message contains the tool name, tool returned value and the tool `id` value from the _tool call_ description.
 
 This example uses a single tool for simplicity. If multiple schemas are provided and the LLM chooses to use more than one tool (i.e., the _tool call_ description list contains multiple tools), you must handle each tool invocation separately and provide a tool result message for each response. The LLM prompt context should then include the initial LLM result with the _tool call_ descriptions, followed by a tool result message for each invoked tool. 
+
+**Synthetic Tool Call message**
+
+In the previous example, we added the Tool Call AI message returned by the LLM to the prompt context. If you want to create a synthetic Tool Call message instead, you can use the built-in service procedure `ChatMessage.buildToolCallMessage`, providing a list of tool call descriptions. This approach allows you to create a tool call message even when the LLM does not return one, or to modify a tool call description before adding it to the prompt context.
+
+The `ChatMessage.buildToolCallMessage` procedure requires two parameters: a message name and a list of tool call descriptions. The message name can be any value. Each tool call description in the list must include the tool name, arguments, a unique id, and the type "tool_call". The return value is an AI message that can be added to the prompt context, just like a Tool Call AI message returned by the LLM.
+
+This is illustrated in the following code below, which modifies the previous example to create a synthetic tool call message instead of using the one returned by the LLM.
+
+```text
+package tool.example
+
+import service io.vantiq.ai.LLM
+import service io.vantiq.ai.ChatMessage 
+
+// LLM resource must have tool calling capability, e.g., OpenAI, Gemini
+PROCEDURE ToolSamples.customInvoke(llmName String, cityName String)
+
+// initial prompt
+var prompt = "What is the temperature in " + cityName + "?"
+var prompts = [ChatMessage.buildHumanMessage(prompt)]
+
+// tool call description for the selected tool
+var toolCall = {
+        name: "getCurrentWeather",
+        args: { location: cityName },
+        id: uuid(),
+        type: "tool_call"
+    }
+    
+// synthetic AI Tool Call message describing the selected tool    
+var result = ChatMessage.buildToolCallMessage("someName", [toolCall])    
+    
+// add message with tool description to prompt context
+prompts.add(result)
+
+// where the tool gets invoked and returns a value (placeholder for actual tool invocation logic)
+// var tempFromTool = <tool invocation>
+var tempFromTool = 18   // assume the tool returns 18 as the temperature
+
+// wrap tool returned value as a tool result message and add to prompt context
+var toolResult = ChatMessage.buildToolResultMessage(toolCall.name, tempFromTool, toolCall.id)
+prompts.add(toolResult)
+
+// with complete context, invoke LLM - we should get the expected response 
+result = LLM.submitPrompt(llmName: llmName, prompt: prompts)
+
+// e.g., ret = "The temperature in Paris is 18 degrees Celsius."
+return result
+```
+
+As with an LLM-generated tool call, the tool result message must reference the same tool id value so that the LLM can associate the tool response with the corresponding tool call.
 
 #### Tool Parameter Override
 

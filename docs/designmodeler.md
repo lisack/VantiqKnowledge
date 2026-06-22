@@ -7,39 +7,30 @@ The Design Modeler is the visual IDE tool for building Vantiq systems. It allows
 For an introduction to the use of the Design Modeler, follow the [Introductory Tutorial](tutorials/tutorial.md). This tutorial introduces the basics of creating a new Design Model to implement a simple engine monitoring system. In addition, the [System Model Tutorial](tutorials/systemmod.md) shows how to model business process requirements and then produce a Design Model based on those requirements.
 
 ## Creating a New Design Model
-New Design Models are created using **Add>Design Model** and clicking the **New Design Model** button. The Design Modeler uses Design Templates to help the developer design Vantiq systems that are scalable and use best practices. The New Design Model dialog shows a diagrammatic representation and an explanation of each of the templates. Select a Design Template that most closely matches the system you're trying to build.
+New Design Models are created using **Add>Design Model** and clicking the **New Design Model** button. For the remainder of this guide, we'll instead use an example Vantiq project using an import process.
 
-&nbsp;&nbsp;&nbsp;&nbsp;![NewDesignModel](assets/img/intro/NewDesignModel.png "New Design Model")
+Use the **Project** menu to select **New Project**, which displays the New Project Wizard. Either create a new Namespace (recommended) or add a new project to the current Namespace, select **Existing** as the Project type and click **Continue**.
 
-There are five Design Templates:
+Next, select the **Import Projects** option and click **Go to Import Project Dialog**.
 
-1. **Closed Loop System**: receives events from an External System and checks the value against a target. If the current value is not yet at the target, computes a change or controller event and publishes the result to the Control System for further processing.
+In the **Import Contributions** dialog, select *Contributions* as the **Select Import Type** and *IntroductoryStart* as the **Select From Contributions**, then click **Import**.
 
-2. **Event Driven Integration**: receives data from an external system, performs transformations and analytics and then publishes the resulting event to another external system for further processing.
+After the import process is complete, reload the *IntroductoryStart* project by clicking the **Reload** button:
 
-3. **IoT System**: receives data from IoT devices, processes and summarizes it looking for anomalies, and updates Clients as needed.
+&nbsp;&nbsp;&nbsp;&nbsp;![ImportStarter](../assets/img/intro/ImportStarter.png "Import Intro Starter")
 
-4. **Object Recognition System**: receives events from an AI Camera or AI platform. These events contain details on what has been detected within the video stream and responds accordingly.
-
-5. **Empty**: creates an empty Design Model to create a model from new and existing Services and Clients.
-
-In addition to selecting the **Design Template**, two additional properties are available for all but the _Empty_ Template:
-
-* **Number of Streams**: the number of sources of data entering the application. As an example for the _IoT System_, the number of streams would be the number of different types of data (e.g. temperature and speed) to be received from IoT devices.
-* **Service Name**: the name of the primary Service that will be generated for this model. Each of the templates create at least one Service. The default name of the Service is the name of the Data Model but another name can be specified using the **Service Name** property.
-
-Click the **OK** button in the _New Design Model_ dialog to start the Design Model generation. After the generation is complete, the Design Model pane will display. Here is an _EngineMonitor_ Design Model generated from the _IoT System_ template with two streams specified:
+After the project reload is complete, the _com.vantiq.engines.EngineMonitor_ Design Model pane is displayed:
 
 &nbsp;&nbsp;&nbsp;&nbsp;![DesignModelInitial](assets/img/intro/DesignModelInitial.png "Initial Design Model")
 
 ## Understanding the Design Model Pane
 The right side of the Design Model pane contains the graphical representation of the model. In the example shown above, there are six nodes in the graph:
 
-- **ExternalSensorEvents**: this is an _External System_ Design Modeler node, which graphically represents the IoT device's two sensors. External System nodes are used for documentation purposes only. They are meant to represent how the Vantiq system being built receives or transmits data external to the Vantiq system.
-- **IngestExternalSensorEventsService**: this is a _Service_ Design Modeler node, which represents an actual Vantiq Service. This Service has a limited purpose: to receive messages from the sensors and to forward those events to the _EngineMonitor_ Service for processing.
-- **EngineMonitor**: this is another _Service_ Design Modeler node which represents the Service that will use data from the sensors, determine if those data indicate possible problems, then forwards the sensor data and problem status to the _EngineMonitor_ Client for display. The [Service Builder](services.md) is used to modify both Services in this Design Model.
-- **EngineMonitor**: this is a _Client_ Design Modeler node which represents the Client that will display sensor data and problem status. The [Client Builder](cbuser.md) is used to modify the Client in this Design Model.
-- **DataWarehouse**: this is another _External System_ Design Modeler node. It could represent a database, either Vantiq's native database or an external database system, to store data received or calculated by the engine system.
+- **Sensors**: this is an _External System_ Design Modeler node, which graphically represents the engine's temperature and speed sensors. External System nodes are used for documentation purposes only. They are meant to represent how the Vantiq system being built receives or transmits data external to the Vantiq system.
+- **EngineMonitorSensors**: this is a _Service_ Design Modeler node, which represents an actual Vantiq Service. This Service has a limited purpose: to receive messages from the temperature and speeds sensors and to forward those events to the _EngineMonitor_ Service for processing.
+- **EngineMonitor**: this is another _Service_ Design Modeler node which represents the Service that will use data from the sensors, determine if that data indicates possible problems with the engine, then forwards the sensor data and engine status to the _EngineMonitor_ Client for display. In this tutorial, the [Service Builder](services.md) is used to modify both Services in this Design Model.
+- **EngineMonitor**: this is a _Client_ Design Modeler node which represents the Client that will display engine status: speed, temperature and any error status. In this tutorial, the [Client Builder](cbuser.md) is used to modify the Client in this Design Model.
+- **DataWarehouse**: this is another _External System_ Design Modeler node. It could represent a database, either Vantiq's native database or an external database system, to store data received or calculated by the engine system. Since this is a real-time engine status system, this node won't be used and is deleted as this tutorial progresses.
 - **OutsideWorld**: like the _DataWarehouse_ node, it could represent, for example, a REST API or MQTT server, that might consume data from this Vantiq system.
 
 The left side of the Design Model pane contains two sections. The upper section is the Design Modeler palette. The palette contains five drag-and-droppable items that are used to create new nodes (External Systems, Services, and Clients) in the Design Model:

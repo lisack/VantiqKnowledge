@@ -1,0 +1,1 @@
+Home for any cluster configuration files that are common to all cluster providers.

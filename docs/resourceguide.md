@@ -603,10 +603,20 @@ A group is a set of users and access tokens with shared access to a collection o
 
 Types that are going to have group-restricted access need to be defined with the groupEnabled flag set to true on the type definition. This flag will add the extra qualifications to any query performed on the "grouped" type. The groupRequired flag can be set on the type definition as well to indicate that all inserts on the type must specify a non-null value for ars_group. Groups can be enabled without being required, in which case records with a null ars_group value will be visible to all users with access to the type.
 
+A group is defined by:
+
+* _name_ -- The name of the group.
+* _owner_ -- The owner of a group is specified when the group is created and is the only user who can add members to the group or delete the group. If the owner is `null`, then all members may edit the group's `members` list.
+* _members_ -- Members of the group have access to records tagged with an ars_group value of the group name. Members can remove themselves from a group, but not add other users to the group.
+
+### Editing the members list
+
+When editing the members list, it is more efficient to use a PATCH that adds or removes individual entries (see [Add a member to the group](#add-a-member-to-the-group) and [Remove a member from the group](#remove-a-member-from-the-group)) over a POST that rewrites the entire list. PATCH lets the server inspect and validate only the changed members, which is significantly faster for large groups.
+
+Including operations on fields other than `members` in the same PATCH will skip this optimization.
+
 ### Access Rights
 
-* _owner_ -- The owner of a group is specified when the group is created and is the only user who can add members to the group or delete the group
-* _member_ -- Members of the group have access to records tagged with an ars_group value of the group name. Members can remove themselves from a group, but not add other users to the group.
 * _admin_ -- The namespace admin can see all records in the namespace, regardless of groups.
 * _users_ -- General users can see which groups exist, and see who owns the group, but can not access any of the elements tagged with an ars_group value of the group name.
 
@@ -958,7 +968,7 @@ That host name is used by Kubernetes to route requests to the installation.
 
 Moreover, as noted,
 the host name given (or the [K8s Cluster](#k8s-clusters)'s `ingressDefaultNode` if that is used)
-must resolve to the cluster address for the Kuberetes cluster in question.
+must resolve to the cluster address for the Kubernetes cluster in question.
 That is,
 the URL `http://host:80` must be a valid, resolvable URL.
 Requests sent to the Kubernetes cluster using that host name will be routed to the K8s Installation
@@ -1296,7 +1306,7 @@ The **status** is a string containing one of the following values:
 
 ## LLMs
 
-LLMs represent a Large Language Model that can either be run by the Vantiq platform or which is hosted somewhere else, but reachable via some remote protocol (most often REST over HTTP). Vantiq has preconfigured support for the following models: [GPT-4](https://platform.openai.com/docs/models/gpt-4), [GPT-4o-mini](https://platform.openai.com/docs/models/gpt-4o-mini), [Open AI Embeddings](https://platform.openai.com/docs/guides/embeddings#embedding-models) and [Sentence Transformers](https://www.sbert.net/docs/pretrained_models.html#model-overview).  It is also possible for customers to configure access to additional, "custom" models (contact Vantiq Support for more details).
+LLMs represent a Large Language Model that can either be run by the Vantiq platform or which is hosted somewhere else, but reachable via some remote protocol (most often REST over HTTP). Vantiq has built-in support for both generative and embedding models from a range of providers; see the [LLM Reference Guide](llms.md) for the supported providers and models.  It is also possible for customers to configure access to additional, "custom" models (contact Vantiq Support for more details).
 
 See also built-in service [io.vantiq.ai.LLM](rules.md#llm).
 
@@ -1306,10 +1316,7 @@ LLMs have the following properties:
 * __type__ (String) -- the type of LLM.  The value is immutable once set.  Indicates what functions the LLM performs.  Possible values are:
     * __embedding__ -- the LLM is used to create vector embeddings when loading a [semanticindex](#semantic-indexes).
     * __generative__ -- the LLM is used to generate responses based on user input.
-* __modelName__ (String) -- the name of the actual model used by this LLM.  The value is immutable for *embedding* models.  If the model is not one that is known to the Vantiq platform, the user must supply the information necessary to configure access to the model at runtime.  The recognized models are:
-    * Versions 3.5 and 4 of the [OpenAI models](https://platform.openai.com/docs/models).
-    * The "text-embedding-ada-002" model from OpenAI.
-    * The HuggingFace [Sentence Transformer models](https://www.sbert.net/docs/pretrained_models.html#model-overview).
+* __modelName__ (String) -- the name of the actual model used by this LLM.  The value is immutable for *embedding* models.  In most cases the model is specified using the syntax `<provider>/<model-name>`, where the provider prefix selects the built-in integration to use (for example, `openai/gpt-4o-mini` or `openai/text-embedding-3-small`).  This makes most models offered by a supported provider available without additional configuration.  If the model is not covered by a built-in provider, the user must supply the information necessary to configure access to the model at runtime.  See the [LLM Reference Guide](llms.md) for the supported providers and their configuration details.
 * __description__ (String) -- an optional description of the LLM.
 * __config__ (Object) -- optional configuration used when constructing the runtime form of the LLM.  Some common properties are:
     * __temperature__ -- the sampling temperature to use (floating point value between 0.0 and 1.0, default is 0.0).
@@ -1884,6 +1891,38 @@ Once created, one-time events can only be deleted, they may not be updated.
 
 Scheduled Events have a *publishes* relationship to the Topic that it is scheduled to publish to.
 
+### Change Scheduled Event Activation State
+
+A scheduled event can be set to the active state via a REST request:
+
+```
+PATCH https://dev.vantiq.com/api/v1/resources/scheduledevents/<eventName>
+```
+
+with the JSON message body:
+
+```json
+[
+    {
+        "op": "replace",
+        "path": "/active",
+        "value": true
+    }
+]
+```
+
+A scheduled event can be set to the inactive state via a REST request with the JSON body:
+
+```json
+[
+    {
+        "op": "replace",
+        "path": "/active",
+        "value": false
+    }
+]
+```
+
 ### Access Rights
 
 * _admin_ -- admin users have full access rights to all Scheduled Event instances in their namespace.
@@ -2278,6 +2317,40 @@ Services may contain the following relationships:
 - *contains* relationship to all of the Procedures within the Service. 
 - *dependency* relationship on any Types used to contain the Service State or referenced as the event schema on any Service Event Types.
 
+### Change Service Activation State
+
+A service can be set to the active state via a REST request:
+
+```
+PATCH https://dev.vantiq.com/api/v1/resources/services/<serviceName>
+```
+
+with the JSON message body:
+
+```json
+[
+    {
+        "op": "replace",
+        "path": "/active",
+        "value": true
+    }
+]
+```
+
+A service can be set to the inactive state via a REST request with the JSON body:
+
+```json
+[
+    {
+        "op": "replace",
+        "path": "/active",
+        "value": false
+    }
+]
+```
+
+When a service is set to inactive, all Event Handlers and Event Streams bound to the service will also be deactivated.  When the service is reactivated, those Event Handlers and Event Streams will be reactivated as well.
+
 ### Access Rights
 
 * _admin_ -- admin users have full access rights to all Service instances in their namespace and read-only access to all system services.
@@ -2419,6 +2492,40 @@ Sources may have any of the following relationships:
 - *dependency* relationship to the Type used as the messageType
 - *executes* relationship to the Mock Publish or Mock Query Procedures
 - *dependency* relationship to the Source Implementation used by an Enterprise Connector
+
+### Change Source Activation State
+
+A source can be set to the active state via a REST request:
+
+```
+PATCH https://dev.vantiq.com/api/v1/resources/sources/<sourceName>
+```
+
+with the JSON message body:
+
+```json
+[
+    {
+        "op": "replace",
+        "path": "/active",
+        "value": true
+    }
+]
+```
+
+A source can be set to the inactive state via a REST request with the JSON body:
+
+```json
+[
+    {
+        "op": "replace",
+        "path": "/active",
+        "value": false
+    }
+]
+```
+
+Deactivating a source disconnects it from the external system it represents. Reactivating it reconnects the source using its current configuration. Note that any source that references an updated [Secret](#secrets) must be deactivated and reactivated for the new secret value to take effect.
 
 ### Access Rights
 
@@ -2787,9 +2894,7 @@ In this example, we have a region called *intersection* with a defined boundary.
 The distance between the two points specified is 24 (the units are unspecified, but should be understood by the application developer).
 The direction between the two points listed is east (compass direction 90 degrees).
 
-For more information about using regions,
-please see the [Motion Tracking](imageprocessing.md#motion-tracking) section
-of the [Image Processing Guide](imageprocessing.md).
+For more information about using regions, please see the [Motion Tracking](rules.md#motion-tracking) built-in service or [Track Motion](apps.md#track-motion) activity pattern.
 
 
 ### Access Rights

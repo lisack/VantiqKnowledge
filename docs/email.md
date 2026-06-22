@@ -27,7 +27,7 @@ The EMAIL source configuration properties are:
 * **password** - the password used to authenticate with the SMTP server (may be a resource reference).
 * **from** - the default value to use as the "from" field using an email source to publish a [delegated request](../resourceguide.md#delegated-requests).  If not provided then the **username** will be used as the default "from" in this case.  NOTE -- this value is **not** used when using `PUBLISH` to [send email](#send-email-via-email-source).
 
-In addition, it is also possible to specify any property supported by the [Vert.x MailConfig](https://vertx.io/docs/4.2.3/apidocs/io/vertx/ext/mail/MailConfig.html).
+In addition, it is also possible to specify any property supported by the [Vert.x MailConfig](https://vertx.io/docs/4.5.28/apidocs/io/vertx/ext/mail/MailConfig.html).
 
 ## Create EMAIL Source
 

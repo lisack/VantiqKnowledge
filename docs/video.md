@@ -9,7 +9,7 @@ A video source implements one or more of the following capabilities:
 
 The operation of the video source is enabled through the _video assistant_ service connector.  If you are using the video source, your administrator will need to configure your organization with the VideoAssistantServiceConnector. Information about how to do this can be found in the [Administrators Reference Guide](../namespaces.md#depVidAssistant) and, for Vantiq edge installations, the [Vantiq Edge Reference Guide](../vantiqedge.md), specifically [running the Video Assistant server](../vantiqedge.md#runVideoAssistant) and [creating the Video Assistant Service Connector](../vantiqedge.md#createVideoAssistantSC).
 
-Images returned by a video source are, by default, placed in memory (as a [`TempBlob`](./../resourceguide.md#tempblobs)) -- they are not saved to a document or image resource ([unless specifically requested](#saveAs)). Any use of a video source requires some organization-wide quota.  See [Size Limits](#sizeLimits) for more information.
+Images returned by a video source are, by default, placed in memory (as a [`TempBlob`](./../resourceguide.md#tempblobs)) -- they are not saved to a document resource ([unless specifically requested](#saveAs)). Any use of a video source requires some organization-wide quota.  See [Size Limits](#sizeLimits) for more information.
 
 ## Defining a Video Source
 
@@ -186,9 +186,9 @@ A VIDEO source is used to download (_i.e._, receive) images. These are returned 
 The [`TempBlob`](./../resourceguide.md#tempblobs) has a defined expiration time (defaulting to 2 minutes).  If not saved by that time, the data is lost.
 
 <a name="saveAs"></a>
-### Saving an Image as a Document or Image
+### Saving an Image as a Document
 
-To save the result of a query against a video source as a Vantiq Document or Image, provide a `saveAs` parameter to the `WITH` clause of the SELECT statement. The value of the `saveAs` parameter should be a `ResourceReference` identifying the where to save the result.
+To save the result of a query against a video source as a Vantiq Document, provide a `saveAs` parameter to the `WITH` clause of the SELECT statement. The value of the `saveAs` parameter should be a `ResourceReference` identifying the where to save the result.
 
 For example, the following VAIL code will fetch an image from a video source (here, called `imageSource`), saving it into a VAIL document named `myImage`.
 
@@ -199,12 +199,10 @@ var fetchedImg = SELECT ONE FROM SOURCE imageSource WITH saveAs = imageRef
 
 The return value of the SELECT statement (here, stored in the `fetchedImg` variable), will be the resource reference into which the image was saved.
 
-Note that in image analysis scenarios, `system.images` may be more appropriate as the type into which to place the image.
-
 <a name="processWith"></a>
-#### Dynamically Determining Whether to Save the Document or Image
+#### Dynamically Determining Whether to Save the Document
 
-As noted above, when the `saveAs` parameter is provided, the Document or Image is saved as specified.  However, it is sometimes desired to fetch entities, then determine whether to save them based on some criteria. Rather than always saving then having to remove unwanted things, we can use the `processWith` parameter.
+As noted above, when the `saveAs` parameter is provided, the Document is saved as specified.  However, it is sometimes desired to fetch entities, then determine whether to save them based on some criteria. Rather than always saving then having to remove unwanted things, we can use the `processWith` parameter.
 
 The `processWith` parameter can optionally be provided in addition to the `saveAs` parameter. The `processWith` parameter should specify the name of a procedure that will be called to determine whether to save the received entity or to discard it.
 
@@ -212,9 +210,9 @@ The procedure (which can be in a package and/or service) must have the following
 
 ```js
 //
-// Process/Filter document/image/video reference
+// Process/Filter document references
 //
-// @param targetContent String Document/Image/Video content, encoded as base64 if necessary
+// @param targetContent String Document content, encoded as base64 if necessary
 // @param targetSize Integer Size of targetContent string
 // @param isBase64Encoded Boolean Is the string passed along the entity value or the base64-encoded entity value
 // @param fileType String MIME content type of target/entity
@@ -235,7 +233,7 @@ where
 * **targetContent** -- the content to be saved, represented as a String.  It may be base64 encoded if the MIME type is not text.
 * **targetSize** -- the size of the `targetContent` as an Integer
 * **isBase64Encoded** -- is the `targetContent` value base64 encoded
-* **fileType** -- the MIME type of the document/image/video presented, as a String
+* **fileType** -- the MIME type of the document presented, as a String
 * **entitySize** -- the size of the entity as it will be saved, as an Integer.  This may be different from `targetSize` if the `targetContent` is base64 encoded.
 * **entityRef** -- Resource Reference of the entity to be saved.
 
@@ -273,9 +271,7 @@ var fetchedImg = SELECT ONE FROM SOURCE imageSource WITH saveAs = imageRef,
 <a name="sizeLimits"></a>
 ### Size Limits When Operating on Images
 
-
-Use of a video source requires the organization to have quota for `documentExpansion`.
-Details on the `documentExpansion` quota can be found in the [Administrators Reference Guide](../namespaces.md#quotas).
+Use of a video source requires the organization to have quota for `documentExpansion`. Details on the `documentExpansion` quota can be found in the [Administrators Reference Guide](../namespaces.md#quotas).
 
 The images returned are stored in the Vantiq server. This storage is controlled by organization quotas that limit how much memory these document, image, or video expansions can concurrently consume. Should these limits be exceeded, the request will result in an error.
 

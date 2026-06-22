@@ -75,8 +75,7 @@ The primitive components (aka primitives) provide various utility/control functi
 
 #### Guardrails
 
-* [GuardrailsAI](#guardrailsai) -- An implementation of the [Guardrails-AI toolkit](https://www.guardrailsai.com/docs) with a limited set of Validators. Used to protect against invalid or improper prompts and responses.
-* [NeMoGuardrails](#nemoguardrails) -- An implementation of [Nvidia's NeMo Guardrails toolkit](https://docs.nvidia.com/nemo/guardrails/latest/index.html). Used to protect against invalid or improper prompts and responses, and to tailor LLM prompts or responses for certain topics. Intended for more complex or comprehensive use-cases, compared to the Guardrails-AI toolkits.
+* [NeMoGuardrails](#nemoguardrails) -- An implementation of [Nvidia's NeMo Guardrails toolkit](https://docs.nvidia.com/nemo/guardrails/latest/index.html). Used to protect against invalid or improper prompts and responses, and to tailor LLM prompts or responses for certain topics.
 
 #### Document Loaders
 
@@ -108,9 +107,10 @@ Document compressors are used to perform [contextual compression](https://python
 The AI Patterns are implementations of several common GenAI algorithms (aka patterns) which are provided by Vantiq.  These can be used as-is or as the basis for further customization in the creation of your own GenAI Flows.
 
 * [Categorize](#categorize) -- analyzes the given input and places it in one of the categories that are part of its configuration.
-* [Consensus](#consensus) -- uses multiple LLMs to arrive at a consensus response to the supplied input prompt.
+* [Consensus](#consensus) -- derives a consensus response from multiple candidate statements, typically produced by multiple upstream LLM tasks.
 * [RAG](#rag) -- an implementation of Retrieval Augmented Generation (RAG).  This implementation matches the one provided by the [AnswerQuestion](apps.md#answer-question) activity pattern.
 * [ReduceDocuments](#reducedocuments) -- uses a given prompt and LLM to reduce an array of documents to a single result.
+* [Reflection](#reflection) -- iteratively generates and critiques a response using two LLMs until the result is accepted or the iteration limit is reached.
 
 #### Configuration Processors
 
@@ -258,7 +258,7 @@ A very common use case involves an application managing a sequence of interactio
 
 It is important that GenAI Flows be able to participate in these conversations, both in order to leverage the state that they contain and in order to contribute to that state.  This is the reason for the [Conversation](#conversation) resource component and for the inclusion of the **useConversation** configuration property in AI patterns such as [RAG](#rag).  More details on how to incorporate conversations into your GenAI Flows can be found in the description of the [Conversation](#conversation) resource component below.
 
-A special memory state called `flowstate` is also available. This memory space, represented as a VAIL Object or a Python dictionary, is exclusive to the current flow and is not shared with other flows. It is useful for storing intermediate results or other flow-specific data. Typically, it can be directly accessed by any [`Code Block`](#codeblock) within the flow.     
+A special memory state called `flowstate` is also available. This memory space, represented as a VAIL Object or a Python dictionary, is exclusive to the current flow and is not shared with other flows. It is useful for storing intermediate results or other flow-specific data. Typically, it can be directly accessed by any [`Code Block`](#codeblock) within the flow. When the flow starts, `flowstate` is pre-populated with two properties: `initial_input` contains the initial input provided to the flow, and `initial_config` contains the runtime configuration as it was provided when the flow was invoked.     
 
 ### Runtime Configuration
 
@@ -834,32 +834,6 @@ The input must be a single `Object` with the properties:
 
 Supports all values specified by the [LLM](#llm) component.
 
-### GuardrailsAI
-
-A local implementation of the [Guardrails-AI](https://www.guardrailsai.com/docs) toolkit with a limited set of Validators. It's able to restrict LLM inputs and outputs, and fix them up to a limited degree.
-
-**Input Type** -- `String`
-
-The input must be a single `String`, and is expected to be either an LLM prompt or an LLM response.
-
-**Output Type** -- `String`
-
-The output will be the same as the input or, if a Validator has "fix" as its `on_fail` action, a fixed-up version of the input String.
-
-**Configuration Properties**
-
-* **validators** (`Object[]`) -- A *required* array of Validator configurations. The expected format for the configurations is `{name: <Validator name>, parameters: {<Validator parameters>}}`. E.g. `{'name': 'RestrictToTopic', parameters: {invalid_topics: ["crime"], on_fail: "exception"}}`.
-
-The available Validators are:
-
-* **BanList** -- Catches words explicitly included in a ban list. [See here for documentation](https://hub.guardrailsai.com/validator/guardrails/ban_list).
-* **DetectPII** -- Catches identifying information such as names, email addresses, and SSNs. [See here for documentation](https://hub.guardrailsai.com/validator/guardrails/detect_pii). The list of possible information that can be identified and redacted can be [found here](https://microsoft.github.io/presidio/supported_entities/)
-* **LowerCase** -- Catches upper-case letters. Mostly intended for testing. [See here for documentation](https://hub.guardrailsai.com/validator/guardrails/lowercase).
-* **ProfanityFree** -- Catches profanity. [See here for documentation](https://hub.guardrailsai.com/validator/guardrails/profanity_free).
-* **RestrictToTopic** -- Catches sentences that either cover banned topics or don't cover allowed topics. [See here for documentation](https://hub.guardrailsai.com/validator/tryolabs/restricttotopic). Note that we disable the LLM fallback option, so the topic detection will rely entirely on the classifier. [This is the classifier](https://huggingface.co/facebook/bart-large-mnli) used by this Validator.
-
-**Runtime Configuration** -- None
-
 ### HTMLSplitter
 
 Splits the provided HTML content using HTML tags.
@@ -945,8 +919,10 @@ Execute the enclosed sub-flow while the specified condition evaluates to `true`.
 
 * **condition** (`Code Block`) -- The *required* condition to evaluate at the beginning of each iteration.  The condition can be written in either VAIL or Python and must return a *Boolean* value.
 * **loopLimit** (`Integer`) -- The maximum number of iterations allowed.  If the loop exceeds this limit, it terminates with an error.
+* **initializer** (`Code Block`) -- Optional code that will be executed prior to the initial execution of the loop (including the initial condition evaluation).  Any return value is ignored.
+* **finalizer** (`Code Block`) -- Optional code that will be executed after the final execution of the loop.  Any value returned becomes the output of the *Loop* task.  Note, however, that the system cannot determine the type of the value returned by the finalizer code, so the task's output type (used for [task typing](#task-typing) checks) remains the one computed from the enclosed sub-flow.
 
-The `flowstate` memory is accessible to the condition code block.
+The `flowstate` memory is accessible to the condition, initializer and finalizer code blocks.
 
 ### Map
 
@@ -997,7 +973,7 @@ An example of this in use is shown in the NativeLCEL section of the [GenAI Build
 
 ### NeMoGuardrails
 
-An implementation of the Nvidia's [NeMo Guardrails](https://docs.nvidia.com/nemo/guardrails/latest/index.html) toolkit. Used to protect against invalid or improper prompts and responses, and to tailor LLM prompts or responses for certain topics. Intended for more complex or comprehensive use-cases, compared to the Guardrails-AI toolkit.
+An implementation of the Nvidia's [NeMo Guardrails](https://docs.nvidia.com/nemo/guardrails/latest/index.html) toolkit. Used to protect against invalid or improper prompts and responses, and to tailor LLM prompts or responses for certain topics.
 
 **Input Type** -- `langchain_core.prompt_values.PromptValue`
 
@@ -1102,8 +1078,8 @@ Normally the input to a *PromptFromMessages* task is expected to be an `Object` 
 
 * **messageTemplates** (`langchain_core.prompt.MessageLikeRepresentation`) -- A *required* list of messages to create. There must be at least one entry in the list.  The entries must be of the following types:
     * `system` -- Creates an LLM "system" message from the provided template.
-    * `ai` or `assistant` -- Creates a message representing a response from the LLM from the provided template.
-    * `human` or `user` -- Creates a message representing input from the user from the provided template.
+    * `ai` -- Creates a message representing a response from the LLM from the provided template.
+    * `human` -- Creates a message representing input from the user from the provided template.
     * `placeholder` -- Creates a message representing a spot where an additional list of messages will be inserted. The value provided is the name of the input key holding the message instances. This is typically from a [conversation](#conversation) using the **historyMessagesKey**. 
 * **defaultValues** (`Labeled Expression[]`) -- A mapping of template substitution variables to their default values (computed via an expression).  These default values are used to populate the template so that you don't need to pass them in every time you call the prompt.  The current input is available via the predefined `input` variable.
 
@@ -1227,6 +1203,33 @@ Uses the given prompt and LLM to reduce an array of documents to a single result
 * **maxTokensPerBatch** (`Integer`) -- The maximum number of tokens permitted in a single reduce request.  It is an error if any of the supplied documents exceeded this threshold.  The default value is `8196`.
 * **maxPartialReductions** (`Integer`) -- The maximum number of "partial" reductions allowed before the final result is achieved.  If no value is provided then the reduction process will continue until done.
 
+### Reflection
+
+An implementation of the "reflection" pattern in which a response is iteratively generated and critiqued until it is judged acceptable.  Each iteration starts with the *generator* LLM producing a draft response to the supplied task (incorporating any feedback from the previous iteration).  The draft is then submitted to the *reflector* LLM which determines whether it is acceptable.  If it is, the draft becomes the result of the task.  If not, the reflector's feedback is used to refine the draft in the next iteration.  Once the iteration limit is reached, the current draft is returned without further critique.
+
+**Input Type** -- `Union[String | Object]`
+
+The input is the task for which a response should be generated.  If the input is an `Object`, the task is taken from its `task` (or `input`) property; if neither is present, the entire object is converted to a string.
+
+**Output Type** -- `String`
+
+**Configuration Properties**
+
+* **generatorLLM** (`LLM`) -- The *required* LLM used to generate and refine the response.
+* **reflectorLLM** (`LLM`) -- The *required* LLM used to critique the draft and determine whether it is acceptable.
+* **iterationLimit** (`Integer`) -- The maximum number of generate/critique iterations.  The default value is `3`.  Setting this to `1` causes the generator to run exactly once, without any critique.
+* **generatorSystemPrompt** (`String`) -- A system prompt for the generator LLM which overrides the built-in default.
+* **reflectorSystemPrompt** (`String`) -- A system prompt for the reflector LLM which overrides the built-in default.  The prompt must instruct the model to return a JSON object with the fields `accepted` (a boolean indicating whether the draft is satisfactory) and `feedback` (a string describing the improvements needed).
+
+Note that the system prompts are used as-is; they do not support template variable substitution.
+
+**Runtime Configuration**
+
+* **generator_llm_name** (`String`) -- Overrides the LLM used to generate the response.
+* **reflector_llm_name** (`String`) -- Overrides the LLM used to critique the response.
+
+Also supports the values specified by the [LLM](#llm) component (these apply to both LLMs).
+
 ### Repeat
 
 Repeats a sub-flow multiple times, with different configurations for each instance of the flow.  The contained sub-flow can only have a single task.  If multiple tasks are required, then a [GenAI Component](#user-defined-genai-components) must be defined to contain them.  This component is useful when defining a [GenAI Component](#user-defined-genai-components) or to avoid having to create multiple tasks based on the identical component (can make the flow easier to read).
@@ -1255,7 +1258,45 @@ Queries the specified semantic index and returns an `Array` of similar documents
 * **semanticIndex** (`Union[SemanticIndex | Expression]`) -- A *required* reference to the [Semantic Index](resourceguide.md#semantic-indexes) to use for the similarity search. This can be provided either as a direct reference to a semantic index or as an expression that dynamically resolves to a semantic index name at runtime.
 * **contentOnly** (`Boolean`) -- When `true` the result will be a `String` containing the combined content of the selected documents (instead of the [langchain_core.documents.Document[]](https://python.langchain.com/api_reference/core/documents/langchain_core.documents.base.Document.html)).  The default value is `false`.
 * **minSimilarity** -- The minimum similarity value to use when working with the semantic index.  This value will override the default value provided by the referenced Semantic Index.
-* **metadataFilter** -- A filter that will be applied against the documents' metadata before the similarity search.
+* **metadataFilter** (`Object`) -- An optional filter that restricts the similarity search to documents whose metadata matches the specified conditions.  Documents whose metadata does not contain the specified key(s) are excluded; when `metadataFilter` is omitted or `null`, all documents are eligible to be returned.  Two filter formats are supported:
+
+  * **Simple key-value format** -- An object whose keys are metadata field names and whose values are the required matching values.  All conditions must match (implicit AND).  For example, to restrict results to documents tagged with a specific source file:
+
+    ```json
+    { "fileName": "BlueSky.txt" }
+    ```
+
+    Multiple pairs create a combined AND condition:
+
+    ```json
+    { "category": "science", "language": "en" }
+    ```
+
+  * **Qdrant filter format** -- For complex filtering logic (AND, OR, NOT, range comparisons, etc.), the full [Qdrant filter syntax](https://qdrant.tech/documentation/concepts/filtering/) is supported.  Metadata field names are specified using the `key` field in each condition object — the system automatically prepends the required `metadata.` prefix, so you do not need to include it.
+
+    Match documents where `category` is `"science"` AND `year` is 2020 or later:
+
+    ```json
+    {
+      "must": [
+        { "key": "category", "match": { "value": "science" } },
+        { "key": "year", "range": { "gte": 2020 } }
+      ]
+    }
+    ```
+
+    Match documents where `topic` is either `"climate"` or `"weather"`:
+
+    ```json
+    {
+      "should": [
+        { "key": "topic", "match": { "value": "climate" } },
+        { "key": "topic", "match": { "value": "weather" } }
+      ]
+    }
+    ```
+
+  The same filter format is used by the [`SemanticSearch.similaritySearch()`](rules.md#semanticsearch) built-in service procedure's `metadataFilter` parameter.
 
 **Runtime Configuration**
 
@@ -1301,7 +1342,45 @@ Queries the specified semantic index and returns an Array of similar documents a
 * **documentCompressorCount** (`Integer`) -- The *required* number of document compressors to configure.  Must be an integer that is greater than or equal to one.
 * **contentOnly** (`Boolean`) -- When `true` the result will be a `String` containing the combined content of the selected documents (instead of the [langchain_core.documents.Document[]](https://python.langchain.com/api_reference/core/documents/langchain_core.documents.base.Document.html)).  The default value is `false`.
 * **minSimilarity** -- The minimum similarity value to use when working with the semantic index.  This value will override the default value provided by the referenced Semantic Index.
-* **metadataFilter** -- A filter that will be applied against the documents' metadata before the similarity search.
+* **metadataFilter** (`Object`) -- An optional filter that restricts the similarity search to documents whose metadata matches the specified conditions.  Documents whose metadata does not contain the specified key(s) are excluded; when `metadataFilter` is omitted or `null`, all documents are eligible to be returned.  Two filter formats are supported:
+
+  * **Simple key-value format** -- An object whose keys are metadata field names and whose values are the required matching values.  All conditions must match (implicit AND).  For example, to restrict results to documents tagged with a specific source file:
+
+    ```json
+    { "fileName": "BlueSky.txt" }
+    ```
+
+    Multiple pairs create a combined AND condition:
+
+    ```json
+    { "category": "science", "language": "en" }
+    ```
+
+  * **Qdrant filter format** -- For complex filtering logic (AND, OR, NOT, range comparisons, etc.), the full [Qdrant filter syntax](https://qdrant.tech/documentation/concepts/filtering/) is supported.  Metadata field names are specified using the `key` field in each condition object — the system automatically prepends the required `metadata.` prefix, so you do not need to include it.
+
+    Match documents where `category` is `"science"` AND `year` is 2020 or later:
+
+    ```json
+    {
+      "must": [
+        { "key": "category", "match": { "value": "science" } },
+        { "key": "year", "range": { "gte": 2020 } }
+      ]
+    }
+    ```
+
+    Match documents where `topic` is either `"climate"` or `"weather"`:
+
+    ```json
+    {
+      "should": [
+        { "key": "topic", "match": { "value": "climate" } },
+        { "key": "topic", "match": { "value": "weather" } }
+      ]
+    }
+    ```
+
+  The same filter format is used by the [`SemanticSearch.similaritySearch()`](rules.md#semanticsearch) built-in service procedure's `metadataFilter` parameter.
 
 **Runtime Configuration**
 
@@ -1331,14 +1410,13 @@ Submits a prompt to an [LLM](resourceguide.md#llms) configured for tool calling 
 
 **Runtime Configuration**
 
-* **tools (`Union[ServiceReference | ProcedureReference]`)** -- A list of VAIL procedures and/or services which will override the statically configured `tools` value.  The semantics are otherwise identical to the `tools` configuration property.
+* **tools** (`Union[ServiceReference | ProcedureReference]`) -- A list of VAIL procedures and/or services which will override the statically configured `tools` value.  The semantics are otherwise identical to the `tools` configuration property.
 * **temperature** (`Real`) -- The temperature value to use when calling the LLM.
 * **max_tokens** (`Integer`) -- Maximum number of tokens that will be generated.
 * **top_p** (`Real`) -- Maximum cumulative probability for words sampled during generation.
 * **stop** (`String[]`) -- The 'stop words' to provide to the LLM.  Token generation terminates once any of these are generated.
 * **presence_penalty** (`Real`) -- Penalty applied for words that have already appeared in the generated text.  Used to encourage the model to include a diverse range of tokens in the generated text.
 * **frequency_penalty** (`Real`) -- Penalty applied based on the frequency of the appearance of a token in the generated text.  Used to discourage the model from repeating the same words or phrases too frequently within the generated text.
-* **tools** (`ResourceReference`) -- List of additional tool references that should be used for this execution.
 * **mcpTools** (`Object`) -- MCP Server Tools available to the LLM for this execution.
 * **toolParameterOverride** (`Object`) -- A configuration to [override](./llms.md#tool-parameter-override) LLM selected tool parameter values.
 
@@ -1362,7 +1440,7 @@ Transforms the input based on the configured transformation.
 
 The properties used from the runtime configuration are determined by the user. Access to runtime configuration is provided via the well-known 'config' variable (which may be 'None'), and it is usable with any transformation option.
 
-The `flowstate` memory is accessible to the transformation code block.
+The `flowstate` memory is accessible to all of the transformation options.
 
 ### UnstructuredURL
 
