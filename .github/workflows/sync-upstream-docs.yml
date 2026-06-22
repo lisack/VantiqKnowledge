@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout VantiqKnowledge
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # 1) dev docs (private) -> docs/  (FLAT, wipe-then-copy)
       - name: Sync dev markdown (flat) from Vantiq/docs
@@ -54,14 +54,39 @@ jobs:
           git clone --no-checkout --depth 1 --filter=blob:none \
             "https://x-access-token:${VANTIQ_SYNC_TOKEN}@github.com/Vantiq/docs.git" /tmp/vantiq-docs
           ( cd /tmp/vantiq-docs && git sparse-checkout init --cone && git sparse-checkout set "${DEV_SRC_PATH}" && git checkout )
-          src="/tmp/vantiq-docs/${DEV_SRC_PATH}"
-          [ -d "$src" ] || { echo "::error::Source path ${DEV_SRC_PATH} not found in Vantiq/docs"; exit 1; }
-          dupes="$(find "$src" -type f -name '*.md' -printf '%f\n' | sort | uniq -d)"
-          if [ -n "$dupes" ]; then
-            echo "::error::Flattening would collide on these filenames:"; echo "$dupes"; exit 1
-          fi
-          rm -rf "${DOCS_DIR}"; mkdir -p "${DOCS_DIR}"
-          find "$src" -type f -name '*.md' -exec cp -f {} "${DOCS_DIR}/" \;
+          # Flatten *.md into docs/. Same-named files in different subdirs:
+          #   identical content -> keep one bare copy (dedupe);
+          #   differing content -> disambiguate by folding the subdir into the name.
+          python3 - "/tmp/vantiq-docs/${DEV_SRC_PATH}" "${DOCS_DIR}" <<'PY'
+          import os, sys, hashlib, shutil
+          src, dest = sys.argv[1], sys.argv[2]
+          if not os.path.isdir(src):
+              sys.exit(f"::error::Source path not found in Vantiq/docs: {src}")
+          by_base = {}
+          for r, _, fs in os.walk(src):
+              for f in fs:
+                  if f.endswith(".md"):
+                      by_base.setdefault(f, []).append(os.path.join(r, f))
+          shutil.rmtree(dest, ignore_errors=True)
+          os.makedirs(dest, exist_ok=True)
+          renamed = []
+          for base, paths in sorted(by_base.items()):
+              if len(paths) == 1:
+                  shutil.copyfile(paths[0], os.path.join(dest, base))
+                  continue
+              digests = {hashlib.sha256(open(p, "rb").read()).hexdigest(): p for p in paths}
+              if len(digests) == 1:                       # identical duplicates
+                  shutil.copyfile(paths[0], os.path.join(dest, base))
+              else:                                        # genuinely different
+                  for p in paths:
+                      nm = os.path.relpath(p, src).replace(os.sep, "_")
+                      shutil.copyfile(p, os.path.join(dest, nm))
+                      renamed.append((base, nm))
+          if renamed:
+              print("Disambiguated differing same-named files:")
+              for b, n in renamed:
+                  print(f"  {b} -> {n}")
+          PY
         env:
           VANTIQ_SYNC_TOKEN: ${{ secrets.VANTIQ_SYNC_TOKEN }}
 

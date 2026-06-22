@@ -96,6 +96,14 @@ def main():
             cands = [h for h in by_base.get(R, []) if h.endswith(f"/{P}/{R}") or h == f"{P}/{R}"]
             if len(cands) == 1:
                 return cands[0]
+        # docs flattener may rename a colliding file to "<subpath>_<base>" - match by content
+        dis = [p for bn, ps in by_base.items() if bn.endswith("_" + base) for p in ps]
+        if dis:
+            body = ns_body_getter()
+            if body is not None:
+                for h in dis:
+                    if norm(repo_text(h)) == norm(body):
+                        return h
         # ambiguous basename: pick the candidate whose content matches the namespace doc
         if len(hits) > 1:
             body = ns_body_getter()
