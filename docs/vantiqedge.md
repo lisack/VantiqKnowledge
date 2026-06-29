@@ -38,7 +38,10 @@ The edge computing device must meet or exceed the following requirements:
 - 64-bit ARM or x86 processor
     - (For Docker deployments, an x86 processor is required)
 - 8 GB main memory
-- 32 GB permanent storage (to support MongoDB and Qdrant)
+- Permanent storage:
+    - 64 GB for the full [Docker](#docker-deployment) deployment
+    - 32 GB for the [Executable JAR](#executable-jar-deployment) deployment
+
 
 ## Software Requirements <a name="edgeSoftwareReqs"></a>
 
@@ -84,20 +87,27 @@ Begin by creating a directory for the edge deployment in the target machine's fi
 
 ```
 services:
-  vantiq_edge:
-    container_name: vantiq_edge_server
-    image: quay.io/vantiq/vantiq-edge:1.43
+  vantiq_edge_netns:
+    container_name: vantiq_edge_netns
+    image: registry.k8s.io/pause:3.10
+    restart: unless-stopped
+    networks:
+      - vantiq_edge
     ports:
       - 8080:8080
+
+  vantiq_edge:
+    container_name: vantiq_edge_server
+    image: quay.io/vantiq/vantiq-edge:1.44
     depends_on:
+      - vantiq_edge_netns
       - vantiq_edge_mongo
       - vantiq_edge_qdrant
     restart: unless-stopped
     volumes:
       - ./config/license.key:/opt/vantiq/config/license.key
       - ./config/public.pem:/opt/vantiq/config/public.pem
-    networks:
-      - vantiq_edge
+    network_mode: "service:vantiq_edge_netns"
 
   vantiq_edge_mongo:
     container_name: vantiq_edge_mongo
@@ -117,20 +127,24 @@ services:
 
   vantiq_ai_assistant:
     container_name: vantiq_ai_assistant
-    image: quay.io/vantiq/ai-assistant:1.43
+    image: quay.io/vantiq/ai-assistant:1.44
+    depends_on:
+      - vantiq_edge_netns
     restart: unless-stopped
-    network_mode: "service:vantiq_edge"
+    network_mode: "service:vantiq_edge_netns"
 
   vantiq_genai_flow_service:
     container_name: vantiq_genai_flow_service
-    image: quay.io/vantiq/genaiflowservice:1.43
+    image: quay.io/vantiq/genaiflowservice:1.44
+    depends_on:
+      - vantiq_edge_netns
     restart: unless-stopped
     command: ["uvicorn", "app.genaiflow_service:app", "--host", "0.0.0.0", "--port", "8889"]
-    network_mode: "service:vantiq_edge"
+    network_mode: "service:vantiq_edge_netns"
 
   vantiq_edge_qdrant:
     container_name: vantiq_edge_qdrant
-    image: qdrant/qdrant:v1.13.4
+    image: qdrant/qdrant:v1.13.6
     restart: unless-stopped
     volumes:
       - qdrantData:/qdrant/storage
@@ -140,7 +154,9 @@ services:
 
   vantiq_unstructured_api:
     container_name: vantiq_unstructured_api
-    image: quay.io/vantiq/unstructured-api:0.0.82
+    image: quay.io/vantiq/unstructured-api:0.1.2
+    depends_on:
+      - vantiq_edge_netns
     restart: unless-stopped
     environment:
       - PORT=18000
@@ -149,7 +165,7 @@ services:
       - UNSTRUCTURED_PARALLEL_MODE_SPLIT_SIZE=20
       - UNSTRUCTURED_PARALLEL_MODE_THREADS=4
       - UNSTRUCTURED_DOWNLOAD_THREADS=4
-    network_mode: "service:vantiq_edge"
+    network_mode: "service:vantiq_edge_netns"
 
 networks:
   vantiq_edge:
@@ -160,11 +176,15 @@ volumes:
   qdrantData: {}
 ```
 
+The `vantiq_edge_netns` service is a do-nothing **network-namespace holder** (the standard `pause` image): it owns the shared network namespace and publishes the server's HTTP port (`8080`), while the edge server and the AI services join it via `network_mode: "service:vantiq_edge_netns"` so they still reach one another over `localhost`. Because the holder itself never restarts, the edge server can restart or crash and rejoin without disrupting the AI services.
+
+> The `pause` image is pulled from `registry.k8s.io`. If your environment cannot reach that registry, mirror the image to a registry you control and update the `image:` value accordingly.
+
 The value of `MONGODB_ROOT_PASSWORD` is used during the first image run to set the password of `MONGODB_ROOT_USER`. You can set the `MONGODB_ROOT_PASSWORD` to a different value if you prefer. Do not change the values of `MONGODB_USERNAME`, `MONGODB_PASSWORD`, and `MONGODB_DATABASE`.
 
-The tag for the vantiq-edge image (the `1.43` in `image: quay.io/vantiq/vantiq-edge:1.43`) can be changed to whichever suitable version the developer would like to use. The version tags are listed in the quay.io repository. The tag for the `ai-assistant` and `genaiflowservice` images must match the tag for the vantiq-edge image for the major and minor versions (e.g., 1.43). The patch version (e.g., 1.43.1), if specified, might differ but should preferably match.
+The tag for the vantiq-edge image (the `1.44` in `image: quay.io/vantiq/vantiq-edge:1.44`) can be changed to whichever suitable version the developer would like to use. The version tags are listed in the quay.io repository. The tag for the `ai-assistant` and `genaiflowservice` images must match the tag for the vantiq-edge image for the major and minor versions (e.g., 1.44). The patch version (e.g., 1.44.1), if specified, might differ but should preferably match.
 
-If the tag specified has the `major.minor` format, the latest patch version will be used. If a specific patch version is required, the tag should be specified as `1.43.1` or similar.
+If the tag specified has the `major.minor` format, the latest patch version will be used. If a specific patch version is required, the tag should be specified as `1.44.1` or similar.
 
 > Do **NOT** use any tag containing `SNAPSHOT`.
 
@@ -200,13 +220,15 @@ To check the overall startup logs,
 docker compose logs -f
 ```
 
-As a best practice, always use `docker compose` for lifecycle management commands such as `start`, `stop`, `restart`, `up`, and `down`. This approach ensures proper handling of service dependencies while preventing the mismanagement or orphaning of compose-managed resources, including volumes and networks.
+As a best practice, manage the deployment with `docker compose` (`start`, `stop`, `restart`, `up`, and `down`) rather than `docker` commands on individual containers, so services start and stop in the correct dependency order.
 
-For example, to restart the edge server, run the following command,
+For example, to restart the edge server:
 
 ```shell
 docker compose restart vantiq_edge
 ```
+
+> **Note:** Do not restart `vantiq_edge_netns` by itself. The edge server and AI services share its network namespace, so restarting the holder destroys the namespace they depend on and breaks their networking — and Compose does not restart them automatically. The holder does no work and never needs restarting; to change its settings, such as the published port, run `docker compose up -d` so the dependent services are recreated together.
 
 Navigate to the [Setting Up Vantiq Edge](#edgeSetup) section for next steps.
 
@@ -219,14 +241,13 @@ docker compose pull
 docker compose up -d
 ```
 
-> If the image tags are specified with the `major.minor` format (e.g., 1.43), the latest patch version is automatically used for the update. If a specific patch version is required, the tag should be specified as `1.43.1` or similar. 
+> If the image tags are specified with the `major.minor` format (e.g., 1.44), the latest patch version is automatically used for the update. If a specific patch version is required, the tag should be specified as `1.44.1` or similar. 
 
 After the update, you must refresh any open browser IDE sessions to ensure the latest UI version is loaded.
 
 ### Upgrade
 
-To upgrade a Vantiq Edge installation from a `1.42` to `1.43` release, you must perform a migration of the
-QDrant vector database. You can either download and run the [migration script](../../../downloads/edgeQDrantUpgrade.zip), or follow the manual steps below.
+If you upgrade from a Vantiq Edge `1.42` release, you must perform a `1.42 -> 1.43` QDrant vector database migration first. You can either download and run the [migration script](../../../downloads/edgeQDrantUpgrade.zip), or follow the manual steps below.
 
 **_Create the upgrade directory_**
 
@@ -312,7 +333,7 @@ docker compose -f <path_to_docker_compose_file> stop vantiq_edge
 ./upgrade.sh
 ```    
 
-> Note: During migration, different 1.42 semantic indexes may be migrated into the same 1.43 collection. As a result, 
+> Note: During migration, different 1.42 semantic indexes may be migrated into the same collection. As a result, 
 the migration process may attempt to create the same collection more than once. In this case you will see 'ALREADY_EXISTS'
 messages, which are expected and can safely be ignored."
 
@@ -323,7 +344,7 @@ After the migration is complete, stop the Edge services using:
 docker compose -f <path_to_docker_compose_file> down
 ```
 
-Then update the `docker-compose.yml` file to reference the appropriate 1.43 image tags (see the documentation above for guidance).
+Then update the `docker-compose.yml` file to reference the appropriate 1.44 image tags (see the documentation above for guidance).
 
 Once updated, restart the Edge services with:
 ```
@@ -332,10 +353,10 @@ docker compose -f <path_to_docker_compose_file> up -d
 
 The QDrant migration is a one time operation, so you can remove the `upgrade` directory and its contents after the upgrade is complete.
 
-> Note: If you are upgrading from version 1.41, you must first upgrade to 1.42 before proceeding to 1.43. The upgrade 
+> Note: If you are upgrading from version 1.41, you must first upgrade to 1.42 before proceeding. The upgrade 
 from 1.41 to 1.42 includes a required QDrant migration, similar to the one described above. If you want to use the
 above instructions to perform a migration from 1.41 to 1.42, use the `qdrant-migration:1.42.3` image in your upgrade
-script and adjust the `docker-compose.yml` service image tags accordingly (e.g., 1.42 vs 1.43).
+script and adjust the `docker-compose.yml` service image tags accordingly (e.g., 1.42).
 
 ### Vantiq Edge Logs
 
