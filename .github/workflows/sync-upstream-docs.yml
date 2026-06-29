@@ -46,6 +46,8 @@ jobs:
     steps:
       - name: Checkout VantiqKnowledge
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0          # full history so the push step can rebase
 
       # 1) dev docs (private) -> docs/  (FLAT, wipe-then-copy)
       - name: Sync dev markdown (flat) from Vantiq/docs
@@ -150,14 +152,26 @@ jobs:
           git config user.name  "vantiq-docs-sync[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           targets="${DOCS_DIR} ${EXTSRC_DIR} ${SDK_DIR} ${K8S_DIR}"
-          if [ -n "$(git status --porcelain -- $targets)" ]; then
-            git add -- $targets
-            git commit -m "chore(docs): sync from upstream Vantiq repos ($(date -u +%Y-%m-%d))"
-            git push
-            echo "Synced changes pushed."
-          else
+          if [ -z "$(git status --porcelain -- $targets)" ]; then
             echo "No documentation changes upstream."
+            exit 0
           fi
+          git add -- $targets
+          git commit -m "chore(docs): sync from upstream Vantiq repos ($(date -u +%Y-%m-%d))"
+          # Resilient push: origin/main may have advanced since checkout (another
+          # sync run, a manual push, or delayed cron). Rebase our commit on top
+          # of the latest main and retry a few times to absorb races.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Synced changes pushed (attempt ${attempt})."
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing on latest origin/main..."
+            git pull --rebase origin main
+            sleep 5
+          done
+          echo "::error::Failed to push after multiple rebase/retry attempts."
+          exit 1
 
       # Hop ②: refresh the manifested kr/ corpus in _144_TestKRMCP from the
       # just-synced working tree. Content-only: refreshes docs that drifted,
