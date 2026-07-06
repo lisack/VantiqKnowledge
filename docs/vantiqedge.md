@@ -476,7 +476,7 @@ Select the menu `Administer/Users` and select the `system` user. Enter a new pas
 
 ## Setting the default LLMs API key
 
-Open the LLMs pane by selecting `Add/LLMs` from the menu. In the configuration description column, you will find the names of the required API keys, represented as secrets (e.g., `@secrets(OPENAI_API_KEY)`) for the generative LLMs. To edit or add the necessary secret(s), go to `Administer/Advanced/Secrets`.  For instance, if the secret for `OPENAI_API_KEY` is already defined to specify an [OpenAI](https://openai.com/) key, simply update it by entering your API key value in the Secret field.
+Open the LLMs pane by selecting `Administer/Advanced/LLMs` from the menu. In the configuration description column, you will find the names of the required API keys, represented as secrets (e.g., `@secrets(OPENAI_API_KEY)`) for the generative LLMs. To edit or add the necessary secret(s), go to `Administer/Advanced/Secrets`.  For instance, if the secret for `OPENAI_API_KEY` is already defined to specify an [OpenAI](https://openai.com/) key, simply update it by entering your API key value in the Secret field.
 
 ## Creating a New Organization and Namespace
 

@@ -7,7 +7,7 @@ Create a simple running temperature alerting application using Vantiq's [Generat
 This tutorial demonstrates the Design Modeler, a visual IDE tool for building Vantiq systems. It uses [Claude Code](https://claude.com/product/claude-code), a Generative AI product that allows the user to enter a text description of the system to be built then turns that description into the beginnings of the running application. The basic steps to create this application are:
 
 * Create a new Project, including a Claude Code configuration to interact with the Vantiq server
-* Use Claude Code to turn a simple application description into a Vantiq Project, including a Design Model that displays an overview of the application
+* Use the Claude Code command line interface (CLI) to turn a simple application description into a Vantiq Project, including a Design Model that displays an overview of the application
 * Configure a Source to receive simulated sensor data
 * Run the application in simulation
 
@@ -34,25 +34,24 @@ Set the Project name to *TemperatureAlert* and click **Continue**. The **Create 
 
 &nbsp;&nbsp;&nbsp;&nbsp;![ClaudeCodeAccess](../assets/img/quickstart/ClaudeCodeAccess.png "New Design Model")
 
-As part of setting up the new Vantiq Project, an access token is created. Follow the instructions in the dialog to use that access token to link a Claude Code UI to the Vantiq server.
+As part of setting up the new Vantiq Project, an access token is created. Follow the instructions in the dialog to use that access token to link a Claude Code CLI session to the Vantiq server.
 
 Click **Finish** to confirm.
 
 ## 2: Using Claude Code
-For this tutorial, we'll use the [desktop version of Claude](https://claude.com/download) to build the temperature alerting application. Open the Claude app, then ensure the **Code** tab at the upper left of the app is selected:
+For this tutorial, we'll use the [CLI version of Claude](https://code.claude.com/docs/en/quickstart#step-1-install-claude-code) to build the temperature alerting application. Open a new command line interface on your local machine (e.g. Terminal on macOS), then navigate to the directory that contains the .mcp.json file referenced in the **Create Claude Code Access** dialog from Step 1 above.
 
-&nbsp;&nbsp;&nbsp;&nbsp;![CCPrompt](../assets/img/quickstart/CCCode.png "Start Claude Code")
+Start a new session by starting the claude CLI:
 
-Start a new session. Select a directory on your local machine; in this example, the *TemperatureAlert* directory is selected. That directory contains the *.mcp.json* file referenced in the **Create Claude Code Access** dialog from Step 1 above.
+&nbsp;&nbsp;&nbsp;&nbsp;![CCStart](../assets/img/quickstart/CCStart.png "Start Claude CLI Session")
 
-&nbsp;&nbsp;&nbsp;&nbsp;![CCPrompt](../assets/img/quickstart/CCPrompt.png "Create Claude Session")
-
-At the bottom of the Claude Desktop pane, use the **Describe a task or ask a question** text entry field to enter the following text:
+At the Claude CLI prompt, use the text entry field to enter the following text:
 
 ```text
-Receive temperature events from MQTT source 'TempMQTT'.
-If the temperature crosses a threshold of 200 degrees,
-notify user 'maintenance' via the 'Maintenance' Client.
+Create an application to receive temperature events from MQTT
+source 'TempMQTT'. If the temperature crosses a threshold of 200
+degrees, notify user 'maintenance' via the 'Maintenance' Client.
+Place all resources created in project 'TemperatureAlert'.
 ```
 This short text describes a simple temperature sensing application, reading from an MQTT Source and notifying a user when a high temperature threshold is crossed. Once the text has been entered, Claude will start building the application, prompting for information it needs to build. For example, it will ask for a package name: use one of the suggested package names or enter one of your own. It may ask for a MQTT broker URI and topic. If so, use *tcp://public.vantiq.com:1883* and *com.vantiq.mqtt.enginetemp*.
 
@@ -67,7 +66,7 @@ Please note the Claude response may take several minutes or more depending on th
 It is important to remember the output of Generative AI systems such as Claude can vary even when entering the same prompt in a different session. The names of resources and their contents in the steps that follow may be different than what is produced by Claude. Please be prepared to apply the concepts in the following steps to resources that might not have exactly the same names and/or properties.
 
 ## 3: Opening the Design Model
-Claude transfers the resources it creates to the Project created in Step 1 above via the Vantiq server's [MCP server](https://modelcontextprotocol.io/docs/getting-started/intro). Open the Design Model it created, *TemperatureAlertApp*, by using the **Open** menu to select **Design Model**, then select **TemperatureAlertApp**.
+Claude transfers the resources it creates to the Namespace specified in Step 1 above via the Vantiq server's [MCP server](https://modelcontextprotocol.io/docs/getting-started/intro). Open the Design Model it created, *TemperatureAlertApp*, by using the **Add** menu to select **Design Model**, then select **TemperatureAlertApp**.
 
 The Design Model pane will look similar to this:
 
@@ -125,11 +124,11 @@ Note the rectangular badges with numbers that appear over the tasks. These badge
 
 ## 8: Create A Session Summary
 
-Optionally, you may ask Claude to produce a session summary: enter _'Please produce a session summary.'_ in the **Type / for commands** field at the bottom of Claude Desktop. Claude will produce a summary of the resources created. To view the summary, click the **VIA Session Summaries** button at the top right of the Vantiq IDE:
+Optionally, you may ask Claude to produce a session summary: enter _'Please produce a session summary.'_ in the **Type / for commands** field at the bottom of the Claude CLI. Claude will produce a summary of the resources created. To view the summary, click the **VIA Session Summaries** button at the top right of the Vantiq IDE:
 
 &nbsp;&nbsp;&nbsp;&nbsp;![VIA Session Summary](../assets/img/quickstart/VIASS.png "VIA Session Summary")
 
-## 9: Example AI Design Assistant Descriptions
+## 9: Example Claude Descriptions
 Claude uses a Generative AI engine to translate natural language descriptions of a desired system into skeletons of Design Models. Those descriptions are generally referred to as _prompts_. Writing effective prompts is referred to as [prompt engineering](https://en.wikipedia.org/wiki/Prompt_engineering). In order to make effective use of Claude, it's helpful to have some examples of prompts that are good starting points to describe business processes. Below are a few examples of such prompts that translate to terms understood by the Vantiq system.
 
 ### Patient Care Example
