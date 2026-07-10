@@ -74,6 +74,22 @@ def is_tooling(path: str) -> bool:
             or base in ("LICENSE.md", "AGENTS.md", "CLAUDE.md", "index.md"))
 
 
+# Explicit "decided NOT to publish" list, so a reviewed file stops re-appearing as
+# a candidate every week. One repo-relative path per line; '#' comments allowed.
+# Edit .github/kr_census_ignore.txt to change decisions — no code change needed.
+def load_ignore():
+    out = set()
+    try:
+        with open(os.path.join(REPO, ".github", "kr_census_ignore.txt"), encoding="utf-8") as f:
+            for line in f:
+                s = line.strip()
+                if s and not s.startswith("#"):
+                    out.add(s)
+    except FileNotFoundError:
+        pass
+    return out
+
+
 def build_index():
     by_base = collections.defaultdict(list)
     all_files = []
@@ -160,9 +176,11 @@ def main():
         else:
             orphaned.append(name)
 
+    ignore = load_ignore()
     unpublished = sorted(set(all_files) - used)
-    candidates = [p for p in unpublished if not is_tooling(p)]
-    tooling = [p for p in unpublished if is_tooling(p)]
+    ignored = [p for p in unpublished if p in ignore]
+    candidates = [p for p in unpublished if p not in ignore and not is_tooling(p)]
+    tooling = [p for p in unpublished if p not in ignore and is_tooling(p)]
 
     pruned = []
     if args.prune_missing:
@@ -171,16 +189,17 @@ def main():
             pruned.append(name)
 
     write_report(args.report, docs, native, orphaned, used, all_files,
-                 candidates, tooling, pruned)
+                 candidates, tooling, ignored, pruned)
 
     print(f"repo doc files      : {len(all_files)}")
     print(f"namespace ctx docs  : {len(docs)}  (native {len(native)}, orphaned {len(orphaned)})")
-    print(f"unpublished         : {len(unpublished)}  (candidates {len(candidates)}, tooling/meta {len(tooling)})")
+    print(f"unpublished         : {len(unpublished)}  (candidates {len(candidates)}, "
+          f"tooling/meta {len(tooling)}, ignore-listed {len(ignored)})")
     print(f"orphaned {'PRUNED' if args.prune_missing else 'reported'} : {len(pruned) if args.prune_missing else len(orphaned)}")
     print(f"report              : {args.report}")
 
 
-def write_report(path, docs, native, orphaned, used, all_files, candidates, tooling, pruned):
+def write_report(path, docs, native, orphaned, used, all_files, candidates, tooling, ignored, pruned):
     gen = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     L = ["# KR Doc Census (repo ↔ namespace)", "",
          f"_Generated {gen} · namespace `{NS}`_", "",
@@ -188,8 +207,9 @@ def write_report(path, docs, native, orphaned, used, all_files, candidates, tool
          f"(native/no-source {len(native)})",
          f"- **Orphaned** namespace docs (repo source gone): **{len(orphaned)}**"
          + (f" — **{len(pruned)} PRUNED this run**" if pruned else ""),
-         f"- **Unpublished** repo files: **{len(candidates) + len(tooling)}** "
-         f"({len(candidates)} content candidates, {len(tooling)} tooling/meta)", ""]
+         f"- **Unpublished** repo files: **{len(candidates) + len(tooling) + len(ignored)}** "
+         f"({len(candidates)} content candidates, {len(tooling)} tooling/meta, "
+         f"{len(ignored)} ignore-listed)", ""]
 
     L += ["## A. Orphaned namespace docs (repo source gone)", ""]
     if orphaned:
@@ -223,6 +243,12 @@ def write_report(path, docs, native, orphaned, used, all_files, candidates, tool
           "The KB's own prompts, licenses, and index files — not Vantiq knowledge. "
           "Listed for completeness.", ""]
     L.append(f"{len(tooling)} file(s): " + ", ".join(f"`{p}`" for p in sorted(tooling)) if tooling else "_None._")
+    L.append("")
+
+    L += ["## D. Ignore-listed (reviewed — decided not to publish)", "",
+          "Files a human reviewed and chose not to publish. Edit "
+          "`.github/kr_census_ignore.txt` to add/remove entries.", ""]
+    L.append(f"{len(ignored)} file(s): " + ", ".join(f"`{p}`" for p in sorted(ignored)) if ignored else "_None._")
     L.append("")
 
     text = "\n".join(L).rstrip() + "\n"

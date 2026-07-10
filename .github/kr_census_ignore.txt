@@ -1,0 +1,18 @@
+# kr_doc_census ignore-list — repo files reviewed and deliberately NOT published
+# into the _144_TestKRMCP namespace. One repo-relative path per line; '#' comments ok.
+# These stop showing as "content candidates" in the weekly census (they move to
+# section D). Remove a line to reconsider it.
+
+# Already represented in the KB as the native, PDF-derived kr/guide/context/intro_to_intelligence.txt
+guide/VANTIQ Developers Guide - Introduction to Intelligence in VANTIQ application v2.0.pdf
+
+# Stubs / test-harness / directory-placeholder READMEs — no standalone Vantiq knowledge (reviewed 2026-07-09)
+extSrc/nlpAssembly/README.md
+sdk/java/examples/JavaProntoClient/README.md
+sdk/java/src/test/java/io/vantiq/client/intg/README.md
+sdk/node/examples/ProntoClient/README.md
+sdk/node/intgtest/README.md
+k8sdeploy_tools/bootstrap/sensitive/README.md
+k8sdeploy_tools/docs/README.md
+k8sdeploy_tools/setup/README.md
+k8sdeploy_tools/setup/common/README.md
