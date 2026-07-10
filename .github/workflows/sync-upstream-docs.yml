@@ -184,35 +184,46 @@ jobs:
 
       # Hop ③: reconcile the kr/ manifests in _144_TestKRMCP against the namespace
       # doc set. MERGE model — existing descriptions are preserved verbatim; a
-      # genuinely new doc is appended to its subject manifest with a
-      # "NEEDS DESCRIPTION" sentinel + filename draft; orphans are reported (not
-      # pruned, so a transient absence never loses a curated line). Writes a weekly
-      # drift report that the next step commits back to the repo.
+      # genuinely new doc is appended to its subject manifest with a filename draft
+      # + "[auto-draft]" marker; orphans are reported (not pruned, so a transient
+      # absence never loses a curated line). Writes a weekly drift report.
       - name: Reconcile kr/ manifests & write drift report
         run: python3 .github/scripts/kr_manifest_reconcile.py --apply --report "$GITHUB_WORKSPACE/manifest-drift-report.md"
         env:
           KR_TOKEN: ${{ secrets.VANTIQ_KR_WRITE_TOKEN }}
 
-      - name: Commit & push drift report
+      # Hop ④: census the repo's source files against the namespace docs (both
+      # directions). Report-only by default: lists namespace docs whose repo source
+      # is gone (orphans) and repo files not yet published (content candidates vs
+      # tooling/meta). Publishing/removal stay human decisions, so no writes here
+      # unless --prune-missing is added. Writes a weekly census report.
+      - name: Doc census (repo ↔ namespace) report
+        run: python3 .github/scripts/kr_doc_census.py --report "$GITHUB_WORKSPACE/doc-census-report.md"
+        env:
+          KR_TOKEN: ${{ secrets.VANTIQ_KR_WRITE_TOKEN }}
+          KR_REPO: ${{ github.workspace }}
+
+      - name: Commit & push KB reports
         run: |
           set -euo pipefail
           git config user.name  "vantiq-docs-sync[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ -z "$(git status --porcelain -- manifest-drift-report.md)" ]; then
-            echo "Drift report unchanged."
+          reports="manifest-drift-report.md doc-census-report.md"
+          if [ -z "$(git status --porcelain -- $reports)" ]; then
+            echo "KB reports unchanged."
             exit 0
           fi
-          git add -- manifest-drift-report.md
-          git commit -m "chore(kb): weekly manifest drift report ($(date -u +%Y-%m-%d))"
+          git add -- $reports
+          git commit -m "chore(kb): weekly manifest drift + doc census reports ($(date -u +%Y-%m-%d))"
           # Same resilient push as the docs-sync step: rebase on latest main and retry.
           for attempt in 1 2 3 4 5; do
             if git push; then
-              echo "Drift report pushed (attempt ${attempt})."
+              echo "KB reports pushed (attempt ${attempt})."
               exit 0
             fi
             echo "Push rejected (attempt ${attempt}); rebasing on latest origin/main..."
             git pull --rebase origin main
             sleep 5
           done
-          echo "::error::Failed to push drift report after multiple attempts."
+          echo "::error::Failed to push KB reports after multiple attempts."
           exit 1
