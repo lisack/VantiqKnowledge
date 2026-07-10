@@ -1,0 +1,105 @@
+### Summary
+
+This document provides an overview of Vantiq agents, which are designed to autonomously resolve requests based on their specializations. Vantiq agents originate from Vantiq services and can be toggled to become Gen AI agents, allowing them to use internal program logic to plan and select skills for task execution. The document explains the difference between services and agents, the process of turning services into agents, and how agents use skills to perform tasks. It also discusses the architecture of multi-agent systems, emphasizing the role of an orchestrating agent to handle requests efficiently. The document concludes by highlighting the benefits of using an orchestrating agent in multi-agent program architecture.
+
+Video URL: https://youtu.be/df85ot4jTvs
+
+### Original Content
+
+**144_AIA_L1_1.1_Agents**
+
+Vantiq agents Developers design agents in Vantiq to autonomously resolve requests in accordance with their specializations.
+
+AI agents in general are large language models tasked with making dynamic decisions to perform work in their specific area of responsibility.
+
+That autonomy is what makes them agentic.
+
+They can be called upon, even by other agents, to resolve requests.
+
+Vantiq agents originate from Vantiq services.
+
+They retain their service functionality, but toggling on the Gen AI Agent feature gives them internal program logic the LLM will use to plan and select skills that will help them perform tasks.
+
+Turning services into agents also presupposes collaborations and discussions.
+
+Discussions are multi threaded, multi participant AI conversations, which we'll talk about in detail later.
+
+Both Vantiq services and agents maintain full service behavior, such as managing their program state, event handling, Gen AI procedures, and so on, but clicking the toggle brings AI as the key driver in that service.
+
+Basic services encapsulate related resources that can be accessed by the program.
+
+In contrast, the program messages the agent with a task, which in turn determines which of its resources best completes the task.
+
+We'll talk more about A to a messaging later, but suffice it to say that communicating with an agent is not the same as calling a service procedure.
+
+Agents perform work as defined by their skills, which are public fail procedures chosen autonomously by AI to deal with runtime needs.
+
+The skill performs its work, then returns the results back to the LLM that called it, which will evaluate those results from it and possibly other agents, and then return a complete answer to the requester.
+
+These procedures become skills when they are toggled so in their interface pane.
+
+One very important note, don't skip on the procedure description, which appears in this pane and also is a comment above the first line in the procedure.
+
+The LLM uses these to evaluate the skill for use, so complete and accurate descriptions are vital.
+
+Building an agent looks a lot like building a service.
+
+We'll start with our Add menu and choose Service.
+
+Choose a new service and right here is where we can first toggle on whether or not it's a Gen AI agent, but I won't do that yet.
+
+All right, give it a name and a package name and choose create.
+
+And if you did not make it into an agent before, you can go into interface and just click it there.
+
+Once this service is saved as an agent, look what happens to the procedures.
+
+A whole new set of private procedures is created to facilitate agent functionality.
+
+Of course, our brand new agent doesn't have any skills, so let's make one.
+
+This looks suspiciously like a tool with a description in a comment at the top, and all it's doing is returning the current time.
+
+To turn a basic VAIL procedure into a skill, go to its interface and toggle on theGennyi Agent skill.
+
+You can fill in a different skill name tags for finding it later and give examples of requests this skill could fulfill.
+
+If you're a seasoned Vantiq developer, you already know about tools, which are also available procedures chosen at runtime by a LLM.
+
+The main difference between them is how they are executed and evaluated.
+
+Developers list tools in a LLM service submit prompt call, which is called in the program.
+
+The AI here chooses one or none from that specific list to fulfill the request.
+
+Skills, by contrast, once marked, become discoverable at runtime by the agent AI.
+
+When the agent is messaged with the request, the agent plans which skills to use, then evaluates what comes back to craft its response to the requester.
+
+What that agent returns might be further evaluated by an upstream agent, along with responses from other agents to produce even more complete work.
+
+One last consideration before we go how should applications handle multiple agents?
+
+There is no right answer, but some answers are more convenient and easier to troubleshoot than others.
+
+In this diagram, notice that there are four agents, each with specific expertise available should they be called upon to solve a request.
+
+The client, as the requester is formally called, could go through the process of discovering which agents are available and what they do, and then send the request directly to whichever agent or agents would best carry out the work.
+
+A more convenient multi agent approach architecture is to designate a single agent as the request handling orchestrator.
+
+The orchestrating agent takes in a request from the client, plans which agent or agents can fulfill it, sends the appropriate messaging, evaluates the responses, and returns the whole answer back to the client.
+
+Developers benefit from this approach in a variety of ways.
+
+First, by only having to build 1 channel of communication between the client and an agent.
+
+Also, agents have built in logic for communicating with other agents, so framing how the orchestrating agent will discover and plan what other agents to message is also much simpler to build than having the client directly deal with each agent separately.
+
+Finally, the orchestrating agent evaluates responses from multiple agents to craft a cohesive whole response back to the client going forward in this class.
+
+This is the multi agent program architecture we'll employ in our use cases and labs so you can see the full breadth of how it works.
+
+Agents are autonomous actors, usually with specialized purposes that fulfill requests by their own reasoning.
+
+The filename: class/Agents/144_AIA_L1_1.1_Agents.txt

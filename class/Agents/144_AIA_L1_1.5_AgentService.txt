@@ -1,0 +1,53 @@
+### Summary
+
+This content provides an overview of the Vantiq Agent Service, detailing the types and procedures used within the service. It highlights the execution of plans, visibility of tasks, and the use of markdown files for agent instructions. Key procedures include executing plans, retrieving task information, and updating task statuses. The document also discusses the interaction between agents and human inputs, using examples like the cake factory simulation and coordinate factory procedure. The Agent Service is essential for effectively utilizing AI agents in the Vantiq platform.
+
+Video URL: https://youtu.be/kaKwl3FmJsU
+
+### Original Content
+
+**144_AIA_L1_1.5_AgentService**
+
+The Vantiq Agent Service In this video, we'll take a closer look at the types and procedure used by Vantiq's Agent Service.
+
+Many of the procedures in the agent service are designed to either execute plans for how to process tasks or make parts of them more visible.
+
+We'll look at most of these more closely, then see some working examples.
+
+For now, I'll just point out get Agent's MD.
+
+Agents MD is an optional markdown file for any instructions developers might have for how their agents should behave in the program, and get Agents MD will return that document when called.
+
+Developers will need to run execute PLAN to begin processing of the task at hand.
+
+If run in its as sequence form, the results will return in chunks rather than all at once, which is useful if those results are large.
+
+Less commonly used is the Get dispatch plan, but it's useful during development to see how the LLM developed a plan graph.
+
+Get CURRENT task will return the Task object describing what the runtime task is and Send Task status update returns an A to a Service task status update type with updated status message about the task.
+
+Send TASK artifact update likewise returns an A to a service task artifact update type with the update.
+
+And finally, we have request user inut, which is used from an agent that's been tasked by the orchestrating agent to complete some request, but requires more information before it can.
+
+Let's take a look at the supply agent for a moment.
+
+At one of the skills called Plan Reorders.
+
+Notice that it has a human in the loop section and in order to get input from the human we have agent dot request user input that supplies a question and waits for the response and then checks that response against whether or not it takes any further orders.
+
+So when I run a cake factory simulation, what happens when I give the directive to order more of everything?
+
+Here is the agent service request user input procedure at work.
+
+And when I type in my approval for the authorization, the procedure goes on to check that answer and act accordingly.
+
+We see even more examples of agent service use in the coordinate factory procedure of the orchestrating agent.
+
+In fact, the first thing this procedure does is use agent dot getcurrent task so we can display the plan information on the dashboard.
+
+Also, after the plan request planning procedure is run, I make a call using the Agent service get dispatch plan to log the plan structure.
+
+The Agent service Execute plan well, actually executes the plan that then goes and calls the right agents and continues the process of resolving the task.
+
+In all, the Agent service provides several of the features we need in order to effectively use AI agents in the Vantiq platform.

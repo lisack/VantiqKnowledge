@@ -1,0 +1,109 @@
+### Summary
+
+The document provides an overview of the Agent-to-Agent (A to A) protocol, which facilitates communication between agents. It highlights the features of Vantiq that support this protocol, even though Vantiq agents are not fully A to A compliant. The document explains how agents can interact using procedures like `Get Agent Card`, `Message Send`, and `Message Stream`. It also details the structure of tasks, messages, and artifacts within the A to A protocol, including how they are constructed and processed. The document concludes with examples of how these procedures are used in practice, emphasizing the importance of the A to A protocol in agent communication.
+
+Video URL: https://youtu.be/9rmOTqz7S8s
+
+---
+
+**144_AIA_L1_1.4_A2AService**
+
+A to A protocol features.
+
+We'll introduce the A to a protocol before delving into the Vantiq features that support it.
+
+Agents need clear communication between themselves, which is why the Agent to agent protocol was developed and very early received widespread industry support and adoption.
+
+If an agent is A to A compliant, other agents will be able to interface with it in order to determine its capabilities, current tasks, receive responses to requests, etcetera.
+
+While Vantiq agents are not yet fully A to a compliant, many A to a features are accessible in the system.
+
+A to a service, Vantiq's A to a service keeps A to a protocol, procedures, and types used for agent interactions.
+
+Every agent will have a card which describes what it is and what it can do.
+
+The Get Agent Card procedure makes an agent's card visible to another agent.
+
+Agents can send messages to other agents with Message Send and Message Stream, which will return the resulting task once it completes, or in a streamed form, respectively.
+
+Tasks describe a user request.
+
+Task properties include the context ID, which is all important for discussion cohesion.
+
+Then there's the task status, which includes the original request as the message.
+
+Now we'll move into the types within the task type.
+
+Like messages, which are arrayed in a task history property, messages carry a variety of information to and from agents.
+
+Everything from user inputs, agent information, steps, status updates, error data, and more.
+
+The rule describes the message sender, usually user, which may or may not be a human or agent.
+
+Task and context IDs are to connect the message to its respective task and discussion, respectively.
+
+Parts convey different types of content within messages, such as text or a file reference sent as parts of the overall message.
+
+The two message procedures, IO dot Vantiq dot AI dot A2A dot message, dot build and dot for value, construct messages in slightly different ways.
+
+Here's the parts type, which is content within either a message or an artifact.
+
+Part kinds vary from text, data, or file to hold their content.
+
+If strict is true, the kind is data and it must be a JSON object.
+
+If it's a file, it will be further defined with the file properties.
+
+And yes, the part procedures for value, build text, build data, build file from bytes, and build file from URL all build different kinds of parts.
+
+Finally, we come to the results of task processing.
+
+Artifacts are the results that are returned.
+
+Each task has an artifacts property which contains an array of artifacts.
+
+The artifact ID, name, and description are both optional, but provide more information about the artifact.
+
+The actual content of what is returned is contained in an array of parts.
+
+Metadata is used by the artifact dot for value and dot for resource procedures to track values such as its fail type.
+
+Extensions are an array of UR is identifying A to A protocol extensions in the artifact.
+
+The three artifact procedures IO dot Vantiq dot AI dot A2A dot artifact, dot build, and dot for value, and dot for resource all construct artifacts in slightly different ways.
+
+To summarize these last four slides, in the A to A protocols, tasks keep track of user request processing.
+
+Within tasks are messages and artifacts, which are further divided into parts A to a service.
+
+Procedures and types are useful for dissecting exactly how agents interact, but only a couple are used regularly.
+
+Like get agent card.
+
+Let's see the card for our supply agent.
+
+Not surprisingly, we have full developer descriptions of the agent itself, plus all of its skills and descriptions thereof.
+
+And all of this in a JSON structure as designated by the A to A protocol.
+
+Let's look more closely at messages sent between agents A to a dot message.
+
+dot build builds the message and then message send sends it to the agent.
+
+Notice we're also taking the task and parts from what is retrieved and putting them together to get the actual artifact, which is the result from the running task.
+
+Our message is going to the equipment agent, and the message itself is How is Oven 2, and the equipment agent runs the task by finding the skill to answer the question that things are not so good with oven too.
+
+And here's a fairly impractical example of the various builder procedures for parts, messages, and artifacts to pretty much answer the same question we just did.
+
+And the result is a full breakdown of those parts, messages and artifacts.
+
+Developers can also send A to a messages to agents with the results streamed or not, using A to a message send and A to a message stream client functions.
+
+These work like the A to a service, message send and message stream procedures.
+
+But from the Vantiq client, the agent to agent protocol fully describes the request to be processed and the communications between clients and server agents.
+
+Vantiq's A to a service contains A to a compliant procedures and types.
+
+The filename: class/Agents/144_AIA_L1_1.4_A2AService.txt

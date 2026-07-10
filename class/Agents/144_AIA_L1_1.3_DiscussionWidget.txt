@@ -1,0 +1,65 @@
+### Summary
+
+The **Discussion Widget** in Vantiq is designed to facilitate human-AI interactions by tracking tasks and outcomes in multi-agent applications. It displays interactions when a user requests a task, which may require responses from multiple skills across different agents. The agent that first receives the task creates and owns the discussion, with all interactions becoming part of the discussion record. Discussions are distinct from conversations, which are single-threaded and involve user interactions with a service procedure calling a Large Language Model (LLM). The widget simplifies the complexity of managing discussions, allowing configuration to specify which agent handles the task. Agents can be configured to automatically generate, delete, and update discussions, but only the discussion owner can execute these procedures. The document also explains how toggling the discussion creation setting affects the availability of discussion-related procedures.
+
+Video URL: https://youtu.be/GQA4YpbnTmg
+
+### Original Content
+
+**144_AIA_L1_1.3_DiscussionWidget**
+
+AI Discussions Discussions are designed for use in tracking tasks and outcomes in multi agent applications.
+
+The Discussion widget displays human AI discussion interactions in the Vantiq client when a user makes a request that is a task.
+
+Tasks might require responses from multiple skills in multiple agents to fully resolve, all of which are persisted as parts of a discussion.
+
+The agent that first receives the task creates the discussion and owns it.
+
+All individual agent interactions with the task become part of the discussion record in the agents state.
+
+Conversations on the other hand, are for a user interacting with a service procedure that calls a LLM.
+
+Conversations work as part of collaborations.
+
+Discussions are part of task processing.
+
+Conversations are single threaded.
+
+Discussions may have multiple threads.
+
+Discussion widgets automate a lot of complexity of using discussions.
+
+Simply configure them to the agent that will handle the task.
+
+The programmatic discussion widget properties and methods are largely concerned with discussion threads and the state of the discussion overall.
+
+By default, any agent can own a discussion, but that can be configured to false or toggled off in the Agent service interface.
+
+The JSON structure shown with creation disabled set to false is the default extension option.
+
+Agents with discussion creation turned on also auto generate discussions, delete discussions, get by ID, discussions list, and discussions update status public procedures.
+
+Only the discussion owner can run these procedures for their discussion.
+
+Here we are with the details about the equipment agent and notice we have the discussion creation toggled on.
+
+I've also got a different client and this client is set to communicate with the equipment agent, thereby making the equipment agent the owner of the discussion.
+
+So I ask an equipment related question and I get an equipment related response.
+
+When I click the Refresh Discussions button, the client is calling the Discussions list procedure from the equipment agent.
+
+But now let me go to the equipment agent and toggle off the discussion creation button.
+
+And once I save the agent, the discussion related procedures will disappear.
+
+This will include the discussions list that our client was calling.
+
+So now I'll make another equipment related request.
+
+And as far as the behavior from the agent is concerned, nothing is going to change.
+
+What will change is that there is no longer a discussion.
+
+That is to say that the discussion has completely disappeared because the agent is no longer owning it and keeping it in memory.

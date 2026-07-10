@@ -1,0 +1,93 @@
+### Summary
+
+This content provides an overview of agent planning patterns within Vantiq, focusing on how orchestrating agents handle requests by generating efficient plans using Large Language Models (LLMs). It explains the process of orchestrating agents coordinating with specialized agents to fulfill requests, using a cake factory application as an example. The planning output is structured as a JSON of type `IO.Vantiq.AI.planningGraph`, which is crucial for executing the plan. The document also highlights the importance of choosing the right planning pattern for your application and provides insights into the structure of the generated plans.
+
+Video URL: https://youtu.be/vivzuJQZFLg
+
+### Original Content
+
+**144_AIA_L1_1.2_LLMPlanning**
+
+Agent Planning Patterns Within agents themselves, there's already built in logic for evaluating how best to fulfill a request.
+
+Orchestrating agents, however, when they receive a request from a client, need an additional plan for where to send messages to one or more other agents in order to fulfill the request.
+
+A LLM agent planning pattern is a way to prompt an LLM to achieve the most efficient plan for the purpose at hand.
+
+There are multiple popular algorithms to implement the planning, but they all instruct the model to execute a sequence of tasks and report the results for the orchestrating agent.
+
+Choose any planning pattern that fits your program's needs.
+
+Each has its advantages and drawbacks.
+
+The plan output needs to be a JSON structure of type IO dot Vantiq dot AI dot planning graph so the system can execute the plan.
+
+We'll see more about this structure soon.
+
+Now on to a concrete example.
+
+This cake factory application receives real time events about machinery, health, ingredients, supply levels, incoming orders and so on.
+
+And there are multiple agents specialized to deal with certain areas of responsibility like supplies, equipment, factory metrics, etcetera.
+
+When a request from the dashboard comes in, the four men Orchestrators Coordinate Factory procedure first finds all the agents and their specializations.
+
+Then it plugs the information about them into the planned procedure called Plan Request.
+
+Plan Request generates a plan for determining which agent or agents should be directed to resolve the request.
+
+In this example, when the plan is executed, the request goes to the equipment agent.
+
+The equipment agent now uses its built in logic to determine which of its skills best fulfills the request and returns the results.
+
+Welcome to our factory application.
+
+And here at the dashboard you can see the key performance metrics along with our orders.
+
+And at the bottom here we have real time updates on our equipment health and supplies.
+
+This discussion widget allows for communication with our orchestration agent, which then turns around and goes to the specialized agents to answer various requests.
+
+So here I've just said order more supplies.
+
+And in just a couple of seconds, the orchestrating agent went to the specialized agent and that specialized agent needed more information in order to fulfill the request.
+
+So when it said, what do you want to order more of, the foreman replied, everything that's low.
+
+The supply agent can now check what's low and do the reorder.
+
+It's a little slow, but on the right here I have a plan tree widget that is showing what the request was and how the foreman orchestrator went about solving it.
+
+Behind the scenes.
+
+The orchestrating agent is the format orchestrator.
+
+And when a message comes through the discussion widget from the human, the coordinate factory procedure is called in that service.
+
+In broad brush strokes, this procedure does three things.
+
+First, it finds what specialized agents are out there and what they can do.
+
+Next, it plugs in the original request and the agent information into the procedure that will produce the plan.
+
+This final two step, which is more complex than it needs to be, is to execute the plan and return the result.
+
+Now that you've seen how the application uses a plan, let's look more closely at its structure.
+
+The generated plan is in a directed acyclic graph format of the planning graph type.
+
+The graph is composed of nodes and edges.
+
+Nodes represent the tasks that will be performed and edges the transition between them.
+
+And Here's an example of an actual plan produced by the Format orchestrator dot planrequest procedure to figure out how to resolve the input it received.
+
+Notice 1st that the request was reworded from what the foreman actually asked, which was more along the lines of what supplies are running low.
+
+Also notice that the node correctly identifies the supply agent as best being able to answer the question about what cake ingredients are on hand and what should be reordered.
+
+Whichever planning pattern works best for your application, just remember that what returns must be formatted as a planning graph type JSON structure in order for the agents to read and execute the plan.
+
+You'll find more information about LLM planning patterns in the Gen AI Agent Building Guide.
+
+The filename: class/Agents/144_AIA_L1_1.2_LLMPlanning.txt
