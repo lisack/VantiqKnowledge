@@ -3365,6 +3365,8 @@ The following are additional `Array` utility procedures.
 * **clear(arr)** - remove all elements from *arr*. The result returned by clear() is the `null` value.
 * **toSequence(arr)** -- convert the given value into a [Sequence](#sequences) value using standard [type conversion](#type-conversions) rules.
 * **toArray(arr)** -- convert the given value into an [Array](#arrays) value using standard [type conversion](#type-conversions) rules.
+* **merge(sequences)** -- merge the provided sequences into a single sequence.  The `sequences` parameter is an Object where the keys are treated as labels and the values must be an iterable value (sequence, array, object). The values emitted from the new sequence will be Objects where the key is the label of the originating sequence and the value is the emitted value. For example, if the `sequences` parameter was: `{a: select from TypeA, b: select from TypeB}`, then the emitted values would look like: `{a: <value from A>}, {b: <value from B>, ...`.  Note that values appear in the merged sequence as they are produced, so the interleaving will vary based on the rate of production from the original sequences.
+
 
 ## General Use Procedures
 

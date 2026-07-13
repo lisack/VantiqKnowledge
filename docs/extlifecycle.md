@@ -798,9 +798,8 @@ As noted above, with sufficient quota, you may see the _self_ cluster listed wit
 If you are deploying to the `self` [K8s Cluster](resourceguide.md#k8s-clusters), you must specify the `resourceRequest` or `resourceLimit` to be used for your installation. If you specify both, the maximum value for these resources is charged against your organization's quota before deployment. See
 [Deploying a K8s Installation](resourceguide.md#k8s-cluster-deploy) for further details.
 
-If you are deploying to the `self` [K8s Cluster](resourceguide.md#k8s-clusters), you must specify the kubernetes namespace that matches the installation you are using.  For example `dev` for dev.vantiq.com or `api` for api.vantiq.com.  Contact [Vantiq support](mailto:support@vantiq.com) if you are not sure what namespace to use.  If you use the wrong namespace, the error will be something like:
-> Kubernetes error performing deploy of MyConnector via system.k8sclusters:self ... 
-Message: statefulsets.apps "myconnector" is forbidden: User "system:serviceaccount:dev:vantiq-worker-svc-account" cannot get resource "statefulsets" in API group "apps" in the namespace "my_dev_NS". 
+If you are deploying to the `self` [K8s Cluster](resourceguide.md#k8s-clusters), you must specify the kubernetes namespace that matches the installation you are using.  For example `dev` for dev.vantiq.com or `api` for api.vantiq.com.  If you are not sure what namespace to use, check the error generated when an incorrect kubernetes namespace is provided or contact [Vantiq support](mailto:support@vantiq.com).  If you use the wrong namespace, the error will be something like below.  Using the namespace mentioned where `<correct namespace>` is will succeed.
+> io.vantiq.resources.k8s.self.cluster.wrong.namespace: The configuration for installation &lt;installation name&gt; for cluster self is targeting the K8s Namespace "&lt;incorrect namespace&gt;". Only the namespace "&lt;correct namespace&gt;" is valid for this cluster. 
 
 Also, once you deploy to the `self` cluster, you may see changes to the configuration provided.  Specifically, you may see items of type `hardAffinity` and/or `label` added.  These additions are used by Vantiq in its management of resources within the `self` cluster.
 

@@ -4,13 +4,47 @@
 
 ## Server Enhancements
 
+### GenAI Agents
+
+* The [GenAI Agents](agents.md) framework has been expanded to provide the following:
+    * [Tasks](agents.md#tasks) -- state management for in-progress agent requests.
+    * [Discussions](agents.md#discussions) -- tracks work over multiple tasks and coordinates interactions with other agents.
+    * [Agent to Agent communication](agents.md#agent-messages) -- support for both direct and indirect interactions between agents.
+    * Expansion of [planning capabilities](agents.md#planning-agents) to support "dynamic" algorithms such as LLMCompiler.
+    * Customization of agent behavior via [configuration of agent extensions](agents.md#agent-extension-configuration)
+* The [Agents](rules.md#agent) and [A2A](rules.md#a2a) built-in services have been expanded to cover all non-optional parts of the A2A specification.
+
 ### AI Support
+
+> Support for Guardrails-AI has been removed. Any use of the `GuardrailsAI` GenAI Component must be removed before the containing GenAI Flow will execute.  See [NeMoGuardrails](genaibuilder.md#nemoguardrails) for an alternative approach.
 
 * GenAI Flow input prompts can now reference images stored as a [Document](resourceguide.md#documents) or [Temp Blob](resourceguide.md#tempblobs). See [Image reference](llms.md#image-reference).
 * Image generation models now support multi-turn editing via the `extra_request_params` configuration (for example, OpenAI's `previous_response_id`). See [Multi-turn editing](llms.md#multi-turn-editing).
 * Added Anthropic as a model provider, accessed using the `anthropic/` model-name prefix.
 * OpenAI embedding models can now be specified using the `openai/` prefix (for example, `openai/text-embedding-3-small`).
 * HuggingFace embedding models can now be specified using the `huggingface/` prefix, including models from any HuggingFace Hub organization.
+* GenAI Flow Service now uses LC 1.x to support expanded capabilities.
+* Added support for the definition of [MCP Servers](mcpservers.md) hosted by Vantiq.
+* Metrics related to LLM interactions (centering on token usage) can be gathered by the GenAI Flow Service connector by setting its [metrics configuration](namespaces.md#depGenAIFlowService). These metrics can be tracked using the "LLM Activity" Grafana dashboard.
+* Support has been added for defining [MCP Servers](mcpservers.md) hosted by Vantiq.
+
+### Services
+
+* Added `ActiveCollabsSetConversation` to the generated [Collaboration Management Procedures](servicestatemgmt.md#procedures).
+
+### VAIL
+
+Added/updated the following built-in services:
+
+* [`merge`](rules.md#array-procedures) -- merges multiple sequences/arrays into a single sequence.
+
+### CLI
+
+Added the [setupToken](cli.md#setup-token) command to assist in the creation of personal access tokens.
+
+### Other
+
+* The "self" K8sCluster now explicitly restricts the K8s Namespace of K8sInstallations deployed to it. The error message will specify the correct namespace name.
 
 ## UI Enhancements
 
@@ -97,11 +131,13 @@
 * The DynamicMapViewer (Google Maps widget) now has an option to enable or disable **Points of Interest**, and the `showPointsOfInterest` setting may be changed dynamically at runtime.
 
 ### LLM Playground
+
 * The user prompt input field now supports Shift + Up/Down Arrow to navigate through prompt history.
 * Prompt templates now support both ${} and {} substitution formats.
 * Improved the Load Template dialog by preselecting text documents only.
 
 ### Deployment Tool
+
 * Allow deployment parameters to be configured for secrets that do not have an associated resource.
 
 # 1.43 Release Notes

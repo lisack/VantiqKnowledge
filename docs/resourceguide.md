@@ -1652,7 +1652,7 @@ Procedures may have any of the following relationships:
 
 #### Group Enabled
 
-Topics are a "group enabled" resource.  Placing a "topic" into a group restricts use of the topic (for both publish and subscribe) to identities which are members of the group.
+Procedures are a "group enabled" resource.  Placing a procedure into a group restricts execution to identities which are members of the group or namespace administrators (who can always access the procedure).
 
 ## Profiles
 
@@ -2113,6 +2113,39 @@ The following properties are all optional, but one of them must be provided.  Th
 #### Remove Entries
 
 Accepts an Array of String values, each of which is assumed to be the id of an existing entry (any values that don't match will be ignored).  The referenced entries will be removed from the index.
+
+##### Force-removing an entry stuck in the `loading` state**
+
+Each Semantic Index Entry has a `status` property. While an entry is being ingested it has a status of `loading`; on success it becomes `loaded`, and on failure `failed`. By default, `removeEntries` refuses to delete an entry whose status is still `loading`, returning the error `io.vantiq.semanticIndex.entry.remove.loading` ("The entry with id '<id>' is currently loading and cannot be removed.").
+
+Occasionally an entry can become **stuck** in the `loading` state — for example if the AI Assistant or a service connector involved in ingestion restarts or fails partway through. Because the ingestion never completes, the entry is never advanced to `loaded` or `failed`, and an ordinary `removeEntries` call will keep failing.
+
+To delete such an entry, add the `force=true` query parameter to the `removeEntries` operation. This bypasses the `loading` status check and removes both the entry and its underlying vector data.
+
+`POST /api/v1/resources/semanticindexes/{indexName}?force=true`
+
+```json
+  {
+      "op": "removeEntries",
+      "data": ["<entryId>"]
+  }
+```
+
+Equivalently, in VAIL:
+```vail
+  ResourceAPI.executeOp({
+      resourceName: "system.semanticindexes",   // the parent index resource
+      resourceId:   indexName,                   // the index name
+      op:           "removeEntries",             // custom operation
+      object:       ["<entryId>"],               // list of entry ids to remove
+      parameters:   { force: true }              // skip the "loading" status check
+  })
+```
+
+Notes:
+
+* `force` applies only to the per-entry `removeEntries` operation. The `clearEntries` operation and full index deletion (`DELETE /api/v1/resources/semanticindexes/{indexName}`) remove entries regardless of status and do not require `force`.
+* Use `force=true` only to recover stuck entries. Forcing removal of an entry that is genuinely mid-ingest can leave orphaned vector data, so confirm the ingestion is no longer in progress before forcing.
 
 #### Clear Entries
 
@@ -2803,6 +2836,10 @@ Topics may have a *dependency* relationship to the Type used as the messageType.
 
 * _admin_ -- admin users have full access rights to all Topic instances in their namespace.
 * _user_ -- users have read-only access rights to all Topic instances in their namespace.
+
+#### Group Enabled
+
+Topics are a “group enabled” resource. Placing a “topic” into a group restricts use of the topic (for both publish and subscribe) to identities which are members of the group.
 
 ### Examples
 

@@ -1,27 +1,27 @@
-# Vantiq Modelo
+# Vantiq
 
-**Vantiq Modelo** is an __Enterprise HP aPaaS__ – a High Productivity Application platform as a service (__aPaaS__) 
+**Vantiq** is an __Enterprise HP aPaaS__ – a High Productivity Application platform as a service (__aPaaS__) 
 solution for development, deployment and execution of real-time event-driven enterprise applications.  It provides 
 “low code” and “no-code” rapid application development (RAD) features to enable high productivity.  Modelo is targeted 
 at application developers building real-time event-driven applications – such as with industrial IoT, consumer IoT, AI 
 applications involving machine-learning(ML), neural networks, AR/VR etc.
 
-With Modelo 3.0, the real-time platform extends from Cloud-to-Edge, with connectivity to ‘edge/gateway’ devices extending to last-mile micro-edge devices.
+With Vantiq, the real-time platform extends from Cloud-to-Edge, with connectivity to ‘edge/gateway’ devices extending to last-mile micro-edge devices.
 
-#### Modelo includes the following Editions:
+#### Vantiq includes the following Editions:
 * Cloud Edition: For Vantiq cloud
 * Server Edition: For client-hosted on-prem/private cloud
 * Edge Edition: For Edge “gateway devices”
 * Micro Edition: For “edge of edge” Micro-devices
 
-#### Modelo has 3 key components
+#### Vantiq has 3 key components
 
 1. Real-time, Event-centric Secure, Elastic, Scalable Application Platform
 2. Low-code & No-code Powerful Productivity Tools
 3. Optimized Deployment on the Cloud, Edge and on-premise
 
 #### Real-time Event-centric Application Platform built on a “Reactive framework”
-Vantiq Modelo is implemented on a Reactive framework. Modelo supports design and run-time for applications serving 
+Vantiq is implemented on a Reactive framework. Vantiq supports design and run-time for applications serving 
 billions of business events.  Its distributed, multi-tenant core is portable across cloud (public and private), data 
 center and edge. It is highly available, leveraging Reactive event processing for scalability. It is clusterable and 
 replicated for simple scaling and fault tolerance.

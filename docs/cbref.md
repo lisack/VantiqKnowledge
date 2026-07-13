@@ -6692,7 +6692,12 @@ You must set the "serviceName" and "inboundServiceEvent" properties, and you mus
 
 **Using Service Procedures**
 
-You must set the "serviceName" and "procedureName" properties. The conversation widget will invoke the Procedure and pass the request in the "input" parameter.
+You must set the "serviceName" and "procedureName" properties. The conversation widget will invoke the Procedure using these two parameters:
+
+1. "input" - a string that contains what the user typed
+2. "config" - an object with the "conversationId" and "collaborationId" properties set (if they are known)
+
+
 
 In either case the response returned to the Conversation widget must be in one of three forms:
 

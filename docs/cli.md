@@ -61,6 +61,7 @@ The major commands available in the CLI include:
 * **export** [data | metadata | project &lt;projectName&gt; | projectdata &lt;projectName&gt; | hidden] [-d &lt;directory&gt;]   
 &nbsp;&nbsp;         [-chunk &lt;size&gt;] [-include &lt;typeName(s)&gt;] [-exclude &lt;typeName(s)&gt;] [-until &lt;DateTime&gt;] [-ignoreErrors]
 * **import** [data | metadata] [-d &lt;directory&gt;] [-chunk &lt;size&gt;]
+* **setupToken** [-n &lt;namespace&gt;]
 
 Command line options available include:
 
@@ -560,6 +561,10 @@ option can be specified more than once to include multiple types.
 This option can be specified more than once to exclude multiple types.
 
 The export/import command pair can be used to conveniently migrate a system from one namespace to another namespace by creating an export directory, running the export command and then running the import command on the same directory using credentials for a user in the target namespace.
+
+### Setup Token
+
+The **setupToken** command is used to create a "personal" token on behalf of the requesting user. The token will have a 1 year expiration date. If a `namespace` is specified via the `-n` command line option, then the token will be a single namespace token. A common use of this command is to create a token for use by an agentic coding tool such as Claude Code.
 
 
 

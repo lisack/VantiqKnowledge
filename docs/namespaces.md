@@ -217,10 +217,20 @@ When the above is the default template for a namespace, the Administer>Users>New
 
 ![New User](assets/img/namespaces/customInviteNewUser.png "New User Custom Invitation")
 
+<a name="depGenAIFlowService"></a>
 ### Deploying the GenAI Flow Service Connector
 
 In order to use the [GenAI Flow Builder](genaibuilder.md) you will first need to deploy the GenAI Flow Service Connector for your organization.  This is done by importing the [GenAIFlowService project](../../../downloads/genAIFlowService.zip) into the organization namespace.  Once imported, the connector will be deployed via the Vantiq K8s infrastructure.  
+
 > Note: deploying the service connector requires `k8sResources` quota for the organization; contact [Vantiq support](mailto:support@vantiq.com) if that does not exist in your organization.  Details on the k8sResources quota is under [Quota](namespaces.md#quotas) in the [Administrators Reference Guide](namespaces.md#quotas). If enabled, the current _K8s Resource Usage_ can be seen using the Administer -> Organization menu when in the organization namespace.
+
+To enable LLM metric collection set the metric configuration to: 
+
+```json
+{
+    "enabled": true
+}
+```
 
 <a name="depVidAssistant"></a>
 ### Deploying the Video Assistant Service Connector

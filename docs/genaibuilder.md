@@ -79,7 +79,7 @@ The primitive components (aka primitives) provide various utility/control functi
 
 #### Document Loaders
 
-The document loaders support reading content from some source and producing an Array of LangChain Documents (these are not instances of the Vantiq Documents resource).  The loaders differ in the source of the content and/or the techniques used to extract their content.
+The document loaders support reading content from some source and producing an Array of LangChain Documents (these are not instances of the Vantiq Documents resource). The loaders differ in the source of the content and/or the techniques used to extract their content.
 
 * [UnstructuredURL](#unstructuredurl) -- reads from a URL (or an array of URLs) and uses the [unstructured](https://github.com/Unstructured-IO/unstructured) library to extract content from whatever the URL references.
 * [ConversationMemory](#conversationmemory) -- reads the current state of a specified conversation.
@@ -207,7 +207,7 @@ The GenAI Builder supports the following types as the input/output of a task:
 * LangChain Core Types -- `PromptValue`, `ChatMessage`, and `Document`.
 * Union Types -- union types allow a list of possible types (known as type choices).  Effectively this means that the Union can be treated as if it were any of the supplied choices when performing type checking.
 
-> The LangChain core type `Document` is *not* the same as the Vantiq `system.documents` resource.
+> The LangChain core type `Document` is *not* the same as the Vantiq `system.documents` resource. They also cannot be passed as parameters to a Procedure component.
 
 ### Merging Task Outputs
 
@@ -1063,6 +1063,8 @@ Executes a specified VAIL procedure.  The procedure must be a [Vantiq Procedure]
 * **parameters** (`Code Block`) -- Code that returns an Object (VAIL) or a dictionary (Python) representing the procedure parameters. Keys correspond to parameter names, and values correspond to their respective values. 
 
 The `flowstate` memory is accessible to the procedure name definition expression and the parameters code block.
+
+LangChain Documents *cannot* be directly passed as parameters. To pass them to the procedure they must be converted into Objects using the `dict()` function call in Python or `toObject()` in VAIL. 
 
 ### PromptFromMessages
 
