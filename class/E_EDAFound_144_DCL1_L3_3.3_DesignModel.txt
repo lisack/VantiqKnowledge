@@ -1,0 +1,74 @@
+### Summary
+
+The Design Model tool in Vantiq is a powerful utility that helps developers transform application system concepts into tangible application resources. It provides a visual representation of how events travel between services, clients, and other entities. This tool allows developers to create real service connections by drawing lines between services, making theoretical services or clients real and editable. The Design Model tool also supports the creation of new services and clients, and it automatically updates the project contents with these new entities. It is an essential tool for architects to design application structures while simultaneously advancing development by establishing the main project resources and their interconnections.
+
+Video URL: https://youtu.be/0_Yeg07h4Iw
+---
+
+**Original Content:**
+
+**144_DCL1_L3_3.3_DesignModel**
+
+Design Model This is just a brief introduction to the Design Model tool.
+
+You'll gain some experience with this tool in your labs, but we won't go into the more advanced features here.
+
+Developers use the Design Modeler tool to turn application system concepts into application resources.
+
+The Design Model tool is a couple of important tools in one First, developers can use the modeler to see a clearview of how events travel between services and clients and from and to other entities beyond the namespace.
+
+The tool isn't just conceptual when a developer draws a line from one service to another that creates actual service, outbound and inbound connections.
+
+Choosing A theoretical service or client makes it real and editable.
+
+You can create a new design model from the Add menu, and upon choosing to create a new one, you'll supply its name, package, and optional description before the model pane opens.
+
+On the left side of the design model pane is a palette of resources that can be dragged into the model.
+
+The service and client options are for incorporating services and clients that have already been created.
+
+Dragging in an external resource is for documentation purposes, in case a developer wants to make note of what sources enter the system, the database involved, etcetera.
+
+Here's what a new service looks like when it's first dragged into the model canvas.
+
+By double clicking on it, you can give it a name and actually create a new service.
+
+Right clicking on it lets you edit it.
+
+Once it's made, you can see the blue plus signs for input and output service events.
+
+The green top and bottom plus signs are for inbound and outbound events to and from external entities respectively.
+
+Developers build the event flow connections between design model entities by drawing them.
+
+Creating a design model means a trip to the ad menu, and you can have any number of design models in your project.
+
+But do remember that they do create real resources, so provide a name, package, and description and it will open out to the canvas.
+
+We happen to have an already existing service and already existing client, so we're going to bring each of these elements in so you can see how they behave.
+
+When you bring in an existing service, it'll ask you which one and you choose it.
+
+Notice that as soon as the service was chosen, the design model filled that service with all of its information.
+
+The same thing will happen with the chosen client.
+
+And notice that the data stream between them is also known and added.
+
+External is nothing more than a placeholder to remind the user that sources are coming in and possibly events are going out to other entities in the Internet.
+
+Remember, through the design model we can also create new services and clients just by double clicking on them, giving them a name and choosing Create New Service, or in the case of our client, Create New Client.
+
+Once the design model is saved, not only will the new entity take on a solid color, but you will see it appear in the project contents as an editable service or client.
+
+Services can send their outputs to multiple other clients and services.
+
+In the design model you simply draw a line between them and once you give the connection a name, that connection will be automatically created and show up in your either client or service.
+
+So when I right click on my brand new service, I can see right away that my public event temps in event handler has been created for me and it's already receiving events in the client.
+
+I dragged in a gauge to show the data streams temp property and when I run the client I can see that I'm indeed getting events from the data stream that I drew in the design model.
+
+The Design Model tool allows architects to simultaneously design application structure while getting a jump on development by creating the main project resources and the connections between them.
+
+The filename: class/E_EDAFound_144_DCL1_L3_3.3_DesignModel.txt

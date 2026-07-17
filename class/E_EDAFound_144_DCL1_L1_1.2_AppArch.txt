@@ -1,0 +1,119 @@
+### Summary
+
+This content provides an overview of the Vantiq application architecture, explaining how Vantiq serves as a platform for building real-time event-driven applications. It outlines the five basic components of a Vantiq application: outside entities, services, clients, data, and schema. The video demonstrates how to create a Vantiq project from scratch, including setting up event flows, creating services, and building a user interface. It also touches on integrating AI agents into the application to enhance functionality. The content is designed to give a comprehensive understanding of how these components work together to form a complete application.
+
+Video URL: https://youtu.be/qDFybhUQ9rI
+
+### Original Content
+
+**144_DCL1_L1_1.2_AppArch**
+
+Vantiq Application Architecture When we say Vantiq is the platform for building real time magentic applications, what does that mean?
+
+In this video, we'll look at the basic components of a Vantiq application, then put a full project together as a demonstration.
+
+Here are the five basic components that make up a real time event driven Vantiq application.
+
+The outside entities are whatever real time events will be coming into the system and schema describes their structure.
+
+Services encapsulate related program logic to handle application needs, Clients are the user interface, and finally data is what's kept in a database.
+
+Upon first logging in, you encounter the Project Wizard which asks you what kind of project you want to create.
+
+We could build our projects using the Vantage via MCP server coupled with AI like Cloud Code or building the integrated development environment.
+
+From these four other starting points, I'm going to choose Empty so you can see what building from scratch really looks like.
+
+And when I do, I'm treated to a vast empty canvas and nothing in my project contents.
+
+But don't worry, I can create things from the Ad menu, including a design model, which is what would have come up if I'd chosen that option in the Project wizard.
+
+After providing a name, package, and description of this model, I can start to build and design at the same time by simply dragging components onto this canvas.
+
+My application is going to ingest events from an Internet source, do some processing in the service, and then display the results in a client.
+
+I can both draw conceptually and set up that event flow by putting these lines between the plus marks in the entities in the design model and setting up what their names are going to be.
+
+Temps out goes from the service and temp stream goes into the client.
+
+We'll bring in our live events now by going to add and source and choosing to make an MQTT source that is sensor data for a pump reporting temperature data.
+
+Do not be overly concerned about how to do each step of this process because you will be doing them in your labs right now.
+
+It's just important to see how each of the basic application components come together to make an application.
+
+Here is the structure of one of the events that came through, and I'm going to save that structure and use it to define what goes in and out of other parts of the project.
+
+So now I have live events coming in and the schema to describe them.
+
+I can create an actual service straight from the design model by double clicking on it, choosing new service, giving it a name, and it becomes reality.
+
+Once I save right Click to open it, I can create a source event handler in order to bring in the sensor data to do some processing.
+
+As soon as I click on this event stream and configure it to the source, I will see red badges showing me that I'm getting the events straight into the service.
+
+When I drew that line between the service and the client, it created the Temps Out outbound service event for me.
+
+The schema structure isn't going to change, so I'm just setting that up.
+
+Now back to our design model.
+
+We'll create a real client by clicking it and giving it a name.
+
+We'll save, then right click on our client in order to build a simple user interface.
+
+A data stream to the client was already created from the service by drawing that line in the design design model.
+
+So now all we have to do is drag in a widget to show the sensor data and configure it to the data stream.
+
+We'll show all the event properties.
+
+Currently my source event handler has events coming in but nothing going out.
+
+Once I drag in and configure the publish to service event, the event stream will be set up so that the data stream will appear on the client side.
+
+Let's really quick build a standard type to hold persistent data.
+
+Its role then is standard.
+
+Once I give it a name and a package name and a description, I'll set its properties and add some records.
+
+Our AI will use this to look up maintenance information.
+
+Let's review the application components we just saw in action.
+
+When we designed our application, we put an outside entity as a placeholder, then created an MQTT message protocol source so our system could get live temperature events from a pump sensor, but we could have integrated with anything on the Internet to bring in live data.
+
+When we set up our inbound and outbound events, we also specified that the schema of the events would be based on incoming source message structure.
+
+By doing this, the platform could anticipate how to deal with the data, like providing the client data table column choices, for example.
+
+Services encapsulate program logic and state service Visual event handlers ingest events, process the data in some way, and publish the results to be handled by other parts of the application as needed.
+
+Remember when we drew a line in the design model between our service and the client?
+
+That created a pathway for events called a data stream.
+
+In the client, we dragged in a data table to display what came from that data stream.
+
+Finally, we created a standard type to hold maintenance records for the pumps associated with the sensors and store them in the database.
+
+Everything you've seen up to this point has shown the deterministic side of a real time Vantiq application, but the platform also supports AI agents by directly converting services into agents and giving them the tools to act autonomously within the program.
+
+Let's see what works in the program we built earlier.
+
+So now I've added an AI agent to this application and it's able to answer very specific questions about the sensors.
+
+This was accomplished by converting our one service to an agent and adding a couple of skills to it.
+
+Just toggle Gen AI agent on.
+
+Likewise, skills are local procedures that have Gen AI Agent skill togggled on, and the skill itself may not employ any AI.
+
+The AI comes in when the agent chooses this skill and then evaluates the answer.
+
+Notice we're getting the right maintenance record from the maintenance type.
+
+Now that you've seen the main parts of a Vantage application, you should have no difficulty learning how to use them.
+
+The filename: class/E_EDAFound_144_DCL1_L1_1.2_AppArch.txt

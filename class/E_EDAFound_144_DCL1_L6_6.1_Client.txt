@@ -1,0 +1,119 @@
+### Summary
+
+This content provides an overview of the Vantiq Client, focusing on its functionality and how to navigate and configure it. The Vantiq Client is a tool for building low-code visual user interfaces that can run on both desktop browsers and the Vantiq mobile app. It employs the MVC (Model-View-Controller) design strategy, allowing developers to manage data, views, and controllers effectively. The client builder interface includes a palette of widgets that can be dragged onto a canvas and configured. Developers can set client properties, manage data streams, and write custom JavaScript code for event handling. The client properties menu includes tabs for Events, Theme, Localization, and Advanced settings, allowing for customization of appearance, language, and operational characteristics. The content also covers how to add widgets, configure layouts, and test the client.
+
+Video URL: https://youtu.be/FgcQxE0YB8Q
+
+### Original Content
+
+**144_DCL1_L6_6.1_Client**
+
+The Vantiq Client By the end of this video you should know what the client is and how to move within it and how to set client properties.
+
+The client builder is for building low code visual user interfaces.
+
+Vantiq clients run on both desktop browsers and in the Vantiq mobile app, like the screen shown here.
+
+The design strategy employed by the client builder is often described by the initials MVC for models, views and controllers.
+
+Bottles refers to the data that the client ingests to be converted in some way for display in views which the developer can further operate using controllers like the JavaScript code in event handlers.
+
+This is what the client builder looks like.
+
+The AD side consists of widgets in a palette that can be dragged into the canvas, configured and used for client based application.
+
+The Edit side is for setting client and individual page properties.
+
+Events flow into clients via data streams.
+
+Most often, data streams are connections to outbound service events, but can also be from sources or topics.
+
+Many widget displays can be bound directly to data streams.
+
+Developers can also write code to execute when data comes into the stream.
+
+Data objects hold client variables at either the whole client scope or for individual client pages.
+
+On the right you see the actions choices.
+
+The plus side is for adding more data objects.
+
+The trash can icon is for deleting them and the lightning button will build a form like layout based on the type.
+
+Click on the three dot menu next to client to bring up the client properties menu.
+
+Open it and you'll see five tabs.
+
+Basic is where we can add custom JavaScript code and libraries.
+
+All code within the client is JavaScript.
+
+Still within the client properties, I want to highlight the Events, Theme, and Localization tabs.
+
+The Events pane is where developers can add code to execute when the client experiences certain conditions.
+
+Theme is for setting a consistent appearance scheme across all the pages.
+
+Individual widgets can override these settings as needed.
+
+Finally, Localization is for converting all text and labels in the client to other languages.
+
+The last tab, Advanced, is where developers set the working characteristics of the client.
+
+Let me start with the area in the menu that I circled.
+
+Toggling on any of these choices will affect all the pages in the client.
+
+Above the circled area is a section that determines how the client will run and who can see it.
+
+Let me call your attention especially to the Mark as Launchable option.
+
+When a client is launchable, it becomes a visible listing in either the Mobile Apps Start area or a browser's client launch window, so it can be run from either.
+
+The three settings at the bottom are for using custom CSS in the client, being able to reuse what you've done in this client as a base for future clients, and whether or not to run the client if events don't come into the system for a prescribed length of time.
+
+Clients can have any number of pages, the first of which is always called Start.
+
+Pages have several events associated with them, such as Onstart, for which developers can write their own custom handlers.
+
+Client is the second choice off of the Ad menu under Service.
+
+When you choose a new client, you'll give it a name and package and choose from a template.
+
+Each of these templates is just a different starting point meant to save you some time.
+
+You can even create your own templates.
+
+This is the client we created in the Design Model lecture, and I'm keeping it so that we can use this data stream later.
+
+That came from when we drew the connection from the service, and now we can spend a little time in the client environment itself.
+
+On the left we have two tabs.
+
+Edit is largely for code features and adding data streams, as well as being able to change some of the properties of the client itself.
+
+Here's where you can add certain event handlers as well as custom code and libraries and Theme sets up a common set of properties for your background widgets and so forth that can be overridden on an individual basis.
+
+In the Advanced tab you can set other client wide properties, including whether or not it will be launchable that is able to be opened in a separate browser window.
+
+The Add tab is for adding widgets to the canvas, dragging them on as simply as just selecting them and pulling them in.
+
+By clicking to select one, you bring up its configuration pane on the right.
+
+Here's where you can encode event handlers for it, change the look and feel, layout, etcetera.
+
+Speaking of layout, use a layout widget like this vertical layout here in order to align your widgets just so and govern the spacing between them.
+
+And once I go back into the client properties and turn off the distracting grid, you can see that there's a new border around all the widgets, which is the layout widget.
+
+Layout widgets have their own configuration pane, including the ability to change how the spacing works of the widgets inside.
+
+And if you don't like the layout widget border showing, just set its thickness to 0.
+
+The save and test run buttons at the top right are also very important.
+
+And since I connected a couple of these widgets to the incoming events from the event stream, you can at least see a little bit of activity when we do a test run.
+
+Now that you know a bit about the client, we'll move on to the widgets in the next video.
+
+The filename: class/E_EDAFound_144_DCL1_L6_6.1_Client.txt

@@ -1,0 +1,70 @@
+### Summary
+
+Vail is Vantiq's domain-specific language designed for multi-tenanted, event-driven, and AI agentic architectures. It is particularly user-friendly for JavaScript developers and is tailored to meet the needs of an asynchronous, load-balancing, fault-tolerant, and secure event-driven platform. Vail supports JSON format types, resource references for REST API calls, and includes many JavaScript library functions with some syntax differences. It offers conditional statements, error handling, and iterative statements, but lacks while loops. Vail interacts with persistent data using MongoDB and maintains a SQL-like language. It distinguishes between procedures and rules, with rules being event-driven. Vail also integrates with AI through tools and skills. For a deeper understanding, Vantiq Academy offers comprehensive courses on Vail.
+
+Video URL: https://youtu.be/AEPqtgikBoc
+---
+
+**Original Content**
+
+Vail Vail is Vantiq's domain specific language specifically designed for multi tenanted, event driven and AI agentic architectures.
+
+Here we want to highlight how it's used on and in the platform.
+
+Vail is an acronym for the Vantiq Automation and Integration Language.
+
+It's an easy to learn language, especially for JavaScript developers, and it includes custom language to meet the needs of an asynchronous, load balancing, fault tolerant and secure event driven platform.
+
+Among the standard types, you'll find that objects, Geojson, and types are all in JSON format.
+
+Types are just nested other types to make a compound type.
+
+Resource references are used often in REST calls to the Vantiq API to access Vantiq resources, usually from outside of the development environment.
+
+One very important departure from JavaScript syntax in Vail is the fact that Vail does not end lines with semicolons.
+
+Also, the JavaScript NULL counts as something as opposed to nothing in the SQL NULL, which is nothing.
+
+Purists will tell you this is a flaw in JavaScript.
+
+Feel free to join the Internet debates about this.
+
+Many of the standard JavaScript library functions are also available in VAIL, though do take note that the syntax often differs.
+
+Vantiq also provides multiple services with procedures developers can use for specialized needs.
+
+This is just a sampling of the many built in services Vantiq has available.
+
+While loops don't exist in Vail, but for loops do.
+
+Vail logic includes conditional statements like if and ternary operators, error handling, iterative statements like map and filter, 5 log levels, and so forth.
+
+All the things a programmer needs for adding logic to an application are here.
+
+Val also interacts with persistent data.
+
+Currently Vantiqh uses Mongo DB as its storage database which is document based, not relational.
+
+But no matter what database Vantiqh might use in the future, the SQL like language in Val will remain the same.
+
+There are two very distinctive uses for VAIL logic in applications.
+
+Procedures are invoked by another entity in the program run and then return something.
+
+But rules are particular to the reactive and performant architecture of ANTIC.
+
+Rules are not invoked, they're triggered automatically when they encounter the condition they are listening for.
+
+Rules are driven by events, such as an insert into a particular database type as shown above.
+
+Tools and skills are also Vail procedures selected to be executed by AI and have their return values used by AI in crafting its response to requests.
+
+Tools are chosen by a large language model.
+
+Skills are chosen by agents.
+
+This has been just a small taste of what Vail is all about.
+
+For developers to gain a mastery of Vail, I highly recommend our Vail courses, which delve much deeper into every facet of the language and its functionality.
+
+The Vantiq Academy offers three different courses for learning the language quickly.
