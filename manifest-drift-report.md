@@ -1,9 +1,9 @@
 # KR Manifest Drift Report
 
-_Generated 2026-07-13T08:48:48Z · namespace `_144_TestKRMCP` · mode: apply_
+_Generated 2026-07-20T08:41:42Z · namespace `_144_TestKRMCP` · mode: apply_
 
 **Structure: IN SYNC — no new docs, no orphans.**
-**Curation worklist: 372 uncurated entrie(s)** (0 `[auto-draft]`, 372 `[auto]`) — bless one by editing its description in the namespace manifest and deleting the trailing marker.
+**Curation worklist: 378 uncurated entrie(s)** (0 `[auto-draft]`, 378 `[auto]`) — bless one by editing its description in the namespace manifest and deleting the trailing marker.
 
 ## Summary
 
@@ -17,7 +17,7 @@ _Generated 2026-07-13T08:48:48Z · namespace `_144_TestKRMCP` · mode: apply_
 | `kr/_topics/orientation/manifest.txt` | 13 | 0 | 13 | 0 |
 | `kr/_topics/security/manifest.txt` | 10 | 0 | 10 | 0 |
 | `kr/administration/manifest.txt` | 26 | 0 | 26 | 0 |
-| `kr/ai/manifest.txt` | 40 | 0 | 40 | 0 |
+| `kr/ai/manifest.txt` | 46 | 0 | 46 | 0 |
 | `kr/api/manifest.txt` | 9 | 0 | 9 | 0 |
 | `kr/catalog/manifest.txt` | 20 | 0 | 20 | 0 |
 | `kr/client/manifest.txt` | 40 | 0 | 40 | 0 |
@@ -170,6 +170,12 @@ _Generated 2026-07-13T08:48:48Z · namespace `_144_TestKRMCP` · mode: apply_
 - [ ] `kr/ai/context/conversationtutorial.md` — `[auto]`
 - [ ] `kr/ai/context/tutorials_genaibuilder.md` — `[auto]`
 - [ ] `kr/ai/context/natlang.md` — `[auto]`
+- [ ] `kr/ai/context/144_AIA_L1_1.1_Agents.txt` — `[auto]`
+- [ ] `kr/ai/context/144_AIA_L1_1.2_LLMPlanning.txt` — `[auto]`
+- [ ] `kr/ai/context/144_AIA_L1_1.3_DiscussionWidget.txt` — `[auto]`
+- [ ] `kr/ai/context/144_AIA_L1_1.4_A2AService.txt` — `[auto]`
+- [ ] `kr/ai/context/144_AIA_L1_1.5_AgentService.txt` — `[auto]`
+- [ ] `kr/ai/context/mcpservers.md` — `[auto]`
 
 ### `kr/api/manifest.txt`
 - [ ] `kr/api/context/api.md` — `[auto]`

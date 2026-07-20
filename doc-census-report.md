@@ -1,34 +1,39 @@
 # KR Doc Census (repo ↔ namespace)
 
-_Generated 2026-07-13T08:48:49Z · namespace `_144_TestKRMCP`_
+_Generated 2026-07-20T08:41:44Z · namespace `_144_TestKRMCP`_
 
-- Repo doc files: **331** · namespace context docs: **324** (native/no-source 30)
-- **Orphaned** namespace docs (repo source gone): **1**
-- **Unpublished** repo files: **35** (8 content candidates, 18 tooling/meta, 9 ignore-listed)
+- Repo doc files: **334** · namespace context docs: **330** (native/no-source 30)
+- **Orphaned** namespace docs (repo source gone): **5**
+- **Unpublished** repo files: **36** (9 content candidates, 18 tooling/meta, 9 ignore-listed)
 
 ## A. Orphaned namespace docs (repo source gone)
 
 Candidates to remove. **Caveat:** a doc may be intentionally hand-authored in the namespace (no repo source) — verify before pruning. Run with `--prune-missing` to delete these.
 
 - [ ] `kr/catalog/context/brokerShort.md`
+- [ ] `kr/client/context/E_EDAFound_142_DCL1_L6_6.1_Client.txt`
+- [ ] `kr/designmodel/context/E_EDAFound_142_DCL1_L3_3.3_DesignModel.txt`
+- [ ] `kr/gettingstarted/context/E_EDAFound_142_DCL1_L1_1.2_AppArch.txt`
+- [ ] `kr/vail/context/E_EDAFound_142_DCL1_L4_4.1_VAILFeatures.txt`
 
 ## B. Unpublished repo files — content candidates
 
 Repo doc files with no namespace doc. Publishing each is a curation call (which subject? should it be published at all?), so this is report-only. Tell me which to publish and I'll categorize + add them in-session.
 
-### `class/` (5)
-- [ ] `class/Agents/144_AIA_L1_1.1_Agents.txt`
-- [ ] `class/Agents/144_AIA_L1_1.2_LLMPlanning.txt`
-- [ ] `class/Agents/144_AIA_L1_1.3_DiscussionWidget.txt`
-- [ ] `class/Agents/144_AIA_L1_1.4_A2AService.txt`
-- [ ] `class/Agents/144_AIA_L1_1.5_AgentService.txt`
+### `blog/` (2)
+- [ ] `blog/MCPServer.txt`
+- [ ] `blog/~$PServer.txt`
 
-### `docs/` (1)
-- [ ] `docs/mcpservers.md`
+### `class/` (4)
+- [ ] `class/E_EDAFound_144_DCL1_L1_1.2_AppArch.txt`
+- [ ] `class/E_EDAFound_144_DCL1_L3_3.3_DesignModel.txt`
+- [ ] `class/E_EDAFound_144_DCL1_L4_4.1_VAILFeatures.txt`
+- [ ] `class/E_EDAFound_144_DCL1_L6_6.1_Client.txt`
 
-### `guide/` (2)
-- [ ] `guide/VDG_Introduction_to Intelligence_in_VANTIQ_application_v2.2.pdf`
-- [ ] `guide/VDG_Introduction_to_VANTIQ_Development_v2.1.pdf`
+### `guide/` (3)
+- [ ] `guide/VANTIQ Developers Guide - Introduction to Intelligence in VANTIQ application v2.2.rtf`
+- [ ] `guide/VANTIQ Developers Guide - Introduction to VANTIQ Development - v2.1.txt`
+- [ ] `guide/~$NTIQ Developers Guide - Introduction to Intelligence in VANTIQ application v2.2.rtf`
 
 ## C. Unpublished — likely tooling / meta (probably ignore)
 
