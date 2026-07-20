@@ -2,6 +2,8 @@
 
 > The Visual Analytics (VA) features of the Vantiq Platform have been removed.  This includes support for the *images*, *videos*, and *tensorflows* resources, for Vision Script, and for all features that were specific to these resources.
 
+> This release introduces support for AI development tools using the [Vantiq Intelligent Assistant](ide.md#via) (VIA).
+
 ## Server Enhancements
 
 ### GenAI Agents
@@ -47,6 +49,10 @@ Added the [setupToken](cli.md#setup-token) command to assist in the creation of 
 * The "self" K8sCluster now explicitly restricts the K8s Namespace of K8sInstallations deployed to it. The error message will specify the correct namespace name.
 
 ## UI Enhancements
+
+### VIA
+
+* Version 1.0 of the [Vantiq Intelligent Assistant](ide.md#via) (VIA) is available.
 
 ### IDE
 

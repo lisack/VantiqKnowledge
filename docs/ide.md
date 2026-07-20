@@ -4,7 +4,9 @@ The [Vantiq IDE](../../..) is Vantiq's web-based Integrated Development Environm
 
 The Development web app is accessed using the following URL: [http(s)://(server host)](../../../) (e.g., https://dev.vantiq.com). The Operations web app is accessed using the following URL: [http(s)://(server host)/ui/ops/index.html](../../../ui/ops/index.html). The purpose and use of each web app is described later in this guide.
 
-The Vantiq IDE is supported in current versions of the Chrome, Firefox, Safari, Edge and Opera browsers. 
+The Vantiq IDE is supported in current versions of the Chrome, Firefox, Safari, Edge and Opera browsers.
+
+> Vantiq also supports the use of Agentic development tools such as Claude Code to construct Vantiq applications.  See the section on supporting [AI development tools](#via) for more details.
 
 ## The Navigation Bar
 The Vantiq IDE Navigation bar appears at the top of the browser window:
@@ -296,6 +298,31 @@ For example, if Project A and Project B both reference a Type `Sensor`:
 
 * Deleting only Project A with **Delete Project and Resources** will leave `Sensor` in place because Project B still uses it.
 * Selecting both Project A and Project B and choosing **Delete Projects and Resources** will remove `Sensor`, because no remaining project references it.
+
+<a name="via"></a>
+## Supporting AI Development Tools
+
+The Vantiq Intelligent Assistant (VIA) is an MCP server which provides the resources and tools necessary for AI development tools to understand the Vantiq platform and construct Vantiq applications. We will use [Claude Code](https://claude.com/product/claude-code) as the exemplar, but the use of the [MCP](https://modelcontextprotocol.io/docs/getting-started/intro) standard means that it should be possible to use other similar tools as well.
+
+To connect to the VIA MCP server you will need to know 2 things, the MCP server URI and the value of an [access token](resourceguide.md#tokens). The MCP server URI is of the form `<vantiqBaseURI>/mcp/io.vantiq.via.mcpServer`.  The base URI will vary depending on the target Vantiq server. For the Vantiq Developer Cloud this is [https://dev.vantiq.com](https://dev.vantiq.com) and the MCP URI is `https://dev.vantiq.com/mcp/io.vantiq.via.mcpServer`. The access token should be a personal token associated with the current developer. It can be a single or multi-namespace token. To create the token you can either:
+
+* Use the [New Project Wizard](tutorials/quickstart.md#newProjectWiz) to create an "AI Development" project. This will automatically create a VIA access token if one does not already exist.
+* Use the [setupToken](cli.md#setup-token) command in the Vantiq CLI to create an appropriate token.
+* Manually create a token using the [Administer...Advanced..Access Token](#administer) menu.
+
+Once you have both the MCP server URI and the access token you can configure your AI development tool to connect to the server. Each tool supports a number of different approaches, but they mostly end up creating a JSON entry the looks like this:
+
+```json
+"via": {
+  "type": "http",
+  "url": "https://dev.vantiq.com/mcp/io.vantiq.via.mcpServer",
+  "headers": {
+    "Authorization": "Bearer <accessToken>"
+  }
+}
+```
+
+Once connected, Claude Code will use the VIA MCP server whenever it is tasked with creating a Vantiq application. It will also answer questions about how Vantiq applications work, how to address specific requirements, and assist in testing the application during construction. The [Quickstart Tutorial](tutorials/quickstart.md) is a good place for new users to start.
 
 ## Integration with Version Control Systems
 

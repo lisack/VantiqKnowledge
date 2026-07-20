@@ -449,6 +449,22 @@ Then, to run the Vantiq Edge installation on Windows, execute the following comm
 ```
 <pathToInstallDirectory>\bin\vantiq.bat
 ```
+<a name="runVideoAssistant"></a>
+## Video Assistant
+
+To deploy the Video assistant (used to run VIDEO sources), you need to use an image from the `videoassistant` repository.
+
+You can configure the docker compose file by adding a `videoassisant` service. For example,
+
+```shell
+videoassistant:
+    container_name: vantiq_video_assistant
+    image: quay.io/vantiq/videoassistant:1.44
+    restart: unless-stopped
+    network_mode: "service:vantiq_edge_netns"
+```
+
+Once the docker compose file is configured, start the server with the `docker compose up -d` command.
 
 # Setting Up Vantiq Edge <a name="edgeSetup"></a>
 
