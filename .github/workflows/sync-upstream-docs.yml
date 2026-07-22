@@ -19,8 +19,11 @@ name: Sync docs from upstream Vantiq repos
 # The public sources need no credentials.
 
 on:
-  schedule:
-    - cron: '0 6 * * 1'      # every Monday 06:00 UTC
+  # Scheduled runs disabled 2026-07-22: the official home for this KB is now
+  # Vantiq/training, where the weekly cron lives. This repo (lisack/VantiqKnowledge)
+  # is kept alongside as a fallback and will be retired. Manual runs still allowed.
+  #   schedule:
+  #     - cron: '0 6 * * 1'      # every Monday 06:00 UTC
   workflow_dispatch: {}       # allow manual runs from the Actions tab
 
 permissions:
